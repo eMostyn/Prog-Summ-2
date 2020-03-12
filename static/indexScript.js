@@ -13,7 +13,7 @@ function learnMore(){
      }
    })
    .then(body =>
-      learnModal.innerHTML = "SLAP A DESCRIPTION HERE")
+      learnModal.innerHTML = body)
 
     .catch(() => {
         console.error("Error");

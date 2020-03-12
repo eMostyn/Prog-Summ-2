@@ -35,7 +35,7 @@
   </nav>
 </head>
 <body>
-  <button id = "adminToggle" type ="button">Admin </button>
+  <button id = "adminToggle" type ="button" onclick = "switchToggler()">Admin </button>
 </label>
 
 
@@ -54,9 +54,8 @@ Add Event
         </button>
       </div>
       <div id = "learnModal" class="modal-body">
-        <form action = "/newEvent" method = "POST">
           <p><label for="title">Title:</label><br>
-          <input type="text" id="title" name="title"><br> </p>
+          <input type="text" id="titleBox" name="title"><br> </p>
           <p> <label for="desc">Description:</label><br>
           <input type="text" id="desc" name="desc"></p>
           <p> <label for="date">Date:</label> <input type="date" id="date" name="date"></p>
@@ -68,10 +67,9 @@ Add Event
 
       </div>
       <div class="modal-footer">
-        <p> <input type="submit"> </p>
+        <p> <button type="button" onClick = "submitForm()" data-dismiss="modal" > Submit </button></p>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
-      </form>
     </div>
   </div>
 </div></p>
@@ -83,7 +81,8 @@ Add Event
   <div id = "title">
     <h1 align = center> Schedule </h1>
   </div>
-  <div id = "Schedule">
+  
+  <!-- <div id = "Schedule">
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
 	<div class="container">
@@ -110,7 +109,7 @@ Add Event
 			<div class="col-10">
 				<h3 class="text-uppercase"><strong>Operations Meeting</strong></h3>
 				<ul class="list-inline">
-				    <li class="list-inline-item"><i class="fa fa-calendar-o" aria-hidden="true"></i> Friday</li>
+				  <li class="list-inline-item"><i class="fa fa-calendar-o" aria-hidden="true"></i> Friday</li>
 					<li class="list-inline-item"><i class="fa fa-clock-o" aria-hidden="true"></i> 2:30 PM - 4:00 PM</li>
 					<li class="list-inline-item"><i class="fa fa-location-arrow" aria-hidden="true"></i> Room 4019</li>
 				</ul>
@@ -118,7 +117,7 @@ Add Event
 			</div>
 		</div>
 	</div>
-  </div>
+  </div> -->
 
 
 <script src="schScript.js"></script>
