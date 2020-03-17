@@ -1,9 +1,7 @@
 var toggleSwitch = document.getElementById("adminToggle")
 var admin= false
 
-window.onload = function() {
-  readFile();
-};
+
 
 function switchToggler(){
   if (!admin) {
@@ -29,9 +27,8 @@ function submitForm(){
                 Begins: beginsVal,
                 Ends: endsVal,
                 Location: locationVal}
-
+  createEventView(nEvent)
   jsonObj = JSON.stringify(nEvent)
-  console.log(jsonObj)
   const options = {
     method: 'POST',
     headers: {
@@ -49,12 +46,7 @@ function submitForm(){
     }
   })
 }
-var test = {Title: "Test",
-              Description: "Desc",
-              Date: "2020-03-20",
-              Begins: "12:30",
-              Ends: "14:30",
-              Location: "Room"}
+
 
 function createEventView(object){
   var eventDate = new Date(object.Date)
@@ -160,7 +152,7 @@ function createEventView(object){
 }
 
 function readFile(){
-  var lines = []
+
   fetch("http://127.0.0.1:8090/readEvents")
   .then(function(response) {
     if (response.ok) {
@@ -175,17 +167,18 @@ function readFile(){
     splitAndLoad(body))
    .catch(() => {
        console.error("Error");
+      
    })
-
 
 }
 function splitAndLoad(data){
-  var lines = data.split("\r\n")
-  console.log(lines)
+  console.log("data" + data)
+  var lines = data.split("\n")
+  console.log("Lines" + lines)
   for (line in lines){
     console.log(lines[line])
     createEventView((JSON.parse(lines[line])))
   }
 }
-createEventView(test)
+
 //{"Title":"Collingwood","Description":"Game vs Collingwood","Date":"2020-03-20","Begins":"12:00","Ends":"13:00","Location":"Maiden Castle"}
