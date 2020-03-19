@@ -42,6 +42,9 @@
 <button type="button" id = "addEventButt" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
 Add Event
 </button>
+<button type="button" id = "delEventButt" onclick = "generateOptions()" class="btn btn-primary" data-toggle="modal" data-target="#delModalCenter">
+Delete Event
+</button>
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -72,7 +75,35 @@ Add Event
       </div>
     </div>
   </div>
-</div></p>
+</div>
+
+<div class="modal fade" id="delModalCenter" tabindex="-1" role="dialog" aria-labelledby="delModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="delModalLongTitle">Delete Event</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id = "learnModal" class="modal-body">
+          <p>
+            <label for="eventDropDown">Events</label>
+              <select id="eventDropDown">
+              </select>
+          </p>
+
+
+      </div>
+      <div class="modal-footer">
+        <p> <button type="button" onClick = "deleteEvent()" data-dismiss="modal" > Submit </button></p>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</p>
     </div>
   </div>
 

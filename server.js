@@ -22,9 +22,7 @@ var data;
     }
     items = []
     data = JSON.parse(jsonString)
-    console.log(data)
     data.push((req.body))
-    console.log(data)
     fs.writeFile('schedule.json', JSON.stringify(data), (err) => {
       // throws an error, you could also catch it here
       if (err) throw err;
@@ -39,9 +37,37 @@ var data;
 })
 
 app.get('/readEvents',function(req,res){
-  res.send('./schedule.json');
+  fs.readFile('./schedule.json', 'utf8', (err, jsonString) => {
+    if (err) {
+        console.log("Error reading file from disk:", err)
+        return
+    }
+    res.send(jsonString)
+  })
 })
 
+app.post('/delEvent', function(req,res){
+var data;
+  fs.readFile('./schedule.json', 'utf8', (err, jsonString) => {
+    if (err) {
+        console.log("Error reading file from disk:", err)
+        return
+    }
+    data = JSON.parse(jsonString)
+    var pos = data.indexOf(req.body)
+    data.splice(pos,1)
+    fs.writeFile('schedule.json', JSON.stringify(data), (err) => {
+      // throws an error, you could also catch it here
+      if (err) throw err;
+})
+
+  res.sendStatus(200)
+
+
+    // success case, the file was saved
+    console.log("Removed event from schedule")
+});
+})
 
 
 app.listen(8090)

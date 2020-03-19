@@ -1,8 +1,5 @@
 var toggleSwitch = document.getElementById("adminToggle")
 var admin= false
-
-
-
 function switchToggler(){
   if (!admin) {
     admin = true
@@ -52,6 +49,7 @@ function createEventView(object){
   var eventDate = new Date(object.Date)
 
   var scheduleDiv = document.createElement("div")
+  scheduleDiv.id = object.Title + object.Date
   var link = document.createElement( "link" );
   link.href ="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css";
   link.rel = "stylesheet";
@@ -163,22 +161,105 @@ function readFile(){
     }
   })
 
-  .then(body =>
-    splitAndLoad(body))
+  .then(body =>{
+    obj = JSON.parse(body)
+    for (object in obj){
+      createEventView((obj[object]))
+    }
+  })
    .catch(() => {
        console.error("Error");
-      
+
    })
 
 }
-function splitAndLoad(data){
-  console.log("data" + data)
-  var lines = data.split("\n")
-  console.log("Lines" + lines)
-  for (line in lines){
-    console.log(lines[line])
-    createEventView((JSON.parse(lines[line])))
-  }
+function splitAndLoad(data)
+{
+
 }
+
+function generateOptions(){
+  fetch("http://127.0.0.1:8090/readEvents")
+
+  .then(function(response) {
+    if (response.ok) {
+      return response.text();
+    }
+    else {
+      return "Failure to read file";
+    }
+  })
+
+  .then(body =>{
+    data = body;
+    var dropdown = document.getElementById("eventDropDown")
+    obj = JSON.parse(data)
+    for (object in obj){
+      var option = document.createElement("option")
+      option.text = obj[object].Title
+      dropdown.add(option)
+    }
+  })
+
+
+
+   .catch(() => {
+       console.error("Error");
+})
+}
+
+
+function deleteEvent(){
+  var dropdown = document.getElementById("eventDropDown")
+  toRemove = dropdown.value;
+  fetch("http://127.0.0.1:8090/readEvents")
+  .then(function(response) {
+    if (response.ok) {
+      return response.text();
+    }
+    else {
+      return "Failure to read file";
+    }
+  })
+
+  .then(body =>{
+      data = body;
+      console.log(data)
+      obj = JSON.parse(data);
+      var pos;
+      for (object in obj){
+        if (obj[object].Title = toRemove){
+          pos = object
+        }
+      }
+      var divId = obj[pos].Title + obj[pos].Date
+      var divToRemove = document.getElementById(divId)
+      divToRemove.parentNode.removeChild(divToRemove)
+      clearEvent(toRemove)
+    })
+
+
+
+}
+function clearEvent(toRemove){
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/string'
+    },
+    body: toRemove
+  }
+  fetch("http://127.0.0.1:8090/delEvent",options)
+  .then(function(response) {
+    if (response.ok) {
+      return response.text();
+    }
+    else {
+      return "Error in adding new event";
+    }
+  })
+}
+
+
 
 //{"Title":"Collingwood","Description":"Game vs Collingwood","Date":"2020-03-20","Begins":"12:00","Ends":"13:00","Location":"Maiden Castle"}
