@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="styles.css">
+<head>
+  <nav class="navbar navbar-expand-sm navbar-custom" id = "topBar">
+    <div class="navbar-brand">
+      <img src = "footer-coat-of-arms.png" alt = "logo">
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExample03">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link"  href="index.html">Home </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="calendar.html">Schedule</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" id = "activeLink" href="adminPage.html" aria-disabled="true">Admin<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+          <div class="dropdown-menu" aria-labelledby="dropdown03">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </li>
+      </ul>
+
+    </div>
+
+  </nav>
+</head>
+
+<body>
+    <h2 align = "center"> Admin Login </h1>
+    <div id = "adminInfo">
+      <p> Entering admin mode will allow you to: </p>
+      <p> Add events </p>
+      <p> Remove events </p>
+      <p> Add players </p>
+      <p> Remove players </p>
+      <p> Edit appearances </p>
+      <p> Add goals </p>
+    </div>
+
+    <div id = "adminButton">
+      <button type = "button" id = "adBut"> Toggle Admin Mode </button>
+    </div>
+
+</body>
+</html>

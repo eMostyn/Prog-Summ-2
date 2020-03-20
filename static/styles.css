@@ -1,0 +1,44 @@
+.navbar.navbar-expand-sm.navbar-custom {
+  background-color: #db2828;
+
+}
+.navbar-custom .navbar-brand,
+.navbar-custom .navbar-text,
+.nav-link {
+    font-family: "Arial Black", Gadget, sans-serif;
+    font-size: 25px;
+    color: white;
+}
+#activeLink
+ {
+    color: black;
+}
+
+#adminInfo{
+   list-style-position: inside;
+  margin: auto;
+  width: 50%;
+  text-align: center;
+  border: 3px solid #db2828;
+  margin-bottom: 25px;
+}
+
+
+#adminButton{
+  margin: auto;
+  width: 50%;
+  text-align: center;
+}
+#adBut{
+background-color: #db2828;
+ color: white;
+ padding: 15px 32px;
+ text-align: center;
+ text-decoration: none;
+ display: inline-block;
+ font-size: 16px;
+}
+
+body{
+  font-family: "Arial Black", Gadget, sans-serif;
+}
