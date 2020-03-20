@@ -5,6 +5,7 @@ var fs = require("fs");
 var FileReader = require('filereader')
 app.use(express.static('static'));
 var learnInfo = "Test"
+var admin = false;
 app.get('/learnMore', function (req, res) {
   res.send(learnInfo)
 })
@@ -15,25 +16,30 @@ app.use(bodyParser.json())
 
 app.post('/newEvent', function(req,res){
 var data;
-  fs.readFile('./schedule.json', 'utf8', (err, jsonString) => {
-    if (err) {
-        console.log("Error reading file from disk:", err)
-        return
-    }
-    items = []
-    data = JSON.parse(jsonString)
-    data.push((req.body))
-    fs.writeFile('schedule.json', JSON.stringify(data), (err) => {
-      // throws an error, you could also catch it here
-      if (err) throw err;
-})
+if(admin == true)
+    {fs.readFile('./schedule.json', 'utf8', (err, jsonString) => {
+      if (err) {
+          console.log("Error reading file from disk:", err)
+          return
+      }
+      items = []
+      data = JSON.parse(jsonString)
+      data.push((req.body))
+      fs.writeFile('schedule.json', JSON.stringify(data), (err) => {
+        // throws an error, you could also catch it here
+        if (err) throw err;
+    })
 
-  res.sendStatus(200)
+    res.sendStatus(200)
 
 
-    // success case, the file was saved
-    console.log("Added new event to schedule")
-});
+      // success case, the file was saved
+      console.log("Added new event to schedule")
+    });}
+
+else{
+  res.sendStatus(403);
+}
 })
 
 app.get('/readEvents',function(req,res){
@@ -48,6 +54,7 @@ app.get('/readEvents',function(req,res){
 
 app.post('/delEvent', function(req,res){
 var data;
+if (admin == true){
   fs.readFile('./schedule.json', 'utf8', (err, jsonString) => {
     if (err) {
         console.log("Error reading file from disk:", err)
@@ -67,7 +74,18 @@ var data;
     // success case, the file was saved
     console.log("Removed event from schedule")
 });
+}
+else {
+  res.sendStatus(304);
+}
 })
 
+app.post('/adminToggle',function(req,res){
+  admin = req.body.Admin
+})
 
+app.get('/getAdmin',function(req,res){
+  console.log(admin)
+  res.send(admin);
+})
 app.listen(8090)

@@ -1,16 +1,3 @@
-var toggleSwitch = document.getElementById("adminToggle")
-var admin= false
-function switchToggler(){
-  if (!admin) {
-    admin = true
-    toggleSwitch.style.background = "Green"
-  } else {
-    admin = false
-    toggleSwitch.style.background = "Red"
-  }
-}
-
-
 function submitForm(){
   var titleVal = document.getElementById("titleBox").value;
   var descVal = document.getElementById("desc").value;
@@ -18,32 +5,40 @@ function submitForm(){
   var beginsVal = document.getElementById("Begins").value;
   var endsVal = document.getElementById("Ends").value;
   var locationVal = document.getElementById("location").value;
-  var nEvent = {Title: titleVal,
-                Description: descVal,
-                Date: dateVal,
-                Begins: beginsVal,
-                Ends: endsVal,
-                Location: locationVal}
-  createEventView(nEvent)
-  jsonObj = JSON.stringify(nEvent)
-  const options = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: jsonObj
-  }
-  fetch("http://127.0.0.1:8090/newEvent",options)
-  .then(function(response) {
-    if (response.ok) {
-      return response.text();
+  if(titleVal != ""){
+    var nEvent = {Title: titleVal,
+                  Description: descVal,
+                  Date: dateVal,
+                  Begins: beginsVal,
+                  Ends: endsVal,
+                  Location: locationVal}
+    jsonObj = JSON.stringify(nEvent)
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: jsonObj
     }
-    else {
-      return "Error in adding new event";
-    }
-  })
-}
+    fetch("http://127.0.0.1:8090/newEvent",options)
+    .then(function(response) {
+      if (response.ok) {
+        createEventView(nEvent)
+        return response.text();
 
+      }
+      if(response.text = 403){
+        window.alert("Enable Admin mode to add events.")
+      }
+      else {
+        return "Error in adding new event";
+      }
+    })
+  }
+  else{
+    window.alert("Please enter a valid title");
+  }
+}
 
 function createEventView(object){
   var eventDate = new Date(object.Date)
@@ -173,10 +168,6 @@ function readFile(){
    })
 
 }
-function splitAndLoad(data)
-{
-
-}
 
 function generateOptions(){
   fetch("http://127.0.0.1:8090/readEvents")
@@ -208,39 +199,52 @@ function generateOptions(){
 })
 }
 
-
 function deleteEvent(){
   var dropdown = document.getElementById("eventDropDown")
   toRemove = dropdown.value;
-  fetch("http://127.0.0.1:8090/readEvents")
+  fetch("http://127.0.0.1:8090/getAdmin")
   .then(function(response) {
     if (response.ok) {
       return response.text();
     }
     else {
-      return "Failure to read file";
+      return "Failure to retrieve admin state";
     }
   })
-
   .then(body =>{
-      data = body;
-      console.log(data)
-      obj = JSON.parse(data);
-      var pos;
-      for (object in obj){
-        if (obj[object].Title = toRemove){
-          pos = object
+    var admin = JSON.parse(body)
+    if (admin == true){
+      fetch("http://127.0.0.1:8090/readEvents")
+      .then(function(response) {
+        if (response.ok) {
+          return response.text();
         }
-      }
-      var divId = obj[pos].Title + obj[pos].Date
-      var divToRemove = document.getElementById(divId)
-      divToRemove.parentNode.removeChild(divToRemove)
-      clearEvent(toRemove)
-    })
+        else {
+          return "Failure to read file";
+        }
+      })
 
-
-
+      .then(body =>{
+          data = body;
+          obj = JSON.parse(data);
+          var pos;
+          for (object in obj){
+            if (obj[object].Title = toRemove){
+              pos = object
+            }
+          }
+          var divId = obj[pos].Title + obj[pos].Date
+          var divToRemove = document.getElementById(divId)
+          divToRemove.parentNode.removeChild(divToRemove)
+          clearEvent(toRemove)
+        })
+    }
+    else{
+      window.alert("Enable Admin mode to delete events.")
+    }
+  })
 }
+
 function clearEvent(toRemove){
   const options = {
     method: 'POST',
@@ -259,7 +263,3 @@ function clearEvent(toRemove){
     }
   })
 }
-
-
-
-//{"Title":"Collingwood","Description":"Game vs Collingwood","Date":"2020-03-20","Begins":"12:00","Ends":"13:00","Location":"Maiden Castle"}

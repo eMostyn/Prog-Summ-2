@@ -5,6 +5,7 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="styles.css">
+<link rel="stylesheet" type="text/css" href="buttonStyle.css">
 <head>
   <nav class="navbar navbar-expand-sm navbar-custom" id = "topBar">
     <div class="navbar-brand">
@@ -40,7 +41,7 @@
   </nav>
 </head>
 
-<body>
+<body onload = setAdmin() >
     <h2 align = "center"> Admin Login </h1>
     <div id = "adminInfo">
       <p> Entering admin mode will allow you to: </p>
@@ -52,9 +53,17 @@
       <p> Add goals </p>
     </div>
 
-    <div id = "adminButton">
-      <button type = "button" id = "adBut"> Toggle Admin Mode </button>
+    <div id = adminButtonDiv >
+      <p> Toggle Admin: </p>
+      <label class="switch">
+        <input type="checkbox" id = "adminButton" onclick = "toggleAdmin()">
+        <span class="slider round"></span>
+      </label>
+
     </div>
 
+
+
+<script src="adminScript.js"></script>
 </body>
 </html>
