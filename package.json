@@ -12,7 +12,9 @@
     "@fullcalendar/core": "^4.4.0",
     "@fullcalendar/daygrid": "^4.4.0",
     "express": "^4.17.1",
+    "express-fileupload": "^1.1.6",
     "filereader": "^0.10.3",
+    "formidable": "^1.2.2",
     "tui-calendar": "^1.12.11"
   }
 }

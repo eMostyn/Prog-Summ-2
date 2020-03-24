@@ -42,3 +42,40 @@ background-color: #db2828;
 body{
   font-family: "Arial Black", Gadget, sans-serif;
 }
+#addPDiv,#removePDiv{
+  list-style-position: inside;
+ margin: auto;
+ width: 50%;
+ text-align: center;
+ border: 3px solid #db2828;
+ margin-bottom: 10px;
+}
+#submitDiv, #removeButtDiv{
+  list-style-position: inside;
+ margin: auto;
+ width: 50%;
+ text-align: center;
+ margin-bottom: 25px;
+}
+#addPButt,#removePButt{
+background-color: #db2828;
+ color: white;
+ padding: 15px 32px;
+ text-align: center;
+ text-decoration: none;
+ display: inline-block;
+ font-size: 16px;
+}
+input[type=text], input[type=file]{
+  width: 50%;
+  padding: 5px;
+  border: 1px solid #db2828;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: vertical;
+  margin-bottom: 5px
+}
+#deleteOptions{
+  margin-top: 5px;
+  margin-bottom: 5px;
+}

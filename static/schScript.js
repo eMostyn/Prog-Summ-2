@@ -229,12 +229,16 @@ function deleteEvent(){
           obj = JSON.parse(data);
           var pos;
           for (object in obj){
-            if (obj[object].Title = toRemove){
+            if (obj[object].Title == toRemove){
               pos = object
             }
           }
+          console.log(obj)
+          console.log(pos)
           var divId = obj[pos].Title + obj[pos].Date
+          console.log(divId)
           var divToRemove = document.getElementById(divId)
+
           divToRemove.parentNode.removeChild(divToRemove)
           clearEvent(toRemove)
         })
