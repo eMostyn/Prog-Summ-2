@@ -14,7 +14,7 @@
 
     <!-- Bootstrap core CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-<link rel="stylesheet" type="text/css" href="squadStyles.css">
+<link rel="stylesheet" type="text/css" href="statsStyles.css">
 <meta name="theme-color" content="#563d7c">
 <nav class="navbar navbar-expand-sm navbar-custom" id = "topBar">
         <div class="navbar-brand">
@@ -36,17 +36,17 @@
               <a class="nav-link"  href="adminPage.html" aria-disabled="true">Admin</a>
             </li>
             <li class="nav-item active">
-              <a class="nav-link" id = "activeLink" href="squad.html" aria-disabled="true">Squad</a>
+              <a class="nav-link"  href="squad.html" aria-disabled="true">Squad</a>
             </li>
             <li class = "nav-item active">
-              <a class = "nav-link" href = "statsPage.html" aria-disabled = "true"> Statistics </a>
+              <a class = "nav-link"  href = "statsPage.html" aria-disabled = "true"> Statistics </a>
               </li>
             <li class="nav-item dropdown" >
-              <a class="nav-link dropdown-toggle"   href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+              <a class="nav-link dropdown-toggle"   href="#" id = "activeLink" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
               <div class="dropdown-menu" aria-labelledby="dropdown03">
                 <a class="dropdown-item" href="eventEdit.html">Add/Remove Events</a>
                 <a class="dropdown-item" href="playerEdit.html">Add/Remove Players</a>
-                  <a class="dropdown-item" href="statsEdit.html">Edit Stats</a>
+                <a class="dropdown-item" href="statsEdit.html">Edit Stats</a>
               </div>
             </li>
           </ul>
@@ -55,13 +55,21 @@
 
       </nav>
     </head>
-
-    <body onload = "readFile()">
-      <div id = "playerContainerDiv" class = "playerContainer">
-
+    <body onload = "generateOptions()">
+      <div id = "title">
+        <h2 align = center> Edit Appearances </h1>
       </div>
+      <div id = "appsDiv">
 
-      <script src="squadScript.js"></script>
-      </body>
-
-</html>
+        <select class = "playerSelect"  onchange = "getApps()"id = "aPlayersSelect">
+        </select>
+        <p>
+          <input type = "number" id = "appsNum" >
+          <button class = "changeButt" onclick = "incrementApps()" id = "aplusButt"> + </button>
+          <button class = "changeButt" onclick = "decrementApps()"id = "aminusButt">-</button>
+          <button id = "submitAppsButt" onclick = "submitApps()"> Change </button>
+        </p>
+      </div>
+    <script src = "statsScript.js"></script>
+    </body>
+    </html>

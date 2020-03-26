@@ -1,4 +1,4 @@
-function submitForm(){
+function addEvent(){
   var titleVal = document.getElementById("titleBox").value;
   var descVal = document.getElementById("desc").value;
   var dateVal = document.getElementById("date").value;
@@ -23,11 +23,17 @@ function submitForm(){
     fetch("http://127.0.0.1:8090/newEvent",options)
     .then(function(response) {
       if (response.ok) {
-        createEventView(nEvent)
+        document.getElementById("titleBox").value = "";
+        document.getElementById("desc").value = "";
+        document.getElementById("date").value= "";
+        document.getElementById("Begins").value= "";
+        document.getElementById("Ends").value= "";
+        document.getElementById("location").value= "";
+        generateOptions();
         return response.text();
 
       }
-      if(response.text = 403){
+      if(response.statusCode = 403){
         window.alert("Enable Admin mode to add events.")
       }
       else {
@@ -171,7 +177,6 @@ function readFile(){
 
 function generateOptions(){
   fetch("http://127.0.0.1:8090/readEvents")
-
   .then(function(response) {
     if (response.ok) {
       return response.text();
@@ -183,7 +188,7 @@ function generateOptions(){
 
   .then(body =>{
     data = body;
-    var dropdown = document.getElementById("eventDropDown")
+    var dropdown = document.getElementById("deleteOptions")
     obj = JSON.parse(data)
     for (object in obj){
       var option = document.createElement("option")
@@ -200,70 +205,27 @@ function generateOptions(){
 }
 
 function deleteEvent(){
-  var dropdown = document.getElementById("eventDropDown")
+  var dropdown = document.getElementById("deleteOptions")
   toRemove = dropdown.value;
-  fetch("http://127.0.0.1:8090/getAdmin")
-  .then(function(response) {
-    if (response.ok) {
-      return response.text();
-    }
-    else {
-      return "Failure to retrieve admin state";
-    }
-  })
-  .then(body =>{
-    var admin = JSON.parse(body)
-    if (admin == true){
-      fetch("http://127.0.0.1:8090/readEvents")
-      .then(function(response) {
-        if (response.ok) {
-          return response.text();
-        }
-        else {
-          return "Failure to read file";
-        }
-      })
-
-      .then(body =>{
-          data = body;
-          obj = JSON.parse(data);
-          var pos;
-          for (object in obj){
-            if (obj[object].Title == toRemove){
-              pos = object
-            }
-          }
-          console.log(obj)
-          console.log(pos)
-          var divId = obj[pos].Title + obj[pos].Date
-          console.log(divId)
-          var divToRemove = document.getElementById(divId)
-
-          divToRemove.parentNode.removeChild(divToRemove)
-          clearEvent(toRemove)
-        })
-    }
-    else{
-      window.alert("Enable Admin mode to delete events.")
-    }
-  })
-}
-
-function clearEvent(toRemove){
+  toSend = {Title: toRemove};
   const options = {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/string'
+      'Content-Type': 'application/json'
     },
-    body: toRemove
+    body: JSON.stringify(toSend)
   }
-  fetch("http://127.0.0.1:8090/delEvent",options)
-  .then(function(response) {
-    if (response.ok) {
-      return response.text();
-    }
-    else {
-      return "Error in adding new event";
-    }
-  })
-}
+    fetch("http://127.0.0.1:8090/delEvent",options)
+    .then(function(response) {
+      if (response.ok) {
+        generateOptions();
+        return response.text();
+      }
+      if(response.statusCode = 403 ){
+        window.alert("Enable admin mode to delete players")
+      }
+      else {
+        return "Error in adding new event";
+      }
+    })
+  }

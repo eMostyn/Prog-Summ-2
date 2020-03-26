@@ -1,0 +1,53 @@
+.navbar.navbar-expand-sm.navbar-custom {
+  background-color: #db2828;
+
+}
+.navbar-custom .navbar-brand,
+.navbar-custom .navbar-text,
+.nav-link {
+    font-family: "Arial Black", Gadget, sans-serif;
+    font-size: 25px;
+    color: white;
+}
+#activeLink
+ {
+    color: black;
+}
+body{
+  font-family: "Arial Black", Gadget, sans-serif;
+}
+#tableDiv, #appsDiv{
+list-style-position: inside;
+ margin: auto;
+ width: 50%;
+ text-align: center;
+ border: 3px solid #db2828;
+ margin-bottom: 10px;
+}
+th{
+  background-color: #db2828;
+}
+table, th, td {
+  border: 1px solid black;
+}
+td{
+  width: 5%;
+}
+#playersTable{
+  text-align: center;
+  margin-top: 10px;
+}
+.changeButt{
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  padding:0.5px;
+}
+#appsNum{
+  width: 15%;
+  text-align: right;
+}
+#aPlayersSelect{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

@@ -64,7 +64,13 @@ if (admin == true){
         return
     }
     data = JSON.parse(jsonString)
-    var pos = data.indexOf(req.body)
+    var pos;
+    for (obj in data){
+      if(data[obj].Title == req.body.Title){
+        pos = obj;
+        break;
+      }
+    }
     data.splice(pos,1)
     fs.writeFile('schedule.json', JSON.stringify(data), (err) => {
       // throws an error, you could also catch it here
@@ -150,7 +156,6 @@ app.post('/delPlayer',function(req,res){
           return
       }
       data = JSON.parse(jsonString)
-      console.log(req.body)
       var pos;
       for (obj in data){
         if(data[obj].Name == req.body.Name){
@@ -158,7 +163,6 @@ app.post('/delPlayer',function(req,res){
           break;
         }
       }
-      console.log(pos)
       data.splice(pos,1)
       fs.writeFile('squad.json', JSON.stringify(data), (err) => {
         // throws an error, you could also catch it here
@@ -176,4 +180,34 @@ app.post('/delPlayer',function(req,res){
     res.sendStatus(304);
   }
 })
+
+app.post('/appendApps',function(req,res){
+  var data;
+  if (admin == true){
+    fs.readFile('./squad.json', 'utf8', (err, jsonString) => {
+      if (err) {
+          console.log("Error reading file from disk:", err)
+          return
+      }
+      data = JSON.parse(jsonString)
+      for (obj in data){
+        if(data[obj].Name == req.body.Name){
+          data[obj].Apps = req.body.Apps;
+          fs.writeFile('squad.json', JSON.stringify(data), (err) => {
+            // throws an error, you could also catch it here
+            if (err) throw err;
+          })
+          break;
+        }
+      }
+    })
+
+    res.sendStatus(200)
+  }
+else {
+    res.sendStatus(304);
+  }
+})
+
+
 app.listen(8090)

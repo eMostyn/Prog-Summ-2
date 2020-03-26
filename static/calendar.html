@@ -28,12 +28,15 @@
         <li class="nav-item">
           <a class="nav-link"  href="squad.html" aria-disabled="true">Squad</a>
         </li>
+        <li class = "nav-item active">
+          <a class = "nav-link" href = "statsPage.html" aria-disabled = "true"> Statistics </a>
+          </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
           <div class="dropdown-menu" aria-labelledby="dropdown03">
+            <a class="dropdown-item" href="eventEdit.htm;">Add/Remove Events</a>
             <a class="dropdown-item" href="playerEdit.html">Add/Remove Players</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
+              <a class="dropdown-item" href="statsEdit.html">Edit Stats</a>
           </div>
         </li>
       </ul>
@@ -42,79 +45,8 @@
 
   </nav>
 </head>
+
 <body onload = "readFile()">
-
-
-<button type="button" id = "addEventButt" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-Add Event
-</button>
-<button type="button" id = "delEventButt" onclick = "generateOptions()" class="btn btn-primary" data-toggle="modal" data-target="#delModalCenter">
-Delete Event
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Add Event</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div id = "learnModal" class="modal-body">
-          <p><label for="title">Title:</label><br>
-          <input type="text" id="titleBox" name="title"><br> </p>
-          <p> <label for="desc">Description:</label><br>
-          <input type="text" id="desc" name="desc"></p>
-          <p> <label for="date">Date:</label> <input type="date" id="date" name="date"></p>
-          <p>  <label for="Begins">Begins:</label> <input type="time" id="Begins" name="Begins">
-             <label for="Ends">Ends:</label> <input type="time" id="Ends" name="Ends"> </p>
-             <p> <label for="location">Where?</label><br>
-             <input type="text" id="location" name="location"></p>
-
-
-      </div>
-      <div class="modal-footer">
-        <p> <button type="button" onClick = "submitForm()" data-dismiss="modal" > Submit </button></p>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="delModalCenter" tabindex="-1" role="dialog" aria-labelledby="delModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="delModalLongTitle">Delete Event</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div id = "learnModal" class="modal-body">
-          <p>
-            <label for="eventDropDown">Events</label>
-              <select id="eventDropDown">
-              </select>
-          </p>
-
-
-      </div>
-      <div class="modal-footer">
-        <p> <button type="button" onClick = "deleteEvent()" data-dismiss="modal" > Submit </button></p>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-</p>
-    </div>
-  </div>
-
-
-
   <div id = "title">
     <h1 align = center> Schedule </h1>
   </div>

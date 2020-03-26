@@ -14,7 +14,7 @@
 
     <!-- Bootstrap core CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-<link rel="stylesheet" type="text/css" href="squadStyles.css">
+<link rel="stylesheet" type="text/css" href="statsStyles.css">
 <meta name="theme-color" content="#563d7c">
 <nav class="navbar navbar-expand-sm navbar-custom" id = "topBar">
         <div class="navbar-brand">
@@ -36,10 +36,10 @@
               <a class="nav-link"  href="adminPage.html" aria-disabled="true">Admin</a>
             </li>
             <li class="nav-item active">
-              <a class="nav-link" id = "activeLink" href="squad.html" aria-disabled="true">Squad</a>
+              <a class="nav-link"  href="squad.html" aria-disabled="true">Squad</a>
             </li>
             <li class = "nav-item active">
-              <a class = "nav-link" href = "statsPage.html" aria-disabled = "true"> Statistics </a>
+              <a class = "nav-link" id = "activeLink" href = "statsPage.html" aria-disabled = "true"> Statistics </a>
               </li>
             <li class="nav-item dropdown" >
               <a class="nav-link dropdown-toggle"   href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
@@ -56,12 +56,25 @@
       </nav>
     </head>
 
-    <body onload = "readFile()">
-      <div id = "playerContainerDiv" class = "playerContainer">
-
+    <body>
+      <div>
+        <h2 align = "center"> Player's Stats </h1>
       </div>
-
-      <script src="squadScript.js"></script>
-      </body>
-
-</html>
+      <div id = "tableDiv">
+        <br>
+        <table align = "center" id = "playersTable">
+          <tr>
+            <th>Name</th>
+            <th>Appearances</th>
+            <th>Goals</th>
+          </tr>
+          <tr>
+            <td>Jill</td>
+            <td>Smith</td>
+            <td>50</td>
+          </tr>
+        </table>
+        <br>
+      </div>
+    </body>
+    </html>

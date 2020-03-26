@@ -9,7 +9,9 @@ function addPlayer(){
     var nPerson = {Name: nameVal,
                    Age: ageVal,
                    Position: posVal,
-                   Picture: fileName}
+                   Picture: fileName,
+                  Apps: 0,
+                  Goals:0}
     jsonObj = JSON.stringify(nPerson)
     const options = {
       method: 'POST',
@@ -151,9 +153,10 @@ function deletePlayer(){
   fetch("http://127.0.0.1:8090/delPlayer",options)
   .then(function(response) {
     if (response.ok) {
+      generateOptions();
       return response.text();
     }
-    if(response.text = 304){
+    if(response.statusCode = 304){
       window.alert("Enable admin mode to delete players")
     }
     else {
