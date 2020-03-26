@@ -150,6 +150,7 @@ function submitGoals(){
 function createRow(data){
   console.log("here")
   var table = document.getElementById("playersTable");
+  var tbody = document.getElementById("tbody")
   var row = document.createElement('tr');
   var name = document.createElement('td');
   var apps = document.createElement('td');
@@ -163,7 +164,8 @@ function createRow(data){
   row.appendChild(apps);
   row.appendChild(goals);
 
-  table.appendChild(row);
+  tbody.appendChild(row)
+  table.appendChild(tbody);
 }
 
 function readPlayers(){
@@ -183,5 +185,6 @@ function readPlayers(){
     for (object in obj){
       createRow(obj[object])
     }
+
   })
 }
