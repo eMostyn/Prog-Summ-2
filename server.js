@@ -8,7 +8,6 @@ var learnInfo = "Test"
 var admin = false;
 var formidable = require('formidable');
 var squadJs = require('./squad.json');
-
 app.get('/learnMore', function (req, res) {
   res.send(learnInfo)
 })
@@ -209,5 +208,31 @@ else {
   }
 })
 
+app.post('/appendGoals', function(req,res){
+  var data;
+  if(admin == true){
+    fs.readFile('./squad.json', 'utf8', (err, jsonString) => {
+      if (err) {
+          console.log("Error reading file from disk:", err)
+          return
+      }
+      data = JSON.parse(jsonString)
+      for (obj in data){
+        if(data[obj].Name == req.body.Name){
+          data[obj].Goals = req.body.Goals;
+          fs.writeFile('squad.json', JSON.stringify(data), (err) => {
+            // throws an error, you could also catch it here
+            if (err) throw err;
+          })
+          break;
+        }
+      }
+    })
 
+    res.sendStatus(200)
+  }
+  else{
+    res.sendStatus(304);
+  }
+})
 app.listen(8090)

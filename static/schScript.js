@@ -189,6 +189,7 @@ function generateOptions(){
   .then(body =>{
     data = body;
     var dropdown = document.getElementById("deleteOptions")
+    dropdown.innerHTML = "";
     obj = JSON.parse(data)
     for (object in obj){
       var option = document.createElement("option")

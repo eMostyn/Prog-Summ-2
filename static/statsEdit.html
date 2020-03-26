@@ -57,17 +57,31 @@
     </head>
     <body onload = "generateOptions()">
       <div id = "title">
-        <h2 align = center> Edit Appearances </h1>
+        <h2 align = center> Edit Appearances </h2>
       </div>
       <div id = "appsDiv">
-
+        Player:
         <select class = "playerSelect"  onchange = "getApps()"id = "aPlayersSelect">
         </select>
         <p>
-          <input type = "number" id = "appsNum" >
+          <input type = "number" class = "numInput" id = "appsNum" >
           <button class = "changeButt" onclick = "incrementApps()" id = "aplusButt"> + </button>
           <button class = "changeButt" onclick = "decrementApps()"id = "aminusButt">-</button>
           <button id = "submitAppsButt" onclick = "submitApps()"> Change </button>
+        </p>
+      </div>
+      <div id = "title2">
+        <h2 align = center> Edit Goals </h2>
+      </div>
+      <div id = "goalsDiv">
+        Player:
+        <select class = "playerSelect"  onchange = "getGoals()"id = "gPlayersSelect">
+        </select>
+        <p>
+          <input type = "number" class = "numInput" id = "goalsNum" >
+          <button class = "changeButt" onclick = "incrementGoals()" id = "gplusButt"> + </button>
+          <button class = "changeButt" onclick = "decrementGoals()"id = "gminusButt">-</button>
+          <button id = "submitAppsButt" onclick = "submitGoals()"> Change </button>
         </p>
       </div>
     <script src = "statsScript.js"></script>

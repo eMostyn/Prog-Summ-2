@@ -16,7 +16,7 @@
 body{
   font-family: "Arial Black", Gadget, sans-serif;
 }
-#tableDiv, #appsDiv{
+#tableDiv, #appsDiv,#goalsDiv{
 list-style-position: inside;
  margin: auto;
  width: 50%;
@@ -36,6 +36,8 @@ td{
 #playersTable{
   text-align: center;
   margin-top: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 .changeButt{
   width: 25px;
@@ -43,11 +45,11 @@ td{
   text-align: center;
   padding:0.5px;
 }
-#appsNum{
+.numInput{
   width: 15%;
   text-align: right;
 }
-#aPlayersSelect{
+.playerSelect{
   margin-top: 10px;
   margin-bottom: 10px;
 }
