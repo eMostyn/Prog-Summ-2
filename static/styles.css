@@ -80,3 +80,9 @@ input[type=text], input[type=file]{
   margin-top: 5px;
   margin-bottom: 5px;
 }
+#searchBar{
+  display: block;
+  width: 20%;
+  text-align: center;
+  margin: auto;
+}

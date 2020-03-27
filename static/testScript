@@ -1,0 +1,25 @@
+function testStatus(){
+
+}
+var nEvent = {Title: titleVal,
+              Description: descVal,
+              Date: dateVal,
+              Begins: beginsVal,
+              Ends: endsVal,
+              Location: locationVal}
+//Convert object to a json string
+jsonObj = JSON.stringify(nEvent)
+//Create the options for the post method
+const options = {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  //Specify the body as the JSON string just created
+  body: jsonObj
+}
+//Send the post request to the specified address using the options from above
+fetch("http://127.0.0.1:8090/newEvent",options)
+.then(function(response) {
+  //If the response recieved from the server is ok
+  if (response.ok) {
