@@ -29,6 +29,7 @@ function addPlayer(){
     }
     //POST request to add the new person to the server
     fetch("http://127.0.0.1:8090/newPerson",options)
+    .catch( (error) => alert("The server has disconnected."))
     .then(function(response) {
       if (response.ok) {
         //If the response is okay clear the form's input
@@ -56,6 +57,7 @@ function addPlayer(){
 function uploadFile(){
 //Convert the data held in the form into FormData
  var formData = new FormData(document.querySelector('form'))
+ console.log(formData)
  //Create the options for the POST request
  const options = {
    method: 'POST',
@@ -63,6 +65,7 @@ function uploadFile(){
  }
  //POST request to send the image to the server
  fetch("http://127.0.0.1:8090/fileupload",options)
+ .catch( (error) => alert("The server has disconnected."))
  .then(function(response) {
    if (response.ok) {
      return response.text();
@@ -127,6 +130,7 @@ function createPlayerProf(data){
 function readFile(){
   //GET request to get the contents of the file storing the players
   fetch("http://127.0.0.1:8090/readPerson")
+  .catch( (error) => alert("The server has disconnected."))
   .then(function(response) {
     if (response.ok) {
       return response.text();
@@ -159,6 +163,7 @@ function generateOptions(){
   dropdown.innerHTML = "";
   //GET request to get the contents of the players file
   fetch("http://127.0.0.1:8090/readPerson")
+  .catch( (error) => alert("The server has disconnected."))
   .then(function(response) {
     if (response.ok) {
       return response.text();
@@ -203,6 +208,7 @@ function deletePlayer(){
   }
   //POST request to delete the player
   fetch("http://127.0.0.1:8090/delPlayer",options)
+  .catch( (error) => alert("The server has disconnected."))
   .then(function(response) {
     if (response.ok) {
       //If the response is OK then regenerate the options of the dropdown so it doesnt include deleted player

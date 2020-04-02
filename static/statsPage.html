@@ -37,17 +37,17 @@
             <li class="nav-item">
               <a class="nav-link" href="calendar.html">Schedule</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link"  href="adminPage.html" aria-disabled="true">Admin</a>
-            </li>
             <li class="nav-item active">
               <a class="nav-link"  href="squad.html" aria-disabled="true">Squad</a>
             </li>
             <li class = "nav-item active">
               <a class = "nav-link" id = "activeLink" href = "statsPage.html" aria-disabled = "true"> Statistics </a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link"  href="adminPage.html" aria-disabled="true">Admin</a>
+              </li>
             <li class="nav-item dropdown" >
-              <a class="nav-link dropdown-toggle"   href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+              <a class="nav-link dropdown-toggle"   href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Edit</a>
               <div class="dropdown-menu" aria-labelledby="dropdown03">
                 <a class="dropdown-item" href="eventEdit.html">Add/Remove Events</a>
                 <a class="dropdown-item" href="playerEdit.html">Add/Remove Players</a>
@@ -66,6 +66,9 @@
         <h2 align = "center"> Player's Stats </h1>
       </div>
       <div id = "tableDiv" >
+        Below are the stats for each player in the squad.
+        <br>
+        Click on any of the headers to sort the table!
         <br>
         <table  class="sortable-theme-bootstrap" data-sortable align = "center" id = "playersTable">
           <thead>

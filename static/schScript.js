@@ -28,6 +28,7 @@ function addEvent(){
     }
     //Send the post request to the specified address using the options from above
     fetch("http://127.0.0.1:8090/newEvent",options)
+    .catch( (error) => alert("The server has disconnected."))
     .then(function(response) {
       //If the response recieved from the server is ok
       if (response.ok) {
@@ -48,6 +49,9 @@ function addEvent(){
         //Alert the user to the issue
         window.alert("Enable Admin mode to add events.")
       }
+      else if(response.status ==  404){
+        window.alert("Server has turned off")
+      }
       else {
         //If the code is not 403 then another error has occurred
         return "Error in adding new event";
@@ -59,7 +63,6 @@ function addEvent(){
     window.alert("Please enter a valid title");
   }
 }
-
 function createEventView(object){
   //Get the overall schedule container
   var scheduleContainer = document.getElementById("scheduleContainer");
@@ -221,6 +224,7 @@ function createEventView(object){
 function readFile(){
   //GET request to the server to read the schedule file and return contents
   fetch("http://127.0.0.1:8090/readEvents")
+  .catch( (error) => alert("The server has disconnected."))
   .then(function(response) {
     if (response.ok) {
       return response.text();
@@ -251,6 +255,7 @@ function readFile(){
 function generateOptions(){
   //GET request to get contents of schedule file
   fetch("http://127.0.0.1:8090/readEvents")
+  .catch( (error) => alert("The server has disconnected."))
   .then(function(response) {
     if (response.ok) {
       return response.text();
@@ -303,6 +308,7 @@ function deleteEvent(){
   }
   //Send the request
     fetch("http://127.0.0.1:8090/delEvent",options)
+    .catch( (error) => alert("The server has disconnected."))
     .then(function(response) {
       if (response.ok) {
         //If the response comes back ok then regenerate the dropdown box options
@@ -325,23 +331,33 @@ function searchEvents(){
   document.getElementById("scheduleContainer").innerHTML = "";
   //Get the value currently in the search bar
   var searchVal = document.getElementById("searchBar").value;
-  //Make a GET request, querying the search value as title
-  fetch("http://127.0.0.1:8090/searchEvents?Title="+searchVal)
-  .then(function(response) {
-    if (response.ok) {
-      return response.text();
-    }
-    else {
-      //Return an error only if on the response is not returned OK.
-      return "Error in searching events";
-    }
-  })
-  .then(body =>{
-    //Set data to the JSON object of body
-    data = JSON.parse(body)
-    //For each individual item that is returned from the search, create an event for it.
-    for(item in data){
-      createEventView(data[item])
-    }
-  })
+  //If there is a value to search by
+  if(searchVal != ""){
+    //Make a GET request, querying the search value as title
+    fetch("http://127.0.0.1:8090/searchEvents?Title="+searchVal)
+    .catch( (error) => alert("The server has disconnected."))
+    .then(function(response) {
+      if (response.ok) {
+        return response.text();
+      }
+      else {
+        //Return an error only if on the response is not returned OK.
+        return "Error in searching events";
+      }
+    })
+    .then(body =>{
+      //Set data to the JSON object of body
+      data = JSON.parse(body)
+      //For each individual item that is returned from the search, create an event for it.
+      for(item in data){
+        createEventView(data[item])
+      }
+    })
+  }
+  //If the search box is empty we want all of the options to appear
+  else{
+
+    readFile();
+  }
+
 }

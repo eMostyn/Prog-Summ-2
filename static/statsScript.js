@@ -3,6 +3,7 @@ function generateOptions(){
   var selects = document.getElementsByClassName("playerSelect")
   //GET request to get the contents of the file holding the players
   fetch("http://127.0.0.1:8090/readPerson")
+  .catch( (error) => alert("The server has disconnected."))
   .then(function(response) {
     if (response.ok) {
       return response.text();
@@ -60,6 +61,7 @@ function getApps(){
   var toFind = document.getElementById("aPlayersSelect").value;
   //GET request to get the value of the player file
   fetch("http://127.0.0.1:8090/readPerson")
+  .catch( (error) => alert("The server has disconnected."))
   .then(function(response) {
     if (response.ok) {
       return response.text();
@@ -103,7 +105,8 @@ function submitApps(){
     body: jsonObj
   }
   //POST request to update the appearances
-  fetch("http://127.0.0.1:8090/appendApps",options)
+  fetch("http://127.0.0.1:8090/ammendApps",options)
+  .catch( (error) => alert("The server has disconnected."))
   .then(function(response) {
     if (response.ok) {
       //IF the response is OK then alert the user that its been updated
@@ -124,6 +127,7 @@ function getGoals(){
   var toFind = document.getElementById("gPlayersSelect").value;
   //Fetch request to get the contents of the player file
   fetch("http://127.0.0.1:8090/readPerson")
+  .catch( (error) => alert("The server has disconnected."))
   .then(function(response) {
     if (response.ok) {
       return response.text();
@@ -154,8 +158,8 @@ function incrementGoals(){
   //Use the stepup method to increase the value in the goals box by one
   document.getElementById("goalsNum").stepUp();
 }
-function decrementGoals()
-  //Get the goals - button
+function decrementGoals(){
+  //Get the goals "-"" button
   var button = document.getElementById("gminusButt");
   //Use the stepup method to decrease the value in the goals box by one
   document.getElementById("goalsNum").stepDown();
@@ -177,7 +181,8 @@ function submitGoals(){
     body: jsonObj
   }
   //Send the POST request to update the goals value
-  fetch("http://127.0.0.1:8090/appendGoals",options)
+  fetch("http://127.0.0.1:8090/ammendGoals",options)
+  .catch( (error) => alert("The server has disconnected."))
   .then(function(response) {
     if (response.ok) {
       //If the response is okay then tell the user it was succefull
@@ -222,6 +227,7 @@ function createRow(data){
 function readPlayers(){
   //GET request to obtain the contains of the person file
   fetch("http://127.0.0.1:8090/readPerson")
+  .catch( (error) => alert("The server has disconnected."))
   .then(function(response) {
     if (response.ok) {
       return response.text();

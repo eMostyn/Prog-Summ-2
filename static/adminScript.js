@@ -3,6 +3,7 @@ function setAdmin(){
   var adminButton = document.getElementById("adminButton");
   //GET request to obtain the current value of admin
   fetch("http://127.0.0.1:8090/getAdmin")
+  .catch( (error) => alert("The server has disconnected."))
   .then(function(response) {
     if (response.ok) {
       return response.text();
@@ -24,6 +25,7 @@ function setAdmin(){
 function toggleAdmin(){
   //GET request to get the value of admin
   fetch("http://127.0.0.1:8090/getAdmin")
+  .catch( (error) => alert("The server has disconnected."))
   .then(function(response) {
     if (response.ok) {
       return response.text();
@@ -48,6 +50,7 @@ function toggleAdmin(){
       }
       //Create a JSON holding the new value of admin
       adminObj = JSON.stringify({Admin: admin})
+      console.log(adminObj)
       //Create options for POST request, setting body to new admin value
       const options = {
         method: 'POST',
