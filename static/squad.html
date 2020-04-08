@@ -16,12 +16,13 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 <link rel="stylesheet" type="text/css" href="squadStyles.css">
 <meta name="theme-color" content="#563d7c">
-<nav class="navbar navbar-expand-sm navbar-custom" id = "topBar">
+<div id = "nav">
+<nav class="navbar navbar-expand-sm navbar-custom navbar-dark">
         <div class="navbar-brand">
-          <img src = "footer-coat-of-arms.png" alt = "logo">
+          <img src = "footer-coat-of-arms.png" id = "logo" alt = "logo">
         </div>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
+        <button id = "collapse" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+          <span id = "collapseIcon" class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarsExample03">
@@ -33,9 +34,9 @@
               <a class="nav-link" href="calendar.html">Schedule</a>
             </li>
             <li class="nav-item active">
-              <a class="nav-link" id = "activeLink" href="squad.html" aria-disabled="true">Squad</a>
+              <a class="nav-link"  href="squad.html" aria-disabled="true">Squad</a>
             </li>
-            <li class = "nav-item active">
+            <li class = "nav-item">
               <a class = "nav-link" href = "statsPage.html" aria-disabled = "true"> Statistics </a>
               </li>
               <li class="nav-item">
@@ -54,9 +55,13 @@
         </div>
 
       </nav>
+</div>
     </head>
 
     <body onload = "readFile()">
+        <div id = "title" align="center">
+          <h2> Current Squad </h2>
+        </div>
       <div id = "playerContainerDiv" class = "playerContainer">
 
       </div>

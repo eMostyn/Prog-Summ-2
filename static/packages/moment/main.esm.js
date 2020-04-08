@@ -8,16 +8,16 @@ import * as momentNs from 'moment';
 import { createPlugin, Calendar } from '@fullcalendar/core';
 
 var moment = momentNs; // the directly callable function
-function toMoment(date, calendar) {
+function toMoment (date, calendar) {
     if (!(calendar instanceof Calendar)) {
         throw new Error('must supply a Calendar instance');
     }
     return convertToMoment(date, calendar.dateEnv.timeZone, null, calendar.dateEnv.locale.codes[0]);
 }
-function toDuration(fcDuration) {
+function toDuration (fcDuration) {
     return moment.duration(fcDuration); // moment accepts all the props that fc.Duration already has!
 }
-function formatWithCmdStr(cmdStr, arg) {
+function formatWithCmdStr (cmdStr, arg) {
     var cmd = parseCmdStr(cmdStr);
     if (arg.end) {
         var startMom = convertToMoment(arg.start.array, arg.timeZone, arg.start.timeZoneOffset, arg.localeCodes[0]);
@@ -29,23 +29,20 @@ function formatWithCmdStr(cmdStr, arg) {
 var main = createPlugin({
     cmdFormatter: formatWithCmdStr
 });
-function createMomentFormatFunc(mom) {
+function createMomentFormatFunc (mom) {
     return function (cmdStr) {
         return cmdStr ? mom.format(cmdStr) : ''; // because calling with blank string results in ISO8601 :(
     };
 }
-function convertToMoment(input, timeZone, timeZoneOffset, locale) {
+function convertToMoment (input, timeZone, timeZoneOffset, locale) {
     var mom;
     if (timeZone === 'local') {
         mom = moment(input);
-    }
-    else if (timeZone === 'UTC') {
+    } else if (timeZone === 'UTC') {
         mom = moment.utc(input);
-    }
-    else if (moment.tz) {
+    } else if (moment.tz) {
         mom = moment.tz(input, timeZone);
-    }
-    else {
+    } else {
         mom = moment.utc(input);
         if (timeZoneOffset != null) {
             mom.utcOffset(timeZoneOffset);
@@ -54,7 +51,7 @@ function convertToMoment(input, timeZone, timeZoneOffset, locale) {
     mom.locale(locale);
     return mom;
 }
-function parseCmdStr(cmdStr) {
+function parseCmdStr (cmdStr) {
     var parts = cmdStr.match(/^(.*?)\{(.*)\}(.*)$/); // TODO: lookbehinds for escape characters
     if (parts) {
         var middle = parseCmdStr(parts[2]);
@@ -64,8 +61,7 @@ function parseCmdStr(cmdStr) {
             tail: parts[3],
             whole: parts[1] + middle.whole + parts[3]
         };
-    }
-    else {
+    } else {
         return {
             head: null,
             middle: null,
@@ -74,7 +70,7 @@ function parseCmdStr(cmdStr) {
         };
     }
 }
-function formatRange(cmd, formatStart, formatEnd, separator) {
+function formatRange (cmd, formatStart, formatEnd, separator) {
     if (cmd.middle) {
         var startHead = formatStart(cmd.head);
         var startMiddle = formatRange(cmd.middle, formatStart, formatEnd, separator);
@@ -92,8 +88,7 @@ function formatRange(cmd, formatStart, formatEnd, separator) {
     var endWhole = formatEnd(cmd.whole);
     if (startWhole === endWhole) {
         return startWhole;
-    }
-    else {
+    } else {
         return startWhole + separator + endWhole;
     }
 }

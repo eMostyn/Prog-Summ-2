@@ -5,10 +5,11 @@ Docs & License: https://fullcalendar.io/
 */
 
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@fullcalendar/core')) :
-    typeof define === 'function' && define.amd ? define(['exports', '@fullcalendar/core'], factory) :
-    (global = global || self, factory(global.FullCalendarList = {}, global.FullCalendar));
-}(this, function (exports, core) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@fullcalendar/core'))
+    : typeof define === 'function' && define.amd ? define(['exports', '@fullcalendar/core'], factory)
+    : (global = global || self, factory(global.FullCalendarList = {}, global.FullCalendar));
+}(this, function (exports, core) {
+ 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -26,22 +27,22 @@ Docs & License: https://fullcalendar.io/
     ***************************************************************************** */
     /* global Reflect, Promise */
 
-    var extendStatics = function(d, b) {
+    var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
             function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
 
-    function __extends(d, b) {
+    function __extends (d, b) {
         extendStatics(d, b);
-        function __() { this.constructor = d; }
+        function __ () { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     }
 
     var ListEventRenderer = /** @class */ (function (_super) {
         __extends(ListEventRenderer, _super);
-        function ListEventRenderer(listView) {
+        function ListEventRenderer (listView) {
             var _this = _super.call(this) || this;
             _this.listView = listView;
             return _this;
@@ -49,8 +50,7 @@ Docs & License: https://fullcalendar.io/
         ListEventRenderer.prototype.attachSegs = function (segs) {
             if (!segs.length) {
                 this.listView.renderEmptyMessage();
-            }
-            else {
+            } else {
                 this.listView.renderSegList(segs);
             }
         };
@@ -58,7 +58,7 @@ Docs & License: https://fullcalendar.io/
         };
         // generates the HTML for a single event row
         ListEventRenderer.prototype.renderSegHtml = function (seg) {
-            var _a = this.context, theme = _a.theme, options = _a.options;
+            var _a = this.context; var theme = _a.theme; var options = _a.options;
             var eventRange = seg.eventRange;
             var eventDef = eventRange.def;
             var eventInstance = eventRange.instance;
@@ -69,21 +69,17 @@ Docs & License: https://fullcalendar.io/
             var timeHtml;
             if (eventDef.allDay) {
                 timeHtml = core.getAllDayHtml(options);
-            }
-            else if (core.isMultiDayRange(eventRange.range)) {
+            } else if (core.isMultiDayRange(eventRange.range)) {
                 if (seg.isStart) {
                     timeHtml = core.htmlEscape(this._getTimeText(eventInstance.range.start, seg.end, false // allDay
                     ));
-                }
-                else if (seg.isEnd) {
+                } else if (seg.isEnd) {
                     timeHtml = core.htmlEscape(this._getTimeText(seg.start, eventInstance.range.end, false // allDay
                     ));
-                }
-                else { // inner segment that lasts the whole day
+                } else { // inner segment that lasts the whole day
                     timeHtml = core.getAllDayHtml(options);
                 }
-            }
-            else {
+            } else {
                 // Display the normal time text for the *event's* times
                 timeHtml = core.htmlEscape(this.getTimeText(eventRange));
             }
@@ -91,16 +87,16 @@ Docs & License: https://fullcalendar.io/
                 classes.push('fc-has-url');
             }
             return '<tr class="' + classes.join(' ') + '">' +
-                (this.displayEventTime ?
-                    '<td class="fc-list-item-time ' + theme.getClass('widgetContent') + '">' +
+                (this.displayEventTime
+                    ? '<td class="fc-list-item-time ' + theme.getClass('widgetContent') + '">' +
                         (timeHtml || '') +
-                        '</td>' :
-                    '') +
+                        '</td>'
+                    : '') +
                 '<td class="fc-list-item-marker ' + theme.getClass('widgetContent') + '">' +
                 '<span class="fc-event-dot"' +
-                (bgColor ?
-                    ' style="background-color:' + bgColor + '"' :
-                    '') +
+                (bgColor
+                    ? ' style="background-color:' + bgColor + '"'
+                    : '') +
                 '></span>' +
                 '</td>' +
                 '<td class="fc-list-item-title ' + theme.getClass('widgetContent') + '">' +
@@ -126,7 +122,7 @@ Docs & License: https://fullcalendar.io/
     */
     var ListView = /** @class */ (function (_super) {
         __extends(ListView, _super);
-        function ListView(viewSpec, parentEl) {
+        function ListView (viewSpec, parentEl) {
             var _this = _super.call(this, viewSpec, parentEl) || this;
             _this.computeDateVars = core.memoize(computeDateVars);
             _this.eventStoreToSegs = core.memoize(_this._eventStoreToSegs);
@@ -143,7 +139,7 @@ Docs & License: https://fullcalendar.io/
         };
         ListView.prototype.render = function (props, context) {
             _super.prototype.render.call(this, props, context);
-            var _a = this.computeDateVars(props.dateProfile), dayDates = _a.dayDates, dayRanges = _a.dayRanges;
+            var _a = this.computeDateVars(props.dateProfile); var dayDates = _a.dayDates; var dayRanges = _a.dayRanges;
             this.dayDates = dayDates;
             this.renderSkeleton(context);
             this.renderContent(context, this.eventStoreToSegs(props.eventStore, props.eventUiBases, dayRanges));
@@ -199,7 +195,7 @@ Docs & License: https://fullcalendar.io/
             return segs;
         };
         ListView.prototype.eventRangeToSegs = function (eventRange, dayRanges) {
-            var _a = this.context, dateEnv = _a.dateEnv, nextDayThreshold = _a.nextDayThreshold;
+            var _a = this.context; var dateEnv = _a.dateEnv; var nextDayThreshold = _a.nextDayThreshold;
             var range = eventRange.range;
             var allDay = eventRange.def.allDay;
             var dayIndex;
@@ -280,7 +276,7 @@ Docs & License: https://fullcalendar.io/
         };
         // generates the HTML for the day headers that live amongst the event rows
         ListView.prototype.buildDayHeaderRow = function (dayDate) {
-            var _a = this.context, theme = _a.theme, dateEnv = _a.dateEnv, options = _a.options;
+            var _a = this.context; var theme = _a.theme; var dateEnv = _a.dateEnv; var options = _a.options;
             var mainFormat = core.createFormatter(options.listDayFormat); // TODO: cache
             var altFormat = core.createFormatter(options.listDayAltFormat); // TODO: cache
             return core.createElement('tr', {
@@ -288,20 +284,20 @@ Docs & License: https://fullcalendar.io/
                 'data-date': dateEnv.formatIso(dayDate, { omitTime: true })
             }, '<td class="' + (theme.getClass('tableListHeading') ||
                 theme.getClass('widgetHeader')) + '" colspan="3">' +
-                (mainFormat ?
-                    core.buildGotoAnchorHtml(options, dateEnv, dayDate, { 'class': 'fc-list-heading-main' }, core.htmlEscape(dateEnv.format(dayDate, mainFormat)) // inner HTML
-                    ) :
-                    '') +
-                (altFormat ?
-                    core.buildGotoAnchorHtml(options, dateEnv, dayDate, { 'class': 'fc-list-heading-alt' }, core.htmlEscape(dateEnv.format(dayDate, altFormat)) // inner HTML
-                    ) :
-                    '') +
+                (mainFormat
+                    ? core.buildGotoAnchorHtml(options, dateEnv, dayDate, { class: 'fc-list-heading-main' }, core.htmlEscape(dateEnv.format(dayDate, mainFormat)) // inner HTML
+                    )
+                    : '') +
+                (altFormat
+                    ? core.buildGotoAnchorHtml(options, dateEnv, dayDate, { class: 'fc-list-heading-alt' }, core.htmlEscape(dateEnv.format(dayDate, altFormat)) // inner HTML
+                    )
+                    : '') +
                 '</td>');
         };
         return ListView;
     }(core.View));
     ListView.prototype.fgSegSelector = '.fc-list-item'; // which elements accept event actions
-    function computeDateVars(dateProfile) {
+    function computeDateVars (dateProfile) {
         var dayStart = core.startOfDay(dateProfile.renderRange.start);
         var viewEnd = dateProfile.renderRange.end;
         var dayDates = [];
@@ -352,5 +348,4 @@ Docs & License: https://fullcalendar.io/
     exports.default = main;
 
     Object.defineProperty(exports, '__esModule', { value: true });
-
 }));

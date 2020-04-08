@@ -21,8 +21,8 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-var __assign = function() {
-    __assign = Object.assign || function __assign(t) {
+var __assign = function () {
+    __assign = Object.assign || function __assign (t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
             s = arguments[i];
             for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
@@ -66,8 +66,7 @@ var eventSourceDef = {
             onFailure({
                 message: 'Specify a googleCalendarApiKey. See http://fullcalendar.io/docs/google_calendar/'
             });
-        }
-        else {
+        } else {
             var url = buildUrl(meta);
             var requestParams_1 = buildRequestParams(arg.range, apiKey, meta.data, calendar.dateEnv);
             requestJson('GET', url, requestParams_1, function (body, xhr) {
@@ -77,8 +76,7 @@ var eventSourceDef = {
                         errors: body.error.errors,
                         xhr: xhr
                     });
-                }
-                else {
+                } else {
                     onSuccess({
                         rawEvents: gcalItemsToRawEventDefs(body.items, requestParams_1.timeZone),
                         xhr: xhr
@@ -90,26 +88,25 @@ var eventSourceDef = {
         }
     }
 };
-function parseGoogleCalendarId(url) {
+function parseGoogleCalendarId (url) {
     var match;
     // detect if the ID was specified as a single string.
     // will match calendars like "asdf1234@calendar.google.com" in addition to person email calendars.
     if (/^[^\/]+@([^\/\.]+\.)*(google|googlemail|gmail)\.com$/.test(url)) {
         return url;
-    }
-    else if ((match = /^https:\/\/www.googleapis.com\/calendar\/v3\/calendars\/([^\/]*)/.exec(url)) ||
+    } else if ((match = /^https:\/\/www.googleapis.com\/calendar\/v3\/calendars\/([^\/]*)/.exec(url)) ||
         (match = /^https?:\/\/www.google.com\/calendar\/feeds\/([^\/]*)/.exec(url))) {
         return decodeURIComponent(match[1]);
     }
 }
-function buildUrl(meta) {
+function buildUrl (meta) {
     var apiBase = meta.googleCalendarApiBase;
     if (!apiBase) {
         apiBase = API_BASE;
     }
     return apiBase + '/' + encodeURIComponent(meta.googleCalendarId) + '/events';
 }
-function buildRequestParams(range, apiKey, extraParams, dateEnv) {
+function buildRequestParams (range, apiKey, extraParams, dateEnv) {
     var params;
     var startStr;
     var endStr;
@@ -117,8 +114,7 @@ function buildRequestParams(range, apiKey, extraParams, dateEnv) {
         // strings will naturally have offsets, which GCal needs
         startStr = dateEnv.formatIso(range.start);
         endStr = dateEnv.formatIso(range.end);
-    }
-    else {
+    } else {
         // when timezone isn't known, we don't know what the UTC offset should be, so ask for +/- 1 day
         // from the UTC day-start to guarantee we're getting all the events
         // (start/end will be UTC-coerced dates, so toISOString is okay)
@@ -131,12 +127,12 @@ function buildRequestParams(range, apiKey, extraParams, dateEnv) {
     }
     return params;
 }
-function gcalItemsToRawEventDefs(items, gcalTimezone) {
+function gcalItemsToRawEventDefs (items, gcalTimezone) {
     return items.map(function (item) {
         return gcalItemToRawEventDef(item, gcalTimezone);
     });
 }
-function gcalItemToRawEventDef(item, gcalTimezone) {
+function gcalItemToRawEventDef (item, gcalTimezone) {
     var url = item.htmlLink || null;
     // make the URLs for each event show times in the correct timezone
     if (url && gcalTimezone) {
@@ -154,7 +150,7 @@ function gcalItemToRawEventDef(item, gcalTimezone) {
 }
 // Injects a string like "arg=value" into the querystring of a URL
 // TODO: move to a general util file?
-function injectQsComponent(url, component) {
+function injectQsComponent (url, component) {
     // inject it after the querystring but before the fragment
     return url.replace(/(\?.*?)?(#|$)/, function (whole, qs, hash) {
         return (qs ? qs + '&' : '?') + component + hash;

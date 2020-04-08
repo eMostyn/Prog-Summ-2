@@ -1,4 +1,4 @@
-(function() {
+(function () {
   var SELECTOR, addEventListener, clickEvents, numberRegExp, sortable, touchDevice, trimRegExp;
 
   SELECTOR = 'table[data-sortable]';
@@ -15,16 +15,16 @@
     clickEvents.push('touchstart');
   }
 
-  addEventListener = function(el, event, handler) {
+  addEventListener = function (el, event, handler) {
     if (el.addEventListener != null) {
       return el.addEventListener(event, handler, false);
     } else {
-      return el.attachEvent("on" + event, handler);
+      return el.attachEvent('on' + event, handler);
     }
   };
 
   sortable = {
-    init: function(options) {
+    init: function (options) {
       var table, tables, _i, _len, _results;
       if (options == null) {
         options = {};
@@ -40,7 +40,7 @@
       }
       return _results;
     },
-    initTable: function(table) {
+    initTable: function (table) {
       var i, th, ths, _i, _len, _ref;
       if (((_ref = table.tHead) != null ? _ref.rows.length : void 0) !== 1) {
         return;
@@ -58,10 +58,10 @@
       }
       return table;
     },
-    setupClickableTH: function(table, th, i) {
+    setupClickableTH: function (table, th, i) {
       var eventName, onClick, type, _i, _len, _results;
       type = sortable.getColumnType(table, i);
-      onClick = function(e) {
+      onClick = function (e) {
         var compare, item, newSortedDirection, position, row, rowArray, sorted, sortedDirection, tBody, ths, value, _compare, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1;
         if (e.handled !== true) {
           e.handled = true;
@@ -89,11 +89,11 @@
           if (type.compare != null) {
             _compare = type.compare;
           } else {
-            _compare = function(a, b) {
+            _compare = function (a, b) {
               return b - a;
             };
           }
-          compare = function(a, b) {
+          compare = function (a, b) {
             if (a[0] === b[0]) {
               return a[2] - b[2];
             }
@@ -129,8 +129,8 @@
             tBody.appendChild(row);
           }
         }
-        if (typeof window['CustomEvent'] === 'function') {
-          return typeof table.dispatchEvent === "function" ? table.dispatchEvent(new CustomEvent('Sortable.sorted', {
+        if (typeof window.CustomEvent === 'function') {
+          return typeof table.dispatchEvent === 'function' ? table.dispatchEvent(new CustomEvent('Sortable.sorted', {
             bubbles: true
           })) : void 0;
         }
@@ -142,7 +142,7 @@
       }
       return _results;
     },
-    getColumnType: function(table, i) {
+    getColumnType: function (table, i) {
       var row, specified, text, type, _i, _j, _len, _len1, _ref, _ref1, _ref2;
       specified = (_ref = table.querySelectorAll('th')[i]) != null ? _ref.getAttribute('data-sortable-type') : void 0;
       if (specified != null) {
@@ -162,7 +162,7 @@
       }
       return sortable.typesObject.alpha;
     },
-    getNodeValue: function(node) {
+    getNodeValue: function (node) {
       var dataValue;
       if (!node) {
         return '';
@@ -176,7 +176,7 @@
       }
       return node.textContent.replace(trimRegExp, '');
     },
-    setupTypes: function(types) {
+    setupTypes: function (types) {
       var type, _i, _len, _results;
       sortable.types = types;
       sortable.typesObject = {};
@@ -193,29 +193,29 @@
     {
       name: 'numeric',
       defaultSortDirection: 'descending',
-      match: function(a) {
+      match: function (a) {
         return a.match(numberRegExp);
       },
-      comparator: function(a) {
+      comparator: function (a) {
         return parseFloat(a.replace(/[^0-9.-]/g, ''), 10) || 0;
       }
     }, {
       name: 'date',
       defaultSortDirection: 'ascending',
       reverse: true,
-      match: function(a) {
+      match: function (a) {
         return !isNaN(Date.parse(a));
       },
-      comparator: function(a) {
+      comparator: function (a) {
         return Date.parse(a) || 0;
       }
     }, {
       name: 'alpha',
       defaultSortDirection: 'ascending',
-      match: function() {
+      match: function () {
         return true;
       },
-      compare: function(a, b) {
+      compare: function (a, b) {
         return a.localeCompare(b);
       }
     }
@@ -224,7 +224,7 @@
   setTimeout(sortable.init, 0);
 
   if (typeof define === 'function' && define.amd) {
-    define(function() {
+    define(function () {
       return sortable;
     });
   } else if (typeof exports !== 'undefined') {
@@ -232,5 +232,4 @@
   } else {
     window.Sortable = sortable;
   }
-
 }).call(this);

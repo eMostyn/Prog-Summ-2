@@ -15,83 +15,78 @@ var containerTagHash = {
     '<tr': 'tbody',
     '<td': 'tr'
 };
-function createElement(tagName, attrs, content) {
+function createElement (tagName, attrs, content) {
     var el = document.createElement(tagName);
     if (attrs) {
         for (var attrName in attrs) {
             if (attrName === 'style') {
                 applyStyle(el, attrs[attrName]);
-            }
-            else if (elementPropHash[attrName]) {
+            } else if (elementPropHash[attrName]) {
                 el[attrName] = attrs[attrName];
-            }
-            else {
+            } else {
                 el.setAttribute(attrName, attrs[attrName]);
             }
         }
     }
     if (typeof content === 'string') {
         el.innerHTML = content; // shortcut. no need to process HTML in any way
-    }
-    else if (content != null) {
+    } else if (content != null) {
         appendToElement(el, content);
     }
     return el;
 }
-function htmlToElement(html) {
+function htmlToElement (html) {
     html = html.trim();
     var container = document.createElement(computeContainerTag(html));
     container.innerHTML = html;
     return container.firstChild;
 }
-function htmlToElements(html) {
+function htmlToElements (html) {
     return Array.prototype.slice.call(htmlToNodeList(html));
 }
-function htmlToNodeList(html) {
+function htmlToNodeList (html) {
     html = html.trim();
     var container = document.createElement(computeContainerTag(html));
     container.innerHTML = html;
     return container.childNodes;
 }
 // assumes html already trimmed and tag names are lowercase
-function computeContainerTag(html) {
+function computeContainerTag (html) {
     return containerTagHash[html.substr(0, 3) // faster than using regex
     ] || 'div';
 }
-function appendToElement(el, content) {
+function appendToElement (el, content) {
     var childNodes = normalizeContent(content);
     for (var i = 0; i < childNodes.length; i++) {
         el.appendChild(childNodes[i]);
     }
 }
-function prependToElement(parent, content) {
+function prependToElement (parent, content) {
     var newEls = normalizeContent(content);
     var afterEl = parent.firstChild || null; // if no firstChild, will append to end, but that's okay, b/c there were no children
     for (var i = 0; i < newEls.length; i++) {
         parent.insertBefore(newEls[i], afterEl);
     }
 }
-function insertAfterElement(refEl, content) {
+function insertAfterElement (refEl, content) {
     var newEls = normalizeContent(content);
     var afterEl = refEl.nextSibling || null;
     for (var i = 0; i < newEls.length; i++) {
         refEl.parentNode.insertBefore(newEls[i], afterEl);
     }
 }
-function normalizeContent(content) {
+function normalizeContent (content) {
     var els;
     if (typeof content === 'string') {
         els = htmlToElements(content);
-    }
-    else if (content instanceof Node) {
+    } else if (content instanceof Node) {
         els = [content];
-    }
-    else { // Node[] or NodeList
+    } else { // Node[] or NodeList
         els = Array.prototype.slice.call(content);
     }
     return els;
 }
-function removeElement(el) {
+function removeElement (el) {
     if (el.parentNode) {
         el.parentNode.removeChild(el);
     }
@@ -116,15 +111,15 @@ var closestMethod = Element.prototype.closest || function (selector) {
     } while (el !== null && el.nodeType === 1);
     return null;
 };
-function elementClosest(el, selector) {
+function elementClosest (el, selector) {
     return closestMethod.call(el, selector);
 }
-function elementMatches(el, selector) {
+function elementMatches (el, selector) {
     return matchesMethod.call(el, selector);
 }
 // accepts multiple subject els
 // returns a real array. good for methods like forEach
-function findElements(container, selector) {
+function findElements (container, selector) {
     var containers = container instanceof HTMLElement ? [container] : container;
     var allMatches = [];
     for (var i = 0; i < containers.length; i++) {
@@ -137,7 +132,7 @@ function findElements(container, selector) {
 }
 // accepts multiple subject els
 // only queries direct child elements
-function findChildren(parent, selector) {
+function findChildren (parent, selector) {
     var parents = parent instanceof HTMLElement ? [parent] : parent;
     var allMatches = [];
     for (var i = 0; i < parents.length; i++) {
@@ -153,42 +148,39 @@ function findChildren(parent, selector) {
 }
 // Attributes
 // ----------------------------------------------------------------------------------------------------------------
-function forceClassName(el, className, bool) {
+function forceClassName (el, className, bool) {
     if (bool) {
         el.classList.add(className);
-    }
-    else {
+    } else {
         el.classList.remove(className);
     }
 }
 // Style
 // ----------------------------------------------------------------------------------------------------------------
 var PIXEL_PROP_RE = /(top|left|right|bottom|width|height)$/i;
-function applyStyle(el, props) {
+function applyStyle (el, props) {
     for (var propName in props) {
         applyStyleProp(el, propName, props[propName]);
     }
 }
-function applyStyleProp(el, name, val) {
+function applyStyleProp (el, name, val) {
     if (val == null) {
         el.style[name] = '';
-    }
-    else if (typeof val === 'number' && PIXEL_PROP_RE.test(name)) {
+    } else if (typeof val === 'number' && PIXEL_PROP_RE.test(name)) {
         el.style[name] = val + 'px';
-    }
-    else {
+    } else {
         el.style[name] = val;
     }
 }
 
-function pointInsideRect(point, rect) {
+function pointInsideRect (point, rect) {
     return point.left >= rect.left &&
         point.left < rect.right &&
         point.top >= rect.top &&
         point.top < rect.bottom;
 }
 // Returns a new rectangle that is the intersection of the two rectangles. If they don't intersect, returns false
-function intersectRects(rect1, rect2) {
+function intersectRects (rect1, rect2) {
     var res = {
         left: Math.max(rect1.left, rect2.left),
         right: Math.min(rect1.right, rect2.right),
@@ -200,7 +192,7 @@ function intersectRects(rect1, rect2) {
     }
     return false;
 }
-function translateRect(rect, deltaX, deltaY) {
+function translateRect (rect, deltaX, deltaY) {
     return {
         left: rect.left + deltaX,
         right: rect.right + deltaX,
@@ -209,21 +201,21 @@ function translateRect(rect, deltaX, deltaY) {
     };
 }
 // Returns a new point that will have been moved to reside within the given rectangle
-function constrainPoint(point, rect) {
+function constrainPoint (point, rect) {
     return {
         left: Math.min(Math.max(point.left, rect.left), rect.right),
         top: Math.min(Math.max(point.top, rect.top), rect.bottom)
     };
 }
 // Returns a point that is the center of the given rectangle
-function getRectCenter(rect) {
+function getRectCenter (rect) {
     return {
         left: (rect.left + rect.right) / 2,
         top: (rect.top + rect.bottom) / 2
     };
 }
 // Subtracts point2's coordinates from point1's coordinates, returning a delta
-function diffPoints(point1, point2) {
+function diffPoints (point1, point2) {
     return {
         left: point1.left - point2.left,
         top: point1.top - point2.top
@@ -232,13 +224,13 @@ function diffPoints(point1, point2) {
 
 // Logic for determining if, when the element is right-to-left, the scrollbar appears on the left side
 var isRtlScrollbarOnLeft = null;
-function getIsRtlScrollbarOnLeft() {
+function getIsRtlScrollbarOnLeft () {
     if (isRtlScrollbarOnLeft === null) {
         isRtlScrollbarOnLeft = computeIsRtlScrollbarOnLeft();
     }
     return isRtlScrollbarOnLeft;
 }
-function computeIsRtlScrollbarOnLeft() {
+function computeIsRtlScrollbarOnLeft () {
     var outerEl = createElement('div', {
         style: {
             position: 'absolute',
@@ -258,13 +250,13 @@ function computeIsRtlScrollbarOnLeft() {
 }
 // The scrollbar width computations in computeEdges are sometimes flawed when it comes to
 // retina displays, rounding, and IE11. Massage them into a usable value.
-function sanitizeScrollbarWidth(width) {
+function sanitizeScrollbarWidth (width) {
     width = Math.max(0, width); // no negatives
     width = Math.round(width);
     return width;
 }
 
-function computeEdges(el, getPadding) {
+function computeEdges (el, getPadding) {
     if (getPadding === void 0) { getPadding = false; }
     var computedStyle = window.getComputedStyle(el);
     var borderLeft = parseInt(computedStyle.borderLeftWidth, 10) || 0;
@@ -285,8 +277,7 @@ function computeEdges(el, getPadding) {
     };
     if (getIsRtlScrollbarOnLeft() && computedStyle.direction === 'rtl') { // is the scrollbar on the left side?
         res.scrollbarLeft = scrollbarLeftRight;
-    }
-    else {
+    } else {
         res.scrollbarRight = scrollbarLeftRight;
     }
     if (getPadding) {
@@ -297,7 +288,7 @@ function computeEdges(el, getPadding) {
     }
     return res;
 }
-function computeInnerRect(el, goWithinPadding) {
+function computeInnerRect (el, goWithinPadding) {
     if (goWithinPadding === void 0) { goWithinPadding = false; }
     var outerRect = computeRect(el);
     var edges = computeEdges(el, goWithinPadding);
@@ -315,7 +306,7 @@ function computeInnerRect(el, goWithinPadding) {
     }
     return res;
 }
-function computeRect(el) {
+function computeRect (el) {
     var rect = el.getBoundingClientRect();
     return {
         left: rect.left + window.pageXOffset,
@@ -324,7 +315,7 @@ function computeRect(el) {
         bottom: rect.bottom + window.pageYOffset
     };
 }
-function computeViewportRect() {
+function computeViewportRect () {
     return {
         left: window.pageXOffset,
         right: window.pageXOffset + document.documentElement.clientWidth,
@@ -332,16 +323,16 @@ function computeViewportRect() {
         bottom: window.pageYOffset + document.documentElement.clientHeight
     };
 }
-function computeHeightAndMargins(el) {
+function computeHeightAndMargins (el) {
     return el.getBoundingClientRect().height + computeVMargins(el);
 }
-function computeVMargins(el) {
+function computeVMargins (el) {
     var computed = window.getComputedStyle(el);
     return parseInt(computed.marginTop, 10) +
         parseInt(computed.marginBottom, 10);
 }
 // does not return window
-function getClippingParents(el) {
+function getClippingParents (el) {
     var parents = [];
     while (el instanceof HTMLElement) { // will stop when gets to document or null
         var computedStyle = window.getComputedStyle(el);
@@ -355,7 +346,7 @@ function getClippingParents(el) {
     }
     return parents;
 }
-function computeClippingRect(el) {
+function computeClippingRect (el) {
     return getClippingParents(el)
         .map(function (el) {
         return computeInnerRect(el);
@@ -367,13 +358,13 @@ function computeClippingRect(el) {
 }
 
 // Stops a mouse/touch event from doing it's native browser action
-function preventDefault(ev) {
+function preventDefault (ev) {
     ev.preventDefault();
 }
 // Event Delegation
 // ----------------------------------------------------------------------------------------------------------------
-function listenBySelector(container, eventType, selector, handler) {
-    function realHandler(ev) {
+function listenBySelector (container, eventType, selector, handler) {
+    function realHandler (ev) {
         var matchedChild = elementClosest(ev.target, selector);
         if (matchedChild) {
             handler.call(matchedChild, ev, matchedChild);
@@ -384,7 +375,7 @@ function listenBySelector(container, eventType, selector, handler) {
         container.removeEventListener(eventType, realHandler);
     };
 }
-function listenToHoverBySelector(container, selector, onMouseEnter, onMouseLeave) {
+function listenToHoverBySelector (container, selector, onMouseEnter, onMouseLeave) {
     var currentMatchedChild;
     return listenBySelector(container, 'mouseover', selector, function (ev, matchedChild) {
         if (matchedChild !== currentMatchedChild) {
@@ -410,7 +401,7 @@ var transitionEventNames = [
     'transitionend'
 ];
 // triggered only when the next single subsequent transition finishes
-function whenTransitionDone(el, callback) {
+function whenTransitionDone (el, callback) {
     var realCallback = function (ev) {
         callback(ev);
         transitionEventNames.forEach(function (eventName) {
@@ -424,38 +415,38 @@ function whenTransitionDone(el, callback) {
 
 var DAY_IDS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 // Adding
-function addWeeks(m, n) {
+function addWeeks (m, n) {
     var a = dateToUtcArray(m);
     a[2] += n * 7;
     return arrayToUtcDate(a);
 }
-function addDays(m, n) {
+function addDays (m, n) {
     var a = dateToUtcArray(m);
     a[2] += n;
     return arrayToUtcDate(a);
 }
-function addMs(m, n) {
+function addMs (m, n) {
     var a = dateToUtcArray(m);
     a[6] += n;
     return arrayToUtcDate(a);
 }
 // Diffing (all return floats)
-function diffWeeks(m0, m1) {
+function diffWeeks (m0, m1) {
     return diffDays(m0, m1) / 7;
 }
-function diffDays(m0, m1) {
+function diffDays (m0, m1) {
     return (m1.valueOf() - m0.valueOf()) / (1000 * 60 * 60 * 24);
 }
-function diffHours(m0, m1) {
+function diffHours (m0, m1) {
     return (m1.valueOf() - m0.valueOf()) / (1000 * 60 * 60);
 }
-function diffMinutes(m0, m1) {
+function diffMinutes (m0, m1) {
     return (m1.valueOf() - m0.valueOf()) / (1000 * 60);
 }
-function diffSeconds(m0, m1) {
+function diffSeconds (m0, m1) {
     return (m1.valueOf() - m0.valueOf()) / 1000;
 }
-function diffDayAndTime(m0, m1) {
+function diffDayAndTime (m0, m1) {
     var m0day = startOfDay(m0);
     var m1day = startOfDay(m1);
     return {
@@ -466,28 +457,28 @@ function diffDayAndTime(m0, m1) {
     };
 }
 // Diffing Whole Units
-function diffWholeWeeks(m0, m1) {
+function diffWholeWeeks (m0, m1) {
     var d = diffWholeDays(m0, m1);
     if (d !== null && d % 7 === 0) {
         return d / 7;
     }
     return null;
 }
-function diffWholeDays(m0, m1) {
+function diffWholeDays (m0, m1) {
     if (timeAsMs(m0) === timeAsMs(m1)) {
         return Math.round(diffDays(m0, m1));
     }
     return null;
 }
 // Start-Of
-function startOfDay(m) {
+function startOfDay (m) {
     return arrayToUtcDate([
         m.getUTCFullYear(),
         m.getUTCMonth(),
         m.getUTCDate()
     ]);
 }
-function startOfHour(m) {
+function startOfHour (m) {
     return arrayToUtcDate([
         m.getUTCFullYear(),
         m.getUTCMonth(),
@@ -495,7 +486,7 @@ function startOfHour(m) {
         m.getUTCHours()
     ]);
 }
-function startOfMinute(m) {
+function startOfMinute (m) {
     return arrayToUtcDate([
         m.getUTCFullYear(),
         m.getUTCMonth(),
@@ -504,7 +495,7 @@ function startOfMinute(m) {
         m.getUTCMinutes()
     ]);
 }
-function startOfSecond(m) {
+function startOfSecond (m) {
     return arrayToUtcDate([
         m.getUTCFullYear(),
         m.getUTCMonth(),
@@ -515,7 +506,7 @@ function startOfSecond(m) {
     ]);
 }
 // Week Computation
-function weekOfYear(marker, dow, doy) {
+function weekOfYear (marker, dow, doy) {
     var y = marker.getUTCFullYear();
     var w = weekOfGivenYear(marker, y, dow, doy);
     if (w < 1) {
@@ -527,14 +518,14 @@ function weekOfYear(marker, dow, doy) {
     }
     return w;
 }
-function weekOfGivenYear(marker, year, dow, doy) {
+function weekOfGivenYear (marker, year, dow, doy) {
     var firstWeekStart = arrayToUtcDate([year, 0, 1 + firstWeekOffset(year, dow, doy)]);
     var dayStart = startOfDay(marker);
     var days = Math.round(diffDays(firstWeekStart, dayStart));
     return Math.floor(days / 7) + 1; // zero-indexed
 }
 // start-of-first-week - start-of-year
-function firstWeekOffset(year, dow, doy) {
+function firstWeekOffset (year, dow, doy) {
     // first-week day -- which january is always in the first week (4 for iso, 1 for other)
     var fwd = 7 + dow - doy;
     // first-week day local weekday -- which local weekday is fwd
@@ -542,7 +533,7 @@ function firstWeekOffset(year, dow, doy) {
     return -fwdlw + fwd - 1;
 }
 // Array Conversion
-function dateToLocalArray(date) {
+function dateToLocalArray (date) {
     return [
         date.getFullYear(),
         date.getMonth(),
@@ -553,11 +544,11 @@ function dateToLocalArray(date) {
         date.getMilliseconds()
     ];
 }
-function arrayToLocalDate(a) {
+function arrayToLocalDate (a) {
     return new Date(a[0], a[1] || 0, a[2] == null ? 1 : a[2], // day of month
     a[3] || 0, a[4] || 0, a[5] || 0);
 }
-function dateToUtcArray(date) {
+function dateToUtcArray (date) {
     return [
         date.getUTCFullYear(),
         date.getUTCMonth(),
@@ -568,7 +559,7 @@ function dateToUtcArray(date) {
         date.getUTCMilliseconds()
     ];
 }
-function arrayToUtcDate(a) {
+function arrayToUtcDate (a) {
     // according to web standards (and Safari), a month index is required.
     // massage if only given a year.
     if (a.length === 1) {
@@ -577,10 +568,10 @@ function arrayToUtcDate(a) {
     return new Date(Date.UTC.apply(Date, a));
 }
 // Other Utils
-function isValidDate(m) {
+function isValidDate (m) {
     return !isNaN(m.valueOf());
 }
-function timeAsMs(m) {
+function timeAsMs (m) {
     return m.getUTCHours() * 1000 * 60 * 60 +
         m.getUTCMinutes() * 1000 * 60 +
         m.getUTCSeconds() * 1000 +
@@ -590,22 +581,19 @@ function timeAsMs(m) {
 var INTERNAL_UNITS = ['years', 'months', 'days', 'milliseconds'];
 var PARSE_RE = /^(-?)(?:(\d+)\.)?(\d+):(\d\d)(?::(\d\d)(?:\.(\d\d\d))?)?/;
 // Parsing and Creation
-function createDuration(input, unit) {
+function createDuration (input, unit) {
     var _a;
     if (typeof input === 'string') {
         return parseString(input);
-    }
-    else if (typeof input === 'object' && input) { // non-null object
+    } else if (typeof input === 'object' && input) { // non-null object
         return normalizeObject(input);
-    }
-    else if (typeof input === 'number') {
+    } else if (typeof input === 'number') {
         return normalizeObject((_a = {}, _a[unit || 'milliseconds'] = input, _a));
-    }
-    else {
+    } else {
         return null;
     }
 }
-function parseString(s) {
+function parseString (s) {
     var m = PARSE_RE.exec(s);
     if (m) {
         var sign = m[1] ? -1 : 1;
@@ -622,7 +610,7 @@ function parseString(s) {
     }
     return null;
 }
-function normalizeObject(obj) {
+function normalizeObject (obj) {
     return {
         years: obj.years || obj.year || 0,
         months: obj.months || obj.month || 0,
@@ -634,21 +622,21 @@ function normalizeObject(obj) {
             (obj.milliseconds || obj.millisecond || obj.ms || 0) // ms
     };
 }
-function getWeeksFromInput(obj) {
+function getWeeksFromInput (obj) {
     return obj.weeks || obj.week || 0;
 }
 // Equality
-function durationsEqual(d0, d1) {
+function durationsEqual (d0, d1) {
     return d0.years === d1.years &&
         d0.months === d1.months &&
         d0.days === d1.days &&
         d0.milliseconds === d1.milliseconds;
 }
-function isSingleDay(dur) {
+function isSingleDay (dur) {
     return dur.years === 0 && dur.months === 0 && dur.days === 1 && dur.milliseconds === 0;
 }
 // Simple Math
-function addDurations(d0, d1) {
+function addDurations (d0, d1) {
     return {
         years: d0.years + d1.years,
         months: d0.months + d1.months,
@@ -656,7 +644,7 @@ function addDurations(d0, d1) {
         milliseconds: d0.milliseconds + d1.milliseconds
     };
 }
-function subtractDurations(d1, d0) {
+function subtractDurations (d1, d0) {
     return {
         years: d1.years - d0.years,
         months: d1.months - d0.months,
@@ -664,7 +652,7 @@ function subtractDurations(d1, d0) {
         milliseconds: d1.milliseconds - d0.milliseconds
     };
 }
-function multiplyDuration(d, n) {
+function multiplyDuration (d, n) {
     return {
         years: d.years * n,
         months: d.months * n,
@@ -674,29 +662,29 @@ function multiplyDuration(d, n) {
 }
 // Conversions
 // "Rough" because they are based on average-case Gregorian months/years
-function asRoughYears(dur) {
+function asRoughYears (dur) {
     return asRoughDays(dur) / 365;
 }
-function asRoughMonths(dur) {
+function asRoughMonths (dur) {
     return asRoughDays(dur) / 30;
 }
-function asRoughDays(dur) {
+function asRoughDays (dur) {
     return asRoughMs(dur) / 864e5;
 }
-function asRoughMinutes(dur) {
+function asRoughMinutes (dur) {
     return asRoughMs(dur) / (1000 * 60);
 }
-function asRoughSeconds(dur) {
+function asRoughSeconds (dur) {
     return asRoughMs(dur) / 1000;
 }
-function asRoughMs(dur) {
+function asRoughMs (dur) {
     return dur.years * (365 * 864e5) +
         dur.months * (30 * 864e5) +
         dur.days * 864e5 +
         dur.milliseconds;
 }
 // Advanced Math
-function wholeDivideDurations(numerator, denominator) {
+function wholeDivideDurations (numerator, denominator) {
     var res = null;
     for (var i = 0; i < INTERNAL_UNITS.length; i++) {
         var unit = INTERNAL_UNITS[i];
@@ -706,15 +694,14 @@ function wholeDivideDurations(numerator, denominator) {
                 return null;
             }
             res = localRes;
-        }
-        else if (numerator[unit]) {
+        } else if (numerator[unit]) {
             // needs to divide by something but can't!
             return null;
         }
     }
     return res;
 }
-function greatestDurationDenominator(dur, dontReturnWeeks) {
+function greatestDurationDenominator (dur, dontReturnWeeks) {
     var ms = dur.milliseconds;
     if (ms) {
         if (ms % 1000 !== 0) {
@@ -746,10 +733,10 @@ function greatestDurationDenominator(dur, dontReturnWeeks) {
 }
 
 /* FullCalendar-specific DOM Utilities
-----------------------------------------------------------------------------------------------------------------------*/
+---------------------------------------------------------------------------------------------------------------------- */
 // Given the scrollbar widths of some other container, create borders/margins on rowEls in order to match the left
 // and right space that was offset by the scrollbars. A 1-pixel border first, then margin beyond that.
-function compensateScroll(rowEl, scrollbarWidths) {
+function compensateScroll (rowEl, scrollbarWidths) {
     if (scrollbarWidths.left) {
         applyStyle(rowEl, {
             borderLeftWidth: 1,
@@ -764,7 +751,7 @@ function compensateScroll(rowEl, scrollbarWidths) {
     }
 }
 // Undoes compensateScroll and restores all borders/margins
-function uncompensateScroll(rowEl) {
+function uncompensateScroll (rowEl) {
     applyStyle(rowEl, {
         marginLeft: '',
         marginRight: '',
@@ -773,18 +760,18 @@ function uncompensateScroll(rowEl) {
     });
 }
 // Make the mouse cursor express that an event is not allowed in the current area
-function disableCursor() {
+function disableCursor () {
     document.body.classList.add('fc-not-allowed');
 }
 // Returns the mouse cursor to its original look
-function enableCursor() {
+function enableCursor () {
     document.body.classList.remove('fc-not-allowed');
 }
 // Given a total available height to fill, have `els` (essentially child rows) expand to accomodate.
 // By default, all elements that are shorter than the recommended height are expanded uniformly, not considering
 // any other els that are already too tall. if `shouldRedistribute` is on, it considers these tall rows and
 // reduces the available height.
-function distributeHeight(els, availableHeight, shouldRedistribute) {
+function distributeHeight (els, availableHeight, shouldRedistribute) {
     // *FLOORING NOTE*: we floor in certain places because zoom can give inaccurate floating-point dimensions,
     // and it is better to be shorter than taller, to avoid creating unnecessary scrollbars.
     var minOffset1 = Math.floor(availableHeight / els.length); // for non-last element
@@ -804,8 +791,7 @@ function distributeHeight(els, availableHeight, shouldRedistribute) {
             flexEls.push(el);
             flexOffsets.push(naturalOffset);
             flexHeights.push(naturalHeight);
-        }
-        else {
+        } else {
             // this element stretches past recommended height (non-expandable). mark the space as occupied.
             usedHeight += naturalOffset;
         }
@@ -828,7 +814,7 @@ function distributeHeight(els, availableHeight, shouldRedistribute) {
     });
 }
 // Undoes distrubuteHeight, restoring all els to their natural height
-function undistributeHeight(els) {
+function undistributeHeight (els) {
     els.forEach(function (el) {
         el.style.height = '';
     });
@@ -836,7 +822,7 @@ function undistributeHeight(els) {
 // Given `els`, a set of <td> cells, find the cell with the largest natural width and set the widths of all the
 // cells to be that width.
 // PREREQUISITE: if you want a cell to take up width, it needs to have a single inner element w/ display:inline
-function matchCellWidths(els) {
+function matchCellWidths (els) {
     var maxInnerWidth = 0;
     els.forEach(function (el) {
         var innerEl = el.firstChild; // hopefully an element
@@ -855,7 +841,7 @@ function matchCellWidths(els) {
 }
 // Given one element that resides inside another,
 // Subtracts the height of the inner element from the outer element.
-function subtractInnerElHeight(outerEl, innerEl) {
+function subtractInnerElHeight (outerEl, innerEl) {
     // effin' IE8/9/10/11 sometimes returns 0 for dimensions. this weird hack was the only thing that worked
     var reflowStyleProps = {
         position: 'relative',
@@ -873,53 +859,50 @@ function subtractInnerElHeight(outerEl, innerEl) {
     return diff;
 }
 /* Selection
-----------------------------------------------------------------------------------------------------------------------*/
-function preventSelection(el) {
+---------------------------------------------------------------------------------------------------------------------- */
+function preventSelection (el) {
     el.classList.add('fc-unselectable');
     el.addEventListener('selectstart', preventDefault);
 }
-function allowSelection(el) {
+function allowSelection (el) {
     el.classList.remove('fc-unselectable');
     el.removeEventListener('selectstart', preventDefault);
 }
 /* Context Menu
-----------------------------------------------------------------------------------------------------------------------*/
-function preventContextMenu(el) {
+---------------------------------------------------------------------------------------------------------------------- */
+function preventContextMenu (el) {
     el.addEventListener('contextmenu', preventDefault);
 }
-function allowContextMenu(el) {
+function allowContextMenu (el) {
     el.removeEventListener('contextmenu', preventDefault);
 }
 /* Object Ordering by Field
-----------------------------------------------------------------------------------------------------------------------*/
-function parseFieldSpecs(input) {
+---------------------------------------------------------------------------------------------------------------------- */
+function parseFieldSpecs (input) {
     var specs = [];
     var tokens = [];
     var i;
     var token;
     if (typeof input === 'string') {
         tokens = input.split(/\s*,\s*/);
-    }
-    else if (typeof input === 'function') {
+    } else if (typeof input === 'function') {
         tokens = [input];
-    }
-    else if (Array.isArray(input)) {
+    } else if (Array.isArray(input)) {
         tokens = input;
     }
     for (i = 0; i < tokens.length; i++) {
         token = tokens[i];
         if (typeof token === 'string') {
-            specs.push(token.charAt(0) === '-' ?
-                { field: token.substring(1), order: -1 } :
-                { field: token, order: 1 });
-        }
-        else if (typeof token === 'function') {
+            specs.push(token.charAt(0) === '-'
+                ? { field: token.substring(1), order: -1 }
+                : { field: token, order: 1 });
+        } else if (typeof token === 'function') {
             specs.push({ func: token });
         }
     }
     return specs;
 }
-function compareByFieldSpecs(obj0, obj1, fieldSpecs) {
+function compareByFieldSpecs (obj0, obj1, fieldSpecs) {
     var i;
     var cmp;
     for (i = 0; i < fieldSpecs.length; i++) {
@@ -930,14 +913,14 @@ function compareByFieldSpecs(obj0, obj1, fieldSpecs) {
     }
     return 0;
 }
-function compareByFieldSpec(obj0, obj1, fieldSpec) {
+function compareByFieldSpec (obj0, obj1, fieldSpec) {
     if (fieldSpec.func) {
         return fieldSpec.func(obj0, obj1);
     }
-    return flexibleCompare(obj0[fieldSpec.field], obj1[fieldSpec.field])
-        * (fieldSpec.order || 1);
+    return flexibleCompare(obj0[fieldSpec.field], obj1[fieldSpec.field]) *
+        (fieldSpec.order || 1);
 }
-function flexibleCompare(a, b) {
+function flexibleCompare (a, b) {
     if (!a && !b) {
         return 0;
     }
@@ -953,25 +936,25 @@ function flexibleCompare(a, b) {
     return a - b;
 }
 /* String Utilities
-----------------------------------------------------------------------------------------------------------------------*/
-function capitaliseFirstLetter(str) {
+---------------------------------------------------------------------------------------------------------------------- */
+function capitaliseFirstLetter (str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
-function padStart(val, len) {
+function padStart (val, len) {
     var s = String(val);
     return '000'.substr(0, len - s.length) + s;
 }
 /* Number Utilities
-----------------------------------------------------------------------------------------------------------------------*/
-function compareNumbers(a, b) {
+---------------------------------------------------------------------------------------------------------------------- */
+function compareNumbers (a, b) {
     return a - b;
 }
-function isInt(n) {
+function isInt (n) {
     return n % 1 === 0;
 }
 /* Weird Utilities
-----------------------------------------------------------------------------------------------------------------------*/
-function applyAll(functions, thisObj, args) {
+---------------------------------------------------------------------------------------------------------------------- */
+function applyAll (functions, thisObj, args) {
     if (typeof functions === 'function') { // supplied a single function
         functions = [functions];
     }
@@ -984,7 +967,7 @@ function applyAll(functions, thisObj, args) {
         return ret;
     }
 }
-function firstDefined() {
+function firstDefined () {
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
@@ -1000,7 +983,7 @@ function firstDefined() {
 // N milliseconds. If `immediate` is passed, trigger the function on the
 // leading edge, instead of the trailing.
 // https://github.com/jashkenas/underscore/blob/1.6.0/underscore.js#L714
-function debounce(func, wait) {
+function debounce (func, wait) {
     var timeout;
     var args;
     var context;
@@ -1010,8 +993,7 @@ function debounce(func, wait) {
         var last = new Date().valueOf() - timestamp;
         if (last < wait) {
             timeout = setTimeout(later, wait - last);
-        }
-        else {
+        } else {
             timeout = null;
             result = func.apply(context, args);
             context = args = null;
@@ -1029,7 +1011,7 @@ function debounce(func, wait) {
 }
 // Number and Boolean are only types that defaults or not computed for
 // TODO: write more comments
-function refineProps(rawProps, processors, defaults, leftoverProps) {
+function refineProps (rawProps, processors, defaults, leftoverProps) {
     if (defaults === void 0) { defaults = {}; }
     var refined = {};
     for (var key in processors) {
@@ -1038,27 +1020,21 @@ function refineProps(rawProps, processors, defaults, leftoverProps) {
             // found
             if (processor === Function) {
                 refined[key] = typeof rawProps[key] === 'function' ? rawProps[key] : null;
-            }
-            else if (processor) { // a refining function?
+            } else if (processor) { // a refining function?
                 refined[key] = processor(rawProps[key]);
-            }
-            else {
+            } else {
                 refined[key] = rawProps[key];
             }
-        }
-        else if (defaults[key] !== undefined) {
+        } else if (defaults[key] !== undefined) {
             // there's an explicit default
             refined[key] = defaults[key];
-        }
-        else {
+        } else {
             // must compute a default
             if (processor === String) {
                 refined[key] = ''; // empty string is default for String
-            }
-            else if (!processor || processor === Number || processor === Boolean || processor === Function) {
+            } else if (!processor || processor === Number || processor === Boolean || processor === Function) {
                 refined[key] = null; // assign null for other non-custom processor funcs
-            }
-            else {
+            } else {
                 refined[key] = processor(null); // run the custom processor func
             }
         }
@@ -1073,10 +1049,10 @@ function refineProps(rawProps, processors, defaults, leftoverProps) {
     return refined;
 }
 /* Date stuff that doesn't belong in datelib core
-----------------------------------------------------------------------------------------------------------------------*/
+---------------------------------------------------------------------------------------------------------------------- */
 // given a timed range, computes an all-day range that has the same exact duration,
 // but whose start time is aligned with the start of the day.
-function computeAlignedDayRange(timedRange) {
+function computeAlignedDayRange (timedRange) {
     var dayCnt = Math.floor(diffDays(timedRange.start, timedRange.end)) || 1;
     var start = startOfDay(timedRange.start);
     var end = addDays(start, dayCnt);
@@ -1084,7 +1060,7 @@ function computeAlignedDayRange(timedRange) {
 }
 // given a timed range, computes an all-day range based on how for the end date bleeds into the next day
 // TODO: give nextDayThreshold a default arg
-function computeVisibleDayRange(timedRange, nextDayThreshold) {
+function computeVisibleDayRange (timedRange, nextDayThreshold) {
     if (nextDayThreshold === void 0) { nextDayThreshold = createDuration(0); }
     var startDay = null;
     var endDay = null;
@@ -1108,18 +1084,16 @@ function computeVisibleDayRange(timedRange, nextDayThreshold) {
     return { start: startDay, end: endDay };
 }
 // spans from one day into another?
-function isMultiDayRange(range) {
+function isMultiDayRange (range) {
     var visibleRange = computeVisibleDayRange(range);
     return diffDays(visibleRange.start, visibleRange.end) > 1;
 }
-function diffDates(date0, date1, dateEnv, largeUnit) {
+function diffDates (date0, date1, dateEnv, largeUnit) {
     if (largeUnit === 'year') {
         return createDuration(dateEnv.diffWholeYears(date0, date1), 'year');
-    }
-    else if (largeUnit === 'month') {
+    } else if (largeUnit === 'month') {
         return createDuration(dateEnv.diffWholeMonths(date0, date1), 'month');
-    }
-    else {
+    } else {
         return diffDayAndTime(date0, date1); // returns a duration
     }
 }
@@ -1140,21 +1114,21 @@ and limitations under the License.
 ***************************************************************************** */
 /* global Reflect, Promise */
 
-var extendStatics = function(d, b) {
+var extendStatics = function (d, b) {
     extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
         function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
     return extendStatics(d, b);
 };
 
-function __extends(d, b) {
+function __extends (d, b) {
     extendStatics(d, b);
-    function __() { this.constructor = d; }
+    function __ () { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 }
 
-var __assign = function() {
-    __assign = Object.assign || function __assign(t) {
+var __assign = function () {
+    __assign = Object.assign || function __assign (t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
             s = arguments[i];
             for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
@@ -1164,7 +1138,7 @@ var __assign = function() {
     return __assign.apply(this, arguments);
 };
 
-function parseRecurring(eventInput, allDayDefault, dateEnv, recurringTypes, leftovers) {
+function parseRecurring (eventInput, allDayDefault, dateEnv, recurringTypes, leftovers) {
     for (var i = 0; i < recurringTypes.length; i++) {
         var localLeftovers = {};
         var parsed = recurringTypes[i].parse(eventInput, localLeftovers, dateEnv);
@@ -1194,7 +1168,7 @@ function parseRecurring(eventInput, allDayDefault, dateEnv, recurringTypes, left
 /*
 Event MUST have a recurringDef
 */
-function expandRecurringRanges(eventDef, duration, framingRange, dateEnv, recurringTypes) {
+function expandRecurringRanges (eventDef, duration, framingRange, dateEnv, recurringTypes) {
     var typeDef = recurringTypes[eventDef.recurringDef.typeId];
     var markers = typeDef.expand(eventDef.recurringDef.typeData, {
         start: dateEnv.subtract(framingRange.start, duration),
@@ -1210,7 +1184,7 @@ function expandRecurringRanges(eventDef, duration, framingRange, dateEnv, recurr
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 // Merges an array of objects into a single object.
 // The second argument allows for an array of property names who's object values will be merged together.
-function mergeProps(propObjs, complexProps) {
+function mergeProps (propObjs, complexProps) {
     var dest = {};
     var i;
     var name;
@@ -1227,8 +1201,7 @@ function mergeProps(propObjs, complexProps) {
                 val = propObjs[j][name];
                 if (typeof val === 'object' && val) { // non-null object
                     complexObjs.unshift(val);
-                }
-                else if (val !== undefined) {
+                } else if (val !== undefined) {
                     dest[name] = val; // if there were no objects, this value will be used
                     break;
                 }
@@ -1250,7 +1223,7 @@ function mergeProps(propObjs, complexProps) {
     }
     return dest;
 }
-function filterHash(hash, func) {
+function filterHash (hash, func) {
     var filtered = {};
     for (var key in hash) {
         if (func(hash[key], key)) {
@@ -1259,14 +1232,14 @@ function filterHash(hash, func) {
     }
     return filtered;
 }
-function mapHash(hash, func) {
+function mapHash (hash, func) {
     var newHash = {};
     for (var key in hash) {
         newHash[key] = func(hash[key], key);
     }
     return newHash;
 }
-function arrayToHash(a) {
+function arrayToHash (a) {
     var hash = {};
     for (var _i = 0, a_1 = a; _i < a_1.length; _i++) {
         var item = a_1[_i];
@@ -1274,14 +1247,14 @@ function arrayToHash(a) {
     }
     return hash;
 }
-function hashValuesToArray(obj) {
+function hashValuesToArray (obj) {
     var a = [];
     for (var key in obj) {
         a.push(obj[key]);
     }
     return a;
 }
-function isPropsEqual(obj0, obj1) {
+function isPropsEqual (obj0, obj1) {
     for (var key in obj0) {
         if (hasOwnProperty.call(obj0, key)) {
             if (!(key in obj1)) {
@@ -1299,7 +1272,7 @@ function isPropsEqual(obj0, obj1) {
     return true;
 }
 
-function parseEvents(rawEvents, sourceId, calendar, allowOpenRange) {
+function parseEvents (rawEvents, sourceId, calendar, allowOpenRange) {
     var eventStore = createEmptyEventStore();
     for (var _i = 0, rawEvents_1 = rawEvents; _i < rawEvents_1.length; _i++) {
         var rawEvent = rawEvents_1[_i];
@@ -1310,7 +1283,7 @@ function parseEvents(rawEvents, sourceId, calendar, allowOpenRange) {
     }
     return eventStore;
 }
-function eventTupleToStore(tuple, eventStore) {
+function eventTupleToStore (tuple, eventStore) {
     if (eventStore === void 0) { eventStore = createEmptyEventStore(); }
     eventStore.defs[tuple.def.defId] = tuple.def;
     if (tuple.instance) {
@@ -1318,9 +1291,9 @@ function eventTupleToStore(tuple, eventStore) {
     }
     return eventStore;
 }
-function expandRecurring(eventStore, framingRange, calendar) {
+function expandRecurring (eventStore, framingRange, calendar) {
     var dateEnv = calendar.dateEnv;
-    var defs = eventStore.defs, instances = eventStore.instances;
+    var defs = eventStore.defs; var instances = eventStore.instances;
     // remove existing recurring instances
     instances = filterHash(instances, function (instance) {
         return !defs[instance.defId].recurringDef;
@@ -1330,9 +1303,9 @@ function expandRecurring(eventStore, framingRange, calendar) {
         if (def.recurringDef) {
             var duration = def.recurringDef.duration;
             if (!duration) {
-                duration = def.allDay ?
-                    calendar.defaultAllDayEventDuration :
-                    calendar.defaultTimedEventDuration;
+                duration = def.allDay
+                    ? calendar.defaultAllDayEventDuration
+                    : calendar.defaultTimedEventDuration;
             }
             var starts = expandRecurringRanges(def, duration, framingRange, calendar.dateEnv, calendar.pluginSystem.hooks.recurringTypes);
             for (var _i = 0, starts_1 = starts; _i < starts_1.length; _i++) {
@@ -1350,7 +1323,7 @@ function expandRecurring(eventStore, framingRange, calendar) {
 // retrieves events that have the same groupId as the instance specified by `instanceId`
 // or they are the same as the instance.
 // why might instanceId not be in the store? an event from another calendar?
-function getRelevantEvents(eventStore, instanceId) {
+function getRelevantEvents (eventStore, instanceId) {
     var instance = eventStore.instances[instanceId];
     if (instance) {
         var def_1 = eventStore.defs[instance.defId];
@@ -1366,10 +1339,10 @@ function getRelevantEvents(eventStore, instanceId) {
     }
     return createEmptyEventStore();
 }
-function isEventDefsGrouped(def0, def1) {
+function isEventDefsGrouped (def0, def1) {
     return Boolean(def0.groupId && def0.groupId === def1.groupId);
 }
-function transformRawEvents(rawEvents, eventSource, calendar) {
+function transformRawEvents (rawEvents, eventSource, calendar) {
     var calEachTransform = calendar.opt('eventDataTransform');
     var sourceEachTransform = eventSource ? eventSource.eventDataTransform : null;
     if (sourceEachTransform) {
@@ -1380,36 +1353,34 @@ function transformRawEvents(rawEvents, eventSource, calendar) {
     }
     return rawEvents;
 }
-function transformEachRawEvent(rawEvents, func) {
+function transformEachRawEvent (rawEvents, func) {
     var refinedEvents;
     if (!func) {
         refinedEvents = rawEvents;
-    }
-    else {
+    } else {
         refinedEvents = [];
         for (var _i = 0, rawEvents_2 = rawEvents; _i < rawEvents_2.length; _i++) {
             var rawEvent = rawEvents_2[_i];
             var refinedEvent = func(rawEvent);
             if (refinedEvent) {
                 refinedEvents.push(refinedEvent);
-            }
-            else if (refinedEvent == null) {
+            } else if (refinedEvent == null) {
                 refinedEvents.push(rawEvent);
             } // if a different falsy value, do nothing
         }
     }
     return refinedEvents;
 }
-function createEmptyEventStore() {
+function createEmptyEventStore () {
     return { defs: {}, instances: {} };
 }
-function mergeEventStores(store0, store1) {
+function mergeEventStores (store0, store1) {
     return {
         defs: __assign({}, store0.defs, store1.defs),
         instances: __assign({}, store0.instances, store1.instances)
     };
 }
-function filterEventStoreDefs(eventStore, filterFunc) {
+function filterEventStoreDefs (eventStore, filterFunc) {
     var defs = filterHash(eventStore.defs, filterFunc);
     var instances = filterHash(eventStore.instances, function (instance) {
         return defs[instance.defId]; // still exists?
@@ -1417,7 +1388,7 @@ function filterEventStoreDefs(eventStore, filterFunc) {
     return { defs: defs, instances: instances };
 }
 
-function parseRange(input, dateEnv) {
+function parseRange (input, dateEnv) {
     var start = null;
     var end = null;
     if (input.start) {
@@ -1436,7 +1407,7 @@ function parseRange(input, dateEnv) {
 }
 // SIDE-EFFECT: will mutate ranges.
 // Will return a new array result.
-function invertRanges(ranges, constraintRange) {
+function invertRanges (ranges, constraintRange) {
     var invertedRanges = [];
     var start = constraintRange.start; // the end of the previous range. the start of the new range
     var i;
@@ -1459,26 +1430,24 @@ function invertRanges(ranges, constraintRange) {
     }
     return invertedRanges;
 }
-function compareRanges(range0, range1) {
+function compareRanges (range0, range1) {
     return range0.start.valueOf() - range1.start.valueOf(); // earlier ranges go first
 }
-function intersectRanges(range0, range1) {
+function intersectRanges (range0, range1) {
     var start = range0.start;
     var end = range0.end;
     var newRange = null;
     if (range1.start !== null) {
         if (start === null) {
             start = range1.start;
-        }
-        else {
+        } else {
             start = new Date(Math.max(start.valueOf(), range1.start.valueOf()));
         }
     }
     if (range1.end != null) {
         if (end === null) {
             end = range1.end;
-        }
-        else {
+        } else {
             end = new Date(Math.min(end.valueOf(), range1.end.valueOf()));
         }
     }
@@ -1487,25 +1456,25 @@ function intersectRanges(range0, range1) {
     }
     return newRange;
 }
-function rangesEqual(range0, range1) {
+function rangesEqual (range0, range1) {
     return (range0.start === null ? null : range0.start.valueOf()) === (range1.start === null ? null : range1.start.valueOf()) &&
         (range0.end === null ? null : range0.end.valueOf()) === (range1.end === null ? null : range1.end.valueOf());
 }
-function rangesIntersect(range0, range1) {
+function rangesIntersect (range0, range1) {
     return (range0.end === null || range1.start === null || range0.end > range1.start) &&
         (range0.start === null || range1.end === null || range0.start < range1.end);
 }
-function rangeContainsRange(outerRange, innerRange) {
+function rangeContainsRange (outerRange, innerRange) {
     return (outerRange.start === null || (innerRange.start !== null && innerRange.start >= outerRange.start)) &&
         (outerRange.end === null || (innerRange.end !== null && innerRange.end <= outerRange.end));
 }
-function rangeContainsMarker(range, date) {
+function rangeContainsMarker (range, date) {
     return (range.start === null || date >= range.start) &&
         (range.end === null || date < range.end);
 }
 // If the given date is not within the given range, move it inside.
 // (If it's past the end, make it one millisecond before the end).
-function constrainMarkerToRange(date, range) {
+function constrainMarkerToRange (date, range) {
     if (range.start != null && date < range.start) {
         return range.start;
     }
@@ -1515,21 +1484,20 @@ function constrainMarkerToRange(date, range) {
     return date;
 }
 
-function removeExact(array, exactVal) {
+function removeExact (array, exactVal) {
     var removeCnt = 0;
     var i = 0;
     while (i < array.length) {
         if (array[i] === exactVal) {
             array.splice(i, 1);
             removeCnt++;
-        }
-        else {
+        } else {
             i++;
         }
     }
     return removeCnt;
 }
-function isArraysEqual(a0, a1) {
+function isArraysEqual (a0, a1) {
     var len = a0.length;
     var i;
     if (len !== a1.length) { // not array? or not same length?
@@ -1543,7 +1511,7 @@ function isArraysEqual(a0, a1) {
     return true;
 }
 
-function memoize(workerFunc) {
+function memoize (workerFunc) {
     var args;
     var res;
     return function () {
@@ -1558,7 +1526,7 @@ function memoize(workerFunc) {
 always executes the workerFunc, but if the result is equal to the previous result,
 return the previous result instead.
 */
-function memoizeOutput(workerFunc, equalityFunc) {
+function memoizeOutput (workerFunc, equalityFunc) {
     var cachedRes = null;
     return function () {
         var newRes = workerFunc.apply(this, arguments);
@@ -1593,7 +1561,7 @@ var MULTI_SPACE_RE = /\s+/g;
 var LTR_RE = /\u200e/g; // control character
 var UTC_RE = /UTC|GMT/;
 var NativeFormatter = /** @class */ (function () {
-    function NativeFormatter(formatSettings) {
+    function NativeFormatter (formatSettings) {
         var standardDateProps = {};
         var extendedSettings = {};
         var severity = 0;
@@ -1601,8 +1569,7 @@ var NativeFormatter = /** @class */ (function () {
             if (name_1 in EXTENDED_SETTINGS_AND_SEVERITIES) {
                 extendedSettings[name_1] = formatSettings[name_1];
                 severity = Math.max(EXTENDED_SETTINGS_AND_SEVERITIES[name_1], severity);
-            }
-            else {
+            } else {
                 standardDateProps[name_1] = formatSettings[name_1];
                 if (name_1 in STANDARD_DATE_PROP_SEVERITIES) {
                     severity = Math.max(STANDARD_DATE_PROP_SEVERITIES[name_1], severity);
@@ -1618,7 +1585,7 @@ var NativeFormatter = /** @class */ (function () {
         return this.buildFormattingFunc(this.standardDateProps, this.extendedSettings, context)(date);
     };
     NativeFormatter.prototype.formatRange = function (start, end, context) {
-        var _a = this, standardDateProps = _a.standardDateProps, extendedSettings = _a.extendedSettings;
+        var _a = this; var standardDateProps = _a.standardDateProps; var extendedSettings = _a.extendedSettings;
         var diffSeverity = computeMarkerDiffSeverity(start.marker, end.marker, context.calendarSystem);
         if (!diffSeverity) {
             return this.format(start, context);
@@ -1662,7 +1629,7 @@ var NativeFormatter = /** @class */ (function () {
     };
     return NativeFormatter;
 }());
-function buildFormattingFunc(standardDateProps, extendedSettings, context) {
+function buildFormattingFunc (standardDateProps, extendedSettings, context) {
     var standardDatePropCnt = Object.keys(standardDateProps).length;
     if (standardDatePropCnt === 1 && standardDateProps.timeZoneName === 'short') {
         return function (date) {
@@ -1676,7 +1643,7 @@ function buildFormattingFunc(standardDateProps, extendedSettings, context) {
     }
     return buildNativeFormattingFunc(standardDateProps, extendedSettings, context);
 }
-function buildNativeFormattingFunc(standardDateProps, extendedSettings, context) {
+function buildNativeFormattingFunc (standardDateProps, extendedSettings, context) {
     standardDateProps = __assign({}, standardDateProps); // copy
     extendedSettings = __assign({}, extendedSettings); // copy
     sanitizeSettings(standardDateProps, extendedSettings);
@@ -1693,15 +1660,14 @@ function buildNativeFormattingFunc(standardDateProps, extendedSettings, context)
         var format;
         if (zeroFormat && !marker.getUTCMinutes()) {
             format = zeroFormat;
-        }
-        else {
+        } else {
             format = normalFormat;
         }
         var s = format.format(marker);
         return postProcess(s, date, standardDateProps, extendedSettings, context);
     };
 }
-function sanitizeSettings(standardDateProps, extendedSettings) {
+function sanitizeSettings (standardDateProps, extendedSettings) {
     // deal with a browser inconsistency where formatting the timezone
     // requires that the hour/minute be present.
     if (standardDateProps.timeZoneName) {
@@ -1721,12 +1687,12 @@ function sanitizeSettings(standardDateProps, extendedSettings) {
         delete extendedSettings.omitZeroMinute;
     }
 }
-function postProcess(s, date, standardDateProps, extendedSettings, context) {
+function postProcess (s, date, standardDateProps, extendedSettings, context) {
     s = s.replace(LTR_RE, ''); // remove left-to-right control chars. do first. good for other regexes
     if (standardDateProps.timeZoneName === 'short') {
-        s = injectTzoStr(s, (context.timeZone === 'UTC' || date.timeZoneOffset == null) ?
-            'UTC' : // important to normalize for IE, which does "GMT"
-            formatTimeZoneOffset(date.timeZoneOffset));
+        s = injectTzoStr(s, (context.timeZone === 'UTC' || date.timeZoneOffset == null)
+            ? 'UTC' // important to normalize for IE, which does "GMT"
+            : formatTimeZoneOffset(date.timeZoneOffset));
     }
     if (extendedSettings.omitCommas) {
         s = s.replace(COMMA_RE, '').trim();
@@ -1738,18 +1704,15 @@ function postProcess(s, date, standardDateProps, extendedSettings, context) {
     // because MERIDIEM_RE likes to eat up loading spaces
     if (extendedSettings.meridiem === false) {
         s = s.replace(MERIDIEM_RE, '').trim();
-    }
-    else if (extendedSettings.meridiem === 'narrow') { // a/p
+    } else if (extendedSettings.meridiem === 'narrow') { // a/p
         s = s.replace(MERIDIEM_RE, function (m0, m1) {
             return m1.toLocaleLowerCase();
         });
-    }
-    else if (extendedSettings.meridiem === 'short') { // am/pm
+    } else if (extendedSettings.meridiem === 'short') { // am/pm
         s = s.replace(MERIDIEM_RE, function (m0, m1) {
             return m1.toLocaleLowerCase() + 'm';
         });
-    }
-    else if (extendedSettings.meridiem === 'lowercase') { // other meridiem transformers already converted to lowercase
+    } else if (extendedSettings.meridiem === 'lowercase') { // other meridiem transformers already converted to lowercase
         s = s.replace(MERIDIEM_RE, function (m0) {
             return m0.toLocaleLowerCase();
         });
@@ -1758,7 +1721,7 @@ function postProcess(s, date, standardDateProps, extendedSettings, context) {
     s = s.trim();
     return s;
 }
-function injectTzoStr(s, tzoStr) {
+function injectTzoStr (s, tzoStr) {
     var replaced = false;
     s = s.replace(UTC_RE, function () {
         replaced = true;
@@ -1770,12 +1733,11 @@ function injectTzoStr(s, tzoStr) {
     }
     return s;
 }
-function formatWeekNumber(num, weekLabel, locale, display) {
+function formatWeekNumber (num, weekLabel, locale, display) {
     var parts = [];
     if (display === 'narrow') {
         parts.push(weekLabel);
-    }
-    else if (display === 'short') {
+    } else if (display === 'short') {
         parts.push(weekLabel, ' ');
     }
     // otherwise, considered 'numeric'
@@ -1789,7 +1751,7 @@ function formatWeekNumber(num, weekLabel, locale, display) {
 // 0 = exactly the same
 // 1 = different by time
 // and bigger
-function computeMarkerDiffSeverity(d0, d1, ca) {
+function computeMarkerDiffSeverity (d0, d1, ca) {
     if (ca.getMarkerYear(d0) !== ca.getMarkerYear(d1)) {
         return 5;
     }
@@ -1804,7 +1766,7 @@ function computeMarkerDiffSeverity(d0, d1, ca) {
     }
     return 0;
 }
-function computePartialFormattingOptions(options, biggestUnit) {
+function computePartialFormattingOptions (options, biggestUnit) {
     var partialOptions = {};
     for (var name_2 in options) {
         if (!(name_2 in STANDARD_DATE_PROP_SEVERITIES) || // not a date part prop (like timeZone)
@@ -1814,7 +1776,7 @@ function computePartialFormattingOptions(options, biggestUnit) {
     }
     return partialOptions;
 }
-function findCommonInsertion(full0, partial0, full1, partial1) {
+function findCommonInsertion (full0, partial0, full1, partial1) {
     var i0 = 0;
     while (i0 < full0.length) {
         var found0 = full0.indexOf(partial0, i0);
@@ -1852,7 +1814,7 @@ At the time of instantiation, this object does not know which cmd-formatting sys
 It receives this at the time of formatting, as a setting.
 */
 var CmdFormatter = /** @class */ (function () {
-    function CmdFormatter(cmdStr, separator) {
+    function CmdFormatter (cmdStr, separator) {
         this.cmdStr = cmdStr;
         this.separator = separator;
     }
@@ -1866,7 +1828,7 @@ var CmdFormatter = /** @class */ (function () {
 }());
 
 var FuncFormatter = /** @class */ (function () {
-    function FuncFormatter(func) {
+    function FuncFormatter (func) {
         this.func = func;
     }
     FuncFormatter.prototype.format = function (date, context) {
@@ -1879,23 +1841,21 @@ var FuncFormatter = /** @class */ (function () {
 }());
 
 // Formatter Object Creation
-function createFormatter(input, defaultSeparator) {
+function createFormatter (input, defaultSeparator) {
     if (typeof input === 'object' && input) { // non-null object
         if (typeof defaultSeparator === 'string') {
             input = __assign({ separator: defaultSeparator }, input);
         }
         return new NativeFormatter(input);
-    }
-    else if (typeof input === 'string') {
+    } else if (typeof input === 'string') {
         return new CmdFormatter(input, defaultSeparator);
-    }
-    else if (typeof input === 'function') {
+    } else if (typeof input === 'function') {
         return new FuncFormatter(input);
     }
 }
 // String Utils
 // timeZoneOffset is in minutes
-function buildIsoString(marker, timeZoneOffset, stripZeroTime) {
+function buildIsoString (marker, timeZoneOffset, stripZeroTime) {
     if (stripZeroTime === void 0) { stripZeroTime = false; }
     var s = marker.toISOString();
     s = s.replace('.000', '');
@@ -1905,20 +1865,19 @@ function buildIsoString(marker, timeZoneOffset, stripZeroTime) {
     if (s.length > 10) { // time part wasn't stripped, can add timezone info
         if (timeZoneOffset == null) {
             s = s.replace('Z', '');
-        }
-        else if (timeZoneOffset !== 0) {
+        } else if (timeZoneOffset !== 0) {
             s = s.replace('Z', formatTimeZoneOffset(timeZoneOffset, true));
         }
         // otherwise, its UTC-0 and we want to keep the Z
     }
     return s;
 }
-function formatIsoTimeString(marker) {
+function formatIsoTimeString (marker) {
     return padStart(marker.getUTCHours(), 2) + ':' +
         padStart(marker.getUTCMinutes(), 2) + ':' +
         padStart(marker.getUTCSeconds(), 2);
 }
-function formatTimeZoneOffset(minutes, doIso) {
+function formatTimeZoneOffset (minutes, doIso) {
     if (doIso === void 0) { doIso = false; }
     var sign = minutes < 0 ? '-' : '+';
     var abs = Math.abs(minutes);
@@ -1926,13 +1885,12 @@ function formatTimeZoneOffset(minutes, doIso) {
     var mins = Math.round(abs % 60);
     if (doIso) {
         return sign + padStart(hours, 2) + ':' + padStart(mins, 2);
-    }
-    else {
+    } else {
         return 'GMT' + sign + hours + (mins ? ':' + padStart(mins, 2) : '');
     }
 }
 // Arg Utils
-function createVerboseFormattingArg(start, end, context, separator) {
+function createVerboseFormattingArg (start, end, context, separator) {
     var startInfo = expandZonedMarker(start, context.calendarSystem);
     var endInfo = end ? expandZonedMarker(end, context.calendarSystem) : null;
     return {
@@ -1944,7 +1902,7 @@ function createVerboseFormattingArg(start, end, context, separator) {
         separator: separator
     };
 }
-function expandZonedMarker(dateInfo, calendarSystem) {
+function expandZonedMarker (dateInfo, calendarSystem) {
     var a = calendarSystem.markerToArray(dateInfo.marker);
     return {
         marker: dateInfo.marker,
@@ -1961,7 +1919,7 @@ function expandZonedMarker(dateInfo, calendarSystem) {
 }
 
 var EventSourceApi = /** @class */ (function () {
-    function EventSourceApi(calendar, internalEventSource) {
+    function EventSourceApi (calendar, internalEventSource) {
         this.calendar = calendar;
         this.internalEventSource = internalEventSource;
     }
@@ -1977,14 +1935,14 @@ var EventSourceApi = /** @class */ (function () {
             sourceIds: [this.internalEventSource.sourceId]
         });
     };
-    Object.defineProperty(EventSourceApi.prototype, "id", {
+    Object.defineProperty(EventSourceApi.prototype, 'id', {
         get: function () {
             return this.internalEventSource.publicId;
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(EventSourceApi.prototype, "url", {
+    Object.defineProperty(EventSourceApi.prototype, 'url', {
         // only relevant to json-feed event sources
         get: function () {
             return this.internalEventSource.meta.url;
@@ -1996,7 +1954,7 @@ var EventSourceApi = /** @class */ (function () {
 }());
 
 var EventApi = /** @class */ (function () {
-    function EventApi(calendar, def, instance) {
+    function EventApi (calendar, def, instance) {
         this._calendar = calendar;
         this._def = def;
         this._instance = instance || null;
@@ -2014,19 +1972,16 @@ var EventApi = /** @class */ (function () {
             this.mutate({
                 standardProps: (_a = {}, _a[name] = val, _a)
             });
-        }
-        else if (name in UNSCOPED_EVENT_UI_PROPS) {
+        } else if (name in UNSCOPED_EVENT_UI_PROPS) {
             var ui = void 0;
             if (typeof UNSCOPED_EVENT_UI_PROPS[name] === 'function') {
                 val = UNSCOPED_EVENT_UI_PROPS[name](val);
             }
             if (name === 'color') {
                 ui = { backgroundColor: val, borderColor: val };
-            }
-            else if (name === 'editable') {
+            } else if (name === 'editable') {
                 ui = { startEditable: val, durationEditable: val };
-            }
-            else {
+            } else {
                 ui = (_b = {}, _b[name] = val, _b);
             }
             this.mutate({
@@ -2049,8 +2004,7 @@ var EventApi = /** @class */ (function () {
             var startDelta = diffDates(instanceRange.start, start, dateEnv, options.granularity); // what if parsed bad!?
             if (options.maintainDuration) {
                 this.mutate({ datesDelta: startDelta });
-            }
-            else {
+            } else {
                 this.mutate({ startDelta: startDelta });
             }
         }
@@ -2069,8 +2023,7 @@ var EventApi = /** @class */ (function () {
             if (end) {
                 var endDelta = diffDates(this._instance.range.end, end, dateEnv, options.granularity);
                 this.mutate({ endDelta: endDelta });
-            }
-            else {
+            } else {
                 this.mutate({ standardProps: { hasEnd: false } });
             }
         }
@@ -2102,12 +2055,10 @@ var EventApi = /** @class */ (function () {
                 var endDelta = diffDates(instanceRange.end, end, dateEnv, options.granularity);
                 if (durationsEqual(startDelta, endDelta)) {
                     this.mutate({ datesDelta: startDelta, standardProps: standardProps });
-                }
-                else {
+                } else {
                     this.mutate({ startDelta: startDelta, endDelta: endDelta, standardProps: standardProps });
                 }
-            }
-            else { // means "clear the end"
+            } else { // means "clear the end"
                 standardProps.hasEnd = false;
                 this.mutate({ datesDelta: startDelta, standardProps: standardProps });
             }
@@ -2152,8 +2103,7 @@ var EventApi = /** @class */ (function () {
                 forcedStartTzo: instance.forcedStartTzo,
                 forcedEndTzo: instance.forcedEndTzo
             });
-        }
-        else {
+        } else {
             return dateEnv.format(instance.range.start, formatter, {
                 forcedTzo: instance.forcedStartTzo
             });
@@ -2180,7 +2130,7 @@ var EventApi = /** @class */ (function () {
             defId: this._def.defId
         });
     };
-    Object.defineProperty(EventApi.prototype, "source", {
+    Object.defineProperty(EventApi.prototype, 'source', {
         get: function () {
             var sourceId = this._def.sourceId;
             if (sourceId) {
@@ -2191,103 +2141,103 @@ var EventApi = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(EventApi.prototype, "start", {
+    Object.defineProperty(EventApi.prototype, 'start', {
         get: function () {
-            return this._instance ?
-                this._calendar.dateEnv.toDate(this._instance.range.start) :
-                null;
+            return this._instance
+                ? this._calendar.dateEnv.toDate(this._instance.range.start)
+                : null;
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(EventApi.prototype, "end", {
+    Object.defineProperty(EventApi.prototype, 'end', {
         get: function () {
-            return (this._instance && this._def.hasEnd) ?
-                this._calendar.dateEnv.toDate(this._instance.range.end) :
-                null;
+            return (this._instance && this._def.hasEnd)
+                ? this._calendar.dateEnv.toDate(this._instance.range.end)
+                : null;
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(EventApi.prototype, "id", {
+    Object.defineProperty(EventApi.prototype, 'id', {
         // computable props that all access the def
         // TODO: find a TypeScript-compatible way to do this at scale
         get: function () { return this._def.publicId; },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(EventApi.prototype, "groupId", {
+    Object.defineProperty(EventApi.prototype, 'groupId', {
         get: function () { return this._def.groupId; },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(EventApi.prototype, "allDay", {
+    Object.defineProperty(EventApi.prototype, 'allDay', {
         get: function () { return this._def.allDay; },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(EventApi.prototype, "title", {
+    Object.defineProperty(EventApi.prototype, 'title', {
         get: function () { return this._def.title; },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(EventApi.prototype, "url", {
+    Object.defineProperty(EventApi.prototype, 'url', {
         get: function () { return this._def.url; },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(EventApi.prototype, "rendering", {
+    Object.defineProperty(EventApi.prototype, 'rendering', {
         get: function () { return this._def.rendering; },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(EventApi.prototype, "startEditable", {
+    Object.defineProperty(EventApi.prototype, 'startEditable', {
         get: function () { return this._def.ui.startEditable; },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(EventApi.prototype, "durationEditable", {
+    Object.defineProperty(EventApi.prototype, 'durationEditable', {
         get: function () { return this._def.ui.durationEditable; },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(EventApi.prototype, "constraint", {
+    Object.defineProperty(EventApi.prototype, 'constraint', {
         get: function () { return this._def.ui.constraints[0] || null; },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(EventApi.prototype, "overlap", {
+    Object.defineProperty(EventApi.prototype, 'overlap', {
         get: function () { return this._def.ui.overlap; },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(EventApi.prototype, "allow", {
+    Object.defineProperty(EventApi.prototype, 'allow', {
         get: function () { return this._def.ui.allows[0] || null; },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(EventApi.prototype, "backgroundColor", {
+    Object.defineProperty(EventApi.prototype, 'backgroundColor', {
         get: function () { return this._def.ui.backgroundColor; },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(EventApi.prototype, "borderColor", {
+    Object.defineProperty(EventApi.prototype, 'borderColor', {
         get: function () { return this._def.ui.borderColor; },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(EventApi.prototype, "textColor", {
+    Object.defineProperty(EventApi.prototype, 'textColor', {
         get: function () { return this._def.ui.textColor; },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(EventApi.prototype, "classNames", {
+    Object.defineProperty(EventApi.prototype, 'classNames', {
         // NOTE: user can't modify these because Object.freeze was called in event-def parsing
         get: function () { return this._def.ui.classNames; },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(EventApi.prototype, "extendedProps", {
+    Object.defineProperty(EventApi.prototype, 'extendedProps', {
         get: function () { return this._def.extendedProps; },
         enumerable: true,
         configurable: true
@@ -2298,7 +2248,7 @@ var EventApi = /** @class */ (function () {
 /*
 Specifying nextDayThreshold signals that all-day ranges should be sliced.
 */
-function sliceEventStore(eventStore, eventUiBases, framingRange, nextDayThreshold) {
+function sliceEventStore (eventStore, eventUiBases, framingRange, nextDayThreshold) {
     var inverseBgByGroupId = {};
     var inverseBgByDefId = {};
     var defByGroupId = {};
@@ -2313,8 +2263,7 @@ function sliceEventStore(eventStore, eventUiBases, framingRange, nextDayThreshol
                 if (!defByGroupId[def.groupId]) {
                     defByGroupId[def.groupId] = def;
                 }
-            }
-            else {
+            } else {
                 inverseBgByDefId[defId] = [];
             }
         }
@@ -2324,20 +2273,18 @@ function sliceEventStore(eventStore, eventUiBases, framingRange, nextDayThreshol
         var def = eventStore.defs[instance.defId];
         var ui = eventUis[def.defId];
         var origRange = instance.range;
-        var normalRange = (!def.allDay && nextDayThreshold) ?
-            computeVisibleDayRange(origRange, nextDayThreshold) :
-            origRange;
+        var normalRange = (!def.allDay && nextDayThreshold)
+            ? computeVisibleDayRange(origRange, nextDayThreshold)
+            : origRange;
         var slicedRange = intersectRanges(normalRange, framingRange);
         if (slicedRange) {
             if (def.rendering === 'inverse-background') {
                 if (def.groupId) {
                     inverseBgByGroupId[def.groupId].push(slicedRange);
-                }
-                else {
+                } else {
                     inverseBgByDefId[instance.defId].push(slicedRange);
                 }
-            }
-            else {
+            } else {
                 (def.rendering === 'background' ? bgRanges : fgRanges).push({
                     def: def,
                     ui: ui,
@@ -2383,11 +2330,11 @@ function sliceEventStore(eventStore, eventUiBases, framingRange, nextDayThreshol
     }
     return { bg: bgRanges, fg: fgRanges };
 }
-function hasBgRendering(def) {
+function hasBgRendering (def) {
     return def.rendering === 'background' || def.rendering === 'inverse-background';
 }
-function filterSegsViaEls(context, segs, isMirror) {
-    var calendar = context.calendar, view = context.view;
+function filterSegsViaEls (context, segs, isMirror) {
+    var calendar = context.calendar; var view = context.view;
     if (calendar.hasPublicHandlers('eventRender')) {
         segs = segs.filter(function (seg) {
             var custom = calendar.publiclyTrigger('eventRender', [
@@ -2403,8 +2350,7 @@ function filterSegsViaEls(context, segs, isMirror) {
             ]);
             if (custom === false) { // means don't render at all
                 return false;
-            }
-            else if (custom && custom !== true) {
+            } else if (custom && custom !== true) {
                 seg.el = custom;
             }
             return true;
@@ -2416,19 +2362,19 @@ function filterSegsViaEls(context, segs, isMirror) {
     }
     return segs;
 }
-function setElSeg(el, seg) {
+function setElSeg (el, seg) {
     el.fcSeg = seg;
 }
-function getElSeg(el) {
+function getElSeg (el) {
     return el.fcSeg || null;
 }
 // event ui computation
-function compileEventUis(eventDefs, eventUiBases) {
+function compileEventUis (eventDefs, eventUiBases) {
     return mapHash(eventDefs, function (eventDef) {
         return compileEventUi(eventDef, eventUiBases);
     });
 }
-function compileEventUi(eventDef, eventUiBases) {
+function compileEventUi (eventDef, eventUiBases) {
     var uis = [];
     if (eventUiBases['']) {
         uis.push(eventUiBases['']);
@@ -2440,8 +2386,8 @@ function compileEventUi(eventDef, eventUiBases) {
     return combineEventUis(uis);
 }
 // triggers
-function triggerRenderedSegs(context, segs, isMirrors) {
-    var calendar = context.calendar, view = context.view;
+function triggerRenderedSegs (context, segs, isMirrors) {
+    var calendar = context.calendar; var view = context.view;
     if (calendar.hasPublicHandlers('eventPositioned')) {
         for (var _i = 0, segs_2 = segs; _i < segs_2.length; _i++) {
             var seg = segs_2[_i];
@@ -2461,8 +2407,8 @@ function triggerRenderedSegs(context, segs, isMirrors) {
         calendar.afterSizingTriggers._eventsPositioned = [null]; // fire once
     }
 }
-function triggerWillRemoveSegs(context, segs, isMirrors) {
-    var calendar = context.calendar, view = context.view;
+function triggerWillRemoveSegs (context, segs, isMirrors) {
+    var calendar = context.calendar; var view = context.view;
     for (var _i = 0, segs_3 = segs; _i < segs_3.length; _i++) {
         var seg = segs_3[_i];
         calendar.trigger('eventElRemove', seg.el);
@@ -2482,8 +2428,8 @@ function triggerWillRemoveSegs(context, segs, isMirrors) {
     }
 }
 // is-interactable
-function computeEventDraggable(context, eventDef, eventUi) {
-    var calendar = context.calendar, view = context.view;
+function computeEventDraggable (context, eventDef, eventUi) {
+    var calendar = context.calendar; var view = context.view;
     var transformers = calendar.pluginSystem.hooks.isDraggableTransformers;
     var val = eventUi.startEditable;
     for (var _i = 0, transformers_1 = transformers; _i < transformers_1.length; _i++) {
@@ -2492,15 +2438,15 @@ function computeEventDraggable(context, eventDef, eventUi) {
     }
     return val;
 }
-function computeEventStartResizable(context, eventDef, eventUi) {
+function computeEventStartResizable (context, eventDef, eventUi) {
     return eventUi.durationEditable && context.options.eventResizableFromStart;
 }
-function computeEventEndResizable(context, eventDef, eventUi) {
+function computeEventEndResizable (context, eventDef, eventUi) {
     return eventUi.durationEditable;
 }
 
 // applies the mutation to ALL defs/instances within the event store
-function applyMutationToEventStore(eventStore, eventConfigBase, mutation, calendar) {
+function applyMutationToEventStore (eventStore, eventConfigBase, mutation, calendar) {
     var eventConfigs = compileEventUis(eventStore.defs, eventConfigBase);
     var dest = createEmptyEventStore();
     for (var defId in eventStore.defs) {
@@ -2514,7 +2460,7 @@ function applyMutationToEventStore(eventStore, eventConfigBase, mutation, calend
     }
     return dest;
 }
-function applyMutationToEventDef(eventDef, eventConfig, mutation, appliers, calendar) {
+function applyMutationToEventDef (eventDef, eventConfig, mutation, appliers, calendar) {
     var standardProps = mutation.standardProps || {};
     // if hasEnd has not been specified, guess a good value based on deltas.
     // if duration will change, there's no way the default duration will persist,
@@ -2537,7 +2483,7 @@ function applyMutationToEventDef(eventDef, eventConfig, mutation, appliers, cale
     }
     return copy;
 }
-function applyMutationToEventInstance(eventInstance, eventDef, // must first be modified by applyMutationToEventDef
+function applyMutationToEventInstance (eventInstance, eventDef, // must first be modified by applyMutationToEventDef
 eventConfig, mutation, calendar) {
     var dateEnv = calendar.dateEnv;
     var forceAllDay = mutation.standardProps && mutation.standardProps.allDay === true;
@@ -2600,8 +2546,7 @@ function reduceEventStore (eventStore, action, eventSources, dateProfile, calend
         case 'SET_VIEW_TYPE':
             if (dateProfile) {
                 return expandRecurring(eventStore, dateProfile.activeRange, calendar);
-            }
-            else {
+            } else {
                 return eventStore;
             }
         case 'CHANGE_TIMEZONE':
@@ -2631,7 +2576,7 @@ function reduceEventStore (eventStore, action, eventSources, dateProfile, calend
             return eventStore;
     }
 }
-function receiveRawEvents(eventStore, eventSource, fetchId, fetchRange, rawEvents, calendar) {
+function receiveRawEvents (eventStore, eventSource, fetchId, fetchRange, rawEvents, calendar) {
     if (eventSource && // not already removed
         fetchId === eventSource.latestFetchId // TODO: wish this logic was always in event-sources
     ) {
@@ -2643,32 +2588,36 @@ function receiveRawEvents(eventStore, eventSource, fetchId, fetchRange, rawEvent
     }
     return eventStore;
 }
-function addEvent(eventStore, subset, expandRange, calendar) {
+function addEvent (eventStore, subset, expandRange, calendar) {
     if (expandRange) {
         subset = expandRecurring(subset, expandRange, calendar);
     }
     return mergeEventStores(eventStore, subset);
 }
-function rezoneDates(eventStore, oldDateEnv, newDateEnv) {
+function rezoneDates (eventStore, oldDateEnv, newDateEnv) {
     var defs = eventStore.defs;
     var instances = mapHash(eventStore.instances, function (instance) {
         var def = defs[instance.defId];
         if (def.allDay || def.recurringDef) {
             return instance; // isn't dependent on timezone
-        }
-        else {
-            return __assign({}, instance, { range: {
+        } else {
+            return __assign({}, instance, {
+ range: {
                     start: newDateEnv.createMarker(oldDateEnv.toDate(instance.range.start, instance.forcedStartTzo)),
                     end: newDateEnv.createMarker(oldDateEnv.toDate(instance.range.end, instance.forcedEndTzo))
-                }, forcedStartTzo: newDateEnv.canComputeOffset ? null : instance.forcedStartTzo, forcedEndTzo: newDateEnv.canComputeOffset ? null : instance.forcedEndTzo });
+                },
+forcedStartTzo: newDateEnv.canComputeOffset ? null : instance.forcedStartTzo,
+forcedEndTzo: newDateEnv.canComputeOffset ? null : instance.forcedEndTzo
+});
         }
     });
     return { defs: defs, instances: instances };
 }
-function applyMutationToRelated(eventStore, instanceId, mutation, fromApi, calendar) {
+function applyMutationToRelated (eventStore, instanceId, mutation, fromApi, calendar) {
     var relevant = getRelevantEvents(eventStore, instanceId);
-    var eventConfigBase = fromApi ?
-        { '': {
+    var eventConfigBase = fromApi
+        ? {
+ '': {
                 startEditable: true,
                 durationEditable: true,
                 constraints: [],
@@ -2678,18 +2627,19 @@ function applyMutationToRelated(eventStore, instanceId, mutation, fromApi, calen
                 borderColor: '',
                 textColor: '',
                 classNames: []
-            } } :
-        calendar.eventUiBases;
+            }
+}
+        : calendar.eventUiBases;
     relevant = applyMutationToEventStore(relevant, eventConfigBase, mutation, calendar);
     return mergeEventStores(eventStore, relevant);
 }
-function excludeEventsBySourceId(eventStore, sourceId) {
+function excludeEventsBySourceId (eventStore, sourceId) {
     return filterEventStoreDefs(eventStore, function (eventDef) {
         return eventDef.sourceId !== sourceId;
     });
 }
 // QUESTION: why not just return instances? do a general object-property-exclusion util
-function excludeInstances(eventStore, removals) {
+function excludeInstances (eventStore, removals) {
     return {
         defs: eventStore.defs,
         instances: filterHash(eventStore.instances, function (instance) {
@@ -2700,18 +2650,18 @@ function excludeInstances(eventStore, removals) {
 
 // high-level segmenting-aware tester functions
 // ------------------------------------------------------------------------------------------------------------------------
-function isInteractionValid(interaction, calendar) {
+function isInteractionValid (interaction, calendar) {
     return isNewPropsValid({ eventDrag: interaction }, calendar); // HACK: the eventDrag props is used for ALL interactions
 }
-function isDateSelectionValid(dateSelection, calendar) {
+function isDateSelectionValid (dateSelection, calendar) {
     return isNewPropsValid({ dateSelection: dateSelection }, calendar);
 }
-function isNewPropsValid(newProps, calendar) {
+function isNewPropsValid (newProps, calendar) {
     var view = calendar.view;
     var props = __assign({ businessHours: view ? view.props.businessHours : createEmptyEventStore(), dateSelection: '', eventStore: calendar.state.eventStore, eventUiBases: calendar.eventUiBases, eventSelection: '', eventDrag: null, eventResize: null }, newProps);
     return (calendar.pluginSystem.hooks.isPropsValid || isPropsValid)(props, calendar);
 }
-function isPropsValid(state, calendar, dateSpanMeta, filterConfig) {
+function isPropsValid (state, calendar, dateSpanMeta, filterConfig) {
     if (dateSpanMeta === void 0) { dateSpanMeta = {}; }
     if (state.eventDrag && !isInteractionPropsValid(state, calendar, dateSpanMeta, filterConfig)) {
         return false;
@@ -2723,14 +2673,14 @@ function isPropsValid(state, calendar, dateSpanMeta, filterConfig) {
 }
 // Moving Event Validation
 // ------------------------------------------------------------------------------------------------------------------------
-function isInteractionPropsValid(state, calendar, dateSpanMeta, filterConfig) {
+function isInteractionPropsValid (state, calendar, dateSpanMeta, filterConfig) {
     var interaction = state.eventDrag; // HACK: the eventDrag props is used for ALL interactions
     var subjectEventStore = interaction.mutatedEvents;
     var subjectDefs = subjectEventStore.defs;
     var subjectInstances = subjectEventStore.instances;
-    var subjectConfigs = compileEventUis(subjectDefs, interaction.isEvent ?
-        state.eventUiBases :
-        { '': calendar.selectionConfig } // if not a real event, validate as a selection
+    var subjectConfigs = compileEventUis(subjectDefs, interaction.isEvent
+        ? state.eventUiBases
+        : { '': calendar.selectionConfig } // if not a real event, validate as a selection
     );
     if (filterConfig) {
         subjectConfigs = mapHash(subjectConfigs, filterConfig);
@@ -2782,8 +2732,7 @@ function isInteractionPropsValid(state, calendar, dateSpanMeta, filterConfig) {
             var eventApi = void 0;
             if (origDef) { // was previously in the calendar
                 eventApi = new EventApi(calendar, origDef, origInstance);
-            }
-            else { // was an external event
+            } else { // was an external event
                 eventApi = new EventApi(calendar, subjectDef); // no instance, because had no dates
             }
             if (!subjectAllow(calendar.buildDateSpanApi(subjectDateSpan), eventApi)) {
@@ -2795,7 +2744,7 @@ function isInteractionPropsValid(state, calendar, dateSpanMeta, filterConfig) {
 }
 // Date Selection Validation
 // ------------------------------------------------------------------------------------------------------------------------
-function isDateSelectionPropsValid(state, calendar, dateSpanMeta, filterConfig) {
+function isDateSelectionPropsValid (state, calendar, dateSpanMeta, filterConfig) {
     var relevantEventStore = state.eventStore;
     var relevantDefs = relevantEventStore.defs;
     var relevantInstances = relevantEventStore.instances;
@@ -2838,7 +2787,7 @@ function isDateSelectionPropsValid(state, calendar, dateSpanMeta, filterConfig) 
 }
 // Constraint Utils
 // ------------------------------------------------------------------------------------------------------------------------
-function allConstraintsPass(constraints, subjectRange, otherEventStore, businessHoursUnexpanded, calendar) {
+function allConstraintsPass (constraints, subjectRange, otherEventStore, businessHoursUnexpanded, calendar) {
     for (var _i = 0, constraints_1 = constraints; _i < constraints_1.length; _i++) {
         var constraint = constraints_1[_i];
         if (!anyRangesContainRange(constraintToRanges(constraint, subjectRange, otherEventStore, businessHoursUnexpanded, calendar), subjectRange)) {
@@ -2847,26 +2796,24 @@ function allConstraintsPass(constraints, subjectRange, otherEventStore, business
     }
     return true;
 }
-function constraintToRanges(constraint, subjectRange, // for expanding a recurring constraint, or expanding business hours
+function constraintToRanges (constraint, subjectRange, // for expanding a recurring constraint, or expanding business hours
 otherEventStore, // for if constraint is an even group ID
 businessHoursUnexpanded, // for if constraint is 'businessHours'
 calendar // for expanding businesshours
 ) {
     if (constraint === 'businessHours') {
         return eventStoreToRanges(expandRecurring(businessHoursUnexpanded, subjectRange, calendar));
-    }
-    else if (typeof constraint === 'string') { // an group ID
+    } else if (typeof constraint === 'string') { // an group ID
         return eventStoreToRanges(filterEventStoreDefs(otherEventStore, function (eventDef) {
             return eventDef.groupId === constraint;
         }));
-    }
-    else if (typeof constraint === 'object' && constraint) { // non-null object
+    } else if (typeof constraint === 'object' && constraint) { // non-null object
         return eventStoreToRanges(expandRecurring(constraint, subjectRange, calendar));
     }
     return []; // if it's false
 }
 // TODO: move to event-store file?
-function eventStoreToRanges(eventStore) {
+function eventStoreToRanges (eventStore) {
     var instances = eventStore.instances;
     var ranges = [];
     for (var instanceId in instances) {
@@ -2875,7 +2822,7 @@ function eventStoreToRanges(eventStore) {
     return ranges;
 }
 // TODO: move to geom file?
-function anyRangesContainRange(outerRanges, innerRange) {
+function anyRangesContainRange (outerRanges, innerRange) {
     for (var _i = 0, outerRanges_1 = outerRanges; _i < outerRanges_1.length; _i++) {
         var outerRange = outerRanges_1[_i];
         if (rangeContainsRange(outerRange, innerRange)) {
@@ -2886,22 +2833,19 @@ function anyRangesContainRange(outerRanges, innerRange) {
 }
 // Parsing
 // ------------------------------------------------------------------------------------------------------------------------
-function normalizeConstraint(input, calendar) {
+function normalizeConstraint (input, calendar) {
     if (Array.isArray(input)) {
         return parseEvents(input, '', calendar, true); // allowOpenRange=true
-    }
-    else if (typeof input === 'object' && input) { // non-null object
+    } else if (typeof input === 'object' && input) { // non-null object
         return parseEvents([input], '', calendar, true); // allowOpenRange=true
-    }
-    else if (input != null) {
+    } else if (input != null) {
         return String(input);
-    }
-    else {
+    } else {
         return null;
     }
 }
 
-function htmlEscape(s) {
+function htmlEscape (s) {
     return (s + '').replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
@@ -2911,7 +2855,7 @@ function htmlEscape(s) {
 }
 // Given a hash of CSS properties, returns a string of CSS.
 // Uses property names as-is (no camel-case conversion). Will not make statements for null/undefined values.
-function cssToStr(cssProps) {
+function cssToStr (cssProps) {
     var statements = [];
     for (var name_1 in cssProps) {
         var val = cssProps[name_1];
@@ -2923,7 +2867,7 @@ function cssToStr(cssProps) {
 }
 // Given an object hash of HTML attribute names to values,
 // generates a string that can be injected between < > in HTML
-function attrsToStr(attrs) {
+function attrsToStr (attrs) {
     var parts = [];
     for (var name_2 in attrs) {
         var val = attrs[name_2];
@@ -2933,14 +2877,12 @@ function attrsToStr(attrs) {
     }
     return parts.join(' ');
 }
-function parseClassName(raw) {
+function parseClassName (raw) {
     if (Array.isArray(raw)) {
         return raw;
-    }
-    else if (typeof raw === 'string') {
+    } else if (typeof raw === 'string') {
         return raw.split(/\s+/);
-    }
-    else {
+    } else {
         return [];
     }
 }
@@ -2959,7 +2901,7 @@ var UNSCOPED_EVENT_UI_PROPS = {
     borderColor: String,
     textColor: String
 };
-function processUnscopedUiProps(rawProps, calendar, leftovers) {
+function processUnscopedUiProps (rawProps, calendar, leftovers) {
     var props = refineProps(rawProps, UNSCOPED_EVENT_UI_PROPS, {}, leftovers);
     var constraint = normalizeConstraint(props.constraint, calendar);
     return {
@@ -2974,7 +2916,7 @@ function processUnscopedUiProps(rawProps, calendar, leftovers) {
         classNames: props.classNames.concat(props.className)
     };
 }
-function processScopedUiProps(prefix, rawScoped, calendar, leftovers) {
+function processScopedUiProps (prefix, rawScoped, calendar, leftovers) {
     var rawUnscoped = {};
     var wasFound = {};
     for (var key in UNSCOPED_EVENT_UI_PROPS) {
@@ -3006,10 +2948,10 @@ var EMPTY_EVENT_UI = {
     classNames: []
 };
 // prevent against problems with <2 args!
-function combineEventUis(uis) {
+function combineEventUis (uis) {
     return uis.reduce(combineTwoEventUis, EMPTY_EVENT_UI);
 }
-function combineTwoEventUis(item0, item1) {
+function combineTwoEventUis (item0, item1) {
     return {
         startEditable: item1.startEditable != null ? item1.startEditable : item0.startEditable,
         durationEditable: item1.durationEditable != null ? item1.durationEditable : item0.durationEditable,
@@ -3038,7 +2980,7 @@ var DATE_PROPS = {
     allDay: null
 };
 var uid = 0;
-function parseEvent(raw, sourceId, calendar, allowOpenRange) {
+function parseEvent (raw, sourceId, calendar, allowOpenRange) {
     var allDayDefault = computeIsAllDayDefault(sourceId, calendar);
     var leftovers0 = {};
     var recurringRes = parseRecurring(raw, // raw, but with single-event stuff stripped out
@@ -3052,8 +2994,7 @@ function parseEvent(raw, sourceId, calendar, allowOpenRange) {
             duration: recurringRes.duration
         };
         return { def: def, instance: null };
-    }
-    else {
+    } else {
         var leftovers1 = {};
         var singleRes = parseSingle(raw, allDayDefault, calendar, leftovers1, allowOpenRange);
         if (singleRes) {
@@ -3069,7 +3010,7 @@ Will NOT populate extendedProps with the leftover properties.
 Will NOT populate date-related props.
 The EventNonDateInput has been normalized (id => publicId, etc).
 */
-function parseEventDef(raw, sourceId, allDay, hasEnd, calendar) {
+function parseEventDef (raw, sourceId, allDay, hasEnd, calendar) {
     var leftovers = {};
     var def = pluckNonDateProps(raw, calendar, leftovers);
     def.defId = String(uid++);
@@ -3088,7 +3029,7 @@ function parseEventDef(raw, sourceId, allDay, hasEnd, calendar) {
     Object.freeze(def.extendedProps);
     return def;
 }
-function createEventInstance(defId, range, forcedStartTzo, forcedEndTzo) {
+function createEventInstance (defId, range, forcedStartTzo, forcedEndTzo) {
     return {
         instanceId: String(uid++),
         defId: defId,
@@ -3097,7 +3038,7 @@ function createEventInstance(defId, range, forcedStartTzo, forcedEndTzo) {
         forcedEndTzo: forcedEndTzo == null ? null : forcedEndTzo
     };
 }
-function parseSingle(raw, allDayDefault, calendar, leftovers, allowOpenRange) {
+function parseSingle (raw, allDayDefault, calendar, leftovers, allowOpenRange) {
     var props = pluckDateProps(raw, leftovers);
     var allDay = props.allDay;
     var startMeta;
@@ -3108,8 +3049,7 @@ function parseSingle(raw, allDayDefault, calendar, leftovers, allowOpenRange) {
     startMeta = calendar.dateEnv.createMarkerMeta(props.start);
     if (startMeta) {
         startMarker = startMeta.marker;
-    }
-    else if (!allowOpenRange) {
+    } else if (!allowOpenRange) {
         return null;
     }
     if (props.end != null) {
@@ -3118,8 +3058,7 @@ function parseSingle(raw, allDayDefault, calendar, leftovers, allowOpenRange) {
     if (allDay == null) {
         if (allDayDefault != null) {
             allDay = allDayDefault;
-        }
-        else {
+        } else {
             // fall back to the date props LAST
             allDay = (!startMeta || startMeta.isTimeUnspecified) &&
                 (!endMeta || endMeta.isTimeUnspecified);
@@ -3139,12 +3078,11 @@ function parseSingle(raw, allDayDefault, calendar, leftovers, allowOpenRange) {
     }
     if (endMarker) {
         hasEnd = true;
-    }
-    else if (!allowOpenRange) {
+    } else if (!allowOpenRange) {
         hasEnd = calendar.opt('forceEventDuration') || false;
-        endMarker = calendar.dateEnv.add(startMarker, allDay ?
-            calendar.defaultAllDayEventDuration :
-            calendar.defaultTimedEventDuration);
+        endMarker = calendar.dateEnv.add(startMarker, allDay
+            ? calendar.defaultAllDayEventDuration
+            : calendar.defaultTimedEventDuration);
     }
     return {
         allDay: allDay,
@@ -3154,13 +3092,13 @@ function parseSingle(raw, allDayDefault, calendar, leftovers, allowOpenRange) {
         forcedEndTzo: endMeta ? endMeta.forcedTzo : null
     };
 }
-function pluckDateProps(raw, leftovers) {
+function pluckDateProps (raw, leftovers) {
     var props = refineProps(raw, DATE_PROPS, {}, leftovers);
     props.start = (props.start !== null) ? props.start : props.date;
     delete props.date;
     return props;
 }
-function pluckNonDateProps(raw, calendar, leftovers) {
+function pluckNonDateProps (raw, calendar, leftovers) {
     var preLeftovers = {};
     var props = refineProps(raw, NON_DATE_PROPS, {}, preLeftovers);
     var ui = processUnscopedUiProps(preLeftovers, calendar, leftovers);
@@ -3169,7 +3107,7 @@ function pluckNonDateProps(raw, calendar, leftovers) {
     props.ui = ui;
     return props;
 }
-function computeIsAllDayDefault(sourceId, calendar) {
+function computeIsAllDayDefault (sourceId, calendar) {
     var res = null;
     if (sourceId) {
         var source = calendar.state.eventSources[sourceId];
@@ -3192,24 +3130,21 @@ var DEF_DEFAULTS = {
 /*
 TODO: pass around as EventDefHash!!!
 */
-function parseBusinessHours(input, calendar) {
+function parseBusinessHours (input, calendar) {
     return parseEvents(refineInputs(input), '', calendar);
 }
-function refineInputs(input) {
+function refineInputs (input) {
     var rawDefs;
     if (input === true) {
         rawDefs = [{}]; // will get DEF_DEFAULTS verbatim
-    }
-    else if (Array.isArray(input)) {
+    } else if (Array.isArray(input)) {
         // if specifying an array, every sub-definition NEEDS a day-of-week
         rawDefs = input.filter(function (rawDef) {
             return rawDef.daysOfWeek;
         });
-    }
-    else if (typeof input === 'object' && input) { // non-null object
+    } else if (typeof input === 'object' && input) { // non-null object
         rawDefs = [input];
-    }
-    else { // is probably false
+    } else { // is probably false
         rawDefs = [];
     }
     rawDefs = rawDefs.map(function (rawDef) {
@@ -3218,12 +3153,12 @@ function refineInputs(input) {
     return rawDefs;
 }
 
-function memoizeRendering(renderFunc, unrenderFunc, dependencies) {
+function memoizeRendering (renderFunc, unrenderFunc, dependencies) {
     if (dependencies === void 0) { dependencies = []; }
     var dependents = [];
     var thisContext;
     var prevArgs;
-    function unrender() {
+    function unrender () {
         if (prevArgs) {
             for (var _i = 0, dependents_1 = dependents; _i < dependents_1.length; _i++) {
                 var dependent = dependents_1[_i];
@@ -3235,7 +3170,7 @@ function memoizeRendering(renderFunc, unrenderFunc, dependencies) {
             prevArgs = null;
         }
     }
-    function res() {
+    function res () {
         if (!prevArgs || !isArraysEqual(prevArgs, arguments)) {
             unrender();
             thisContext = this;
@@ -3254,7 +3189,7 @@ function memoizeRendering(renderFunc, unrenderFunc, dependencies) {
 
 var EMPTY_EVENT_STORE = createEmptyEventStore(); // for purecomponents. TODO: keep elsewhere
 var Splitter = /** @class */ (function () {
-    function Splitter() {
+    function Splitter () {
         this.getKeysForEventDefs = memoize(this._getKeysForEventDefs);
         this.splitDateSelection = memoize(this._splitDateSpan);
         this.splitEventStore = memoize(this._splitEventStore);
@@ -3310,7 +3245,7 @@ var Splitter = /** @class */ (function () {
         });
     };
     Splitter.prototype._splitEventStore = function (eventStore, defKeys) {
-        var defs = eventStore.defs, instances = eventStore.instances;
+        var defs = eventStore.defs; var instances = eventStore.instances;
         var splitStores = {};
         for (var defId in defs) {
             for (var _i = 0, _a = defKeys[defId]; _i < _a.length; _i++) {
@@ -3376,7 +3311,7 @@ var Splitter = /** @class */ (function () {
     };
     return Splitter;
 }());
-function buildEventUiForKey(allUi, eventUiForKey, individualUi) {
+function buildEventUiForKey (allUi, eventUiForKey, individualUi) {
     var baseParts = [];
     if (allUi) {
         baseParts.push(allUi);
@@ -3399,15 +3334,14 @@ function buildEventUiForKey(allUi, eventUiForKey, individualUi) {
 // { date, type, forceOff }
 // `type` is a view-type like "day" or "week". default value is "day".
 // `attrs` and `innerHtml` are use to generate the rest of the HTML tag.
-function buildGotoAnchorHtml(allOptions, dateEnv, gotoOptions, attrs, innerHtml) {
+function buildGotoAnchorHtml (allOptions, dateEnv, gotoOptions, attrs, innerHtml) {
     var date;
     var type;
     var forceOff;
     var finalOptions;
     if (gotoOptions instanceof Date) {
         date = gotoOptions; // a single date-like input
-    }
-    else {
+    } else {
         date = gotoOptions.date;
         type = gotoOptions.type;
         forceOff = gotoOptions.forceOff;
@@ -3427,26 +3361,24 @@ function buildGotoAnchorHtml(allOptions, dateEnv, gotoOptions, attrs, innerHtml)
             ' data-goto="' + htmlEscape(JSON.stringify(finalOptions)) + '">' +
             innerHtml +
             '</a>';
-    }
-    else {
+    } else {
         return '<span' + attrs + '>' +
             innerHtml +
             '</span>';
     }
 }
-function getAllDayHtml(allOptions) {
+function getAllDayHtml (allOptions) {
     return allOptions.allDayHtml || htmlEscape(allOptions.allDayText);
 }
 // Computes HTML classNames for a single-day element
-function getDayClasses(date, dateProfile, context, noThemeHighlight) {
-    var calendar = context.calendar, options = context.options, theme = context.theme, dateEnv = context.dateEnv;
+function getDayClasses (date, dateProfile, context, noThemeHighlight) {
+    var calendar = context.calendar; var options = context.options; var theme = context.theme; var dateEnv = context.dateEnv;
     var classes = [];
     var todayStart;
     var todayEnd;
     if (!rangeContainsMarker(dateProfile.activeRange, date)) {
         classes.push('fc-disabled-day');
-    }
-    else {
+    } else {
         classes.push('fc-' + DAY_IDS[date.getUTCDay()]);
         if (options.monthMode &&
             dateEnv.getMonth(date) !== dateEnv.getMonth(dateProfile.currentRange.start)) {
@@ -3456,11 +3388,9 @@ function getDayClasses(date, dateProfile, context, noThemeHighlight) {
         todayEnd = addDays(todayStart, 1);
         if (date < todayStart) {
             classes.push('fc-past');
-        }
-        else if (date >= todayEnd) {
+        } else if (date >= todayEnd) {
             classes.push('fc-future');
-        }
-        else {
+        } else {
             classes.push('fc-today');
             if (noThemeHighlight !== true) {
                 classes.push(theme.getClass('today'));
@@ -3474,7 +3404,7 @@ function getDayClasses(date, dateProfile, context, noThemeHighlight) {
 // the function can either call passed-in success and failure callbacks,
 // or it can return a promise.
 // if you need to pass additional params to func, bind them first.
-function unpromisify(func, success, failure) {
+function unpromisify (func, success, failure) {
     // guard against success/failure callbacks being called more than once
     // and guard against a promise AND callback being used together.
     var isResolved = false;
@@ -3499,7 +3429,7 @@ function unpromisify(func, success, failure) {
 }
 
 var Mixin = /** @class */ (function () {
-    function Mixin() {
+    function Mixin () {
     }
     // mix into a CLASS
     Mixin.mixInto = function (destClass) {
@@ -3542,7 +3472,7 @@ after class:
 */
 var EmitterMixin = /** @class */ (function (_super) {
     __extends(EmitterMixin, _super);
-    function EmitterMixin() {
+    function EmitterMixin () {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     EmitterMixin.prototype.on = function (type, handler) {
@@ -3587,19 +3517,18 @@ var EmitterMixin = /** @class */ (function (_super) {
     };
     return EmitterMixin;
 }(Mixin));
-function addToHash(hash, type, handler) {
+function addToHash (hash, type, handler) {
     (hash[type] || (hash[type] = []))
         .push(handler);
 }
-function removeFromHash(hash, type, handler) {
+function removeFromHash (hash, type, handler) {
     if (handler) {
         if (hash[type]) {
             hash[type] = hash[type].filter(function (func) {
                 return func !== handler;
             });
         }
-    }
-    else {
+    } else {
         delete hash[type]; // remove all handler funcs for this type
     }
 }
@@ -3610,7 +3539,7 @@ Can record the left/right OR the top/bottom OR both.
 Provides methods for querying the cache by position.
 */
 var PositionCache = /** @class */ (function () {
-    function PositionCache(originEl, els, isHorizontal, isVertical) {
+    function PositionCache (originEl, els, isHorizontal, isVertical) {
         this.originEl = originEl;
         this.els = els;
         this.isHorizontal = isHorizontal;
@@ -3698,7 +3627,7 @@ Internally, this is done very differently for window versus DOM element,
 so this object serves as a common interface.
 */
 var ScrollController = /** @class */ (function () {
-    function ScrollController() {
+    function ScrollController () {
     }
     ScrollController.prototype.getMaxScrollTop = function () {
         return this.getScrollHeight() - this.getClientHeight();
@@ -3728,7 +3657,7 @@ var ScrollController = /** @class */ (function () {
 }());
 var ElementScrollController = /** @class */ (function (_super) {
     __extends(ElementScrollController, _super);
-    function ElementScrollController(el) {
+    function ElementScrollController (el) {
         var _this = _super.call(this) || this;
         _this.el = el;
         return _this;
@@ -3761,7 +3690,7 @@ var ElementScrollController = /** @class */ (function (_super) {
 }(ScrollController));
 var WindowScrollController = /** @class */ (function (_super) {
     __extends(WindowScrollController, _super);
-    function WindowScrollController() {
+    function WindowScrollController () {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     WindowScrollController.prototype.getScrollTop = function () {
@@ -3796,7 +3725,7 @@ Embodies a div that has potential scrollbars
 */
 var ScrollComponent = /** @class */ (function (_super) {
     __extends(ScrollComponent, _super);
-    function ScrollComponent(overflowX, overflowY) {
+    function ScrollComponent (overflowX, overflowY) {
         var _this = _super.call(this, createElement('div', {
             className: 'fc-scroller'
         })) || this;
@@ -3855,7 +3784,7 @@ var ScrollComponent = /** @class */ (function (_super) {
 }(ElementScrollController));
 
 var Theme = /** @class */ (function () {
-    function Theme(calendarOptions) {
+    function Theme (calendarOptions) {
         this.calendarOptions = calendarOptions;
         this.processIconOverride();
     }
@@ -3873,8 +3802,7 @@ var Theme = /** @class */ (function () {
                 iconClassesCopy[buttonName] = this.applyIconOverridePrefix(iconOverrideHash[buttonName]);
             }
             this.iconClasses = iconClassesCopy;
-        }
-        else if (iconOverrideHash === false) {
+        } else if (iconOverrideHash === false) {
             this.iconClasses = {};
         }
     };
@@ -3914,7 +3842,7 @@ Theme.prototype.iconOverridePrefix = '';
 
 var guid = 0;
 var ComponentContext = /** @class */ (function () {
-    function ComponentContext(calendar, theme, dateEnv, options, view) {
+    function ComponentContext (calendar, theme, dateEnv, options, view) {
         this.calendar = calendar;
         this.theme = theme;
         this.dateEnv = dateEnv;
@@ -3930,7 +3858,7 @@ var ComponentContext = /** @class */ (function () {
     return ComponentContext;
 }());
 var Component = /** @class */ (function () {
-    function Component() {
+    function Component () {
         this.uid = String(guid++);
     }
     Component.addEqualityFuncs = function (newFuncs) {
@@ -3942,7 +3870,7 @@ var Component = /** @class */ (function () {
         if (!oldContext) {
             this.firstContext(context);
         }
-        var _a = recycleProps(this.props || {}, props, this.equalityFuncs), anyChanges = _a.anyChanges, comboProps = _a.comboProps;
+        var _a = recycleProps(this.props || {}, props, this.equalityFuncs); var anyChanges = _a.anyChanges; var comboProps = _a.comboProps;
         this.props = comboProps;
         if (anyChanges) {
             if (oldContext) {
@@ -3972,7 +3900,7 @@ Component.prototype.equalityFuncs = {};
 Reuses old values when equal. If anything is unequal, returns newProps as-is.
 Great for PureComponent, but won't be feasible with React, so just eliminate and use React's DOM diffing.
 */
-function recycleProps(oldProps, newProps, equalityFuncs) {
+function recycleProps (oldProps, newProps, equalityFuncs) {
     var comboProps = {}; // some old, some new
     var anyChanges = false;
     for (var key in newProps) {
@@ -3980,8 +3908,7 @@ function recycleProps(oldProps, newProps, equalityFuncs) {
             (equalityFuncs[key] && equalityFuncs[key](oldProps[key], newProps[key])))) {
             // equal to old? use old prop
             comboProps[key] = oldProps[key];
-        }
-        else {
+        } else {
             comboProps[key] = newProps[key];
             anyChanges = true;
         }
@@ -4002,7 +3929,7 @@ PURPOSES:
 */
 var DateComponent = /** @class */ (function (_super) {
     __extends(DateComponent, _super);
-    function DateComponent(el) {
+    function DateComponent (el) {
         var _this = _super.call(this) || this;
         _this.el = el;
         return _this;
@@ -4071,7 +3998,7 @@ DateComponent.prototype.fgSegSelector = '.fc-event-container > *';
 DateComponent.prototype.bgSegSelector = '.fc-bgevent:not(.fc-nonbusiness)';
 
 var uid$1 = 0;
-function createPlugin(input) {
+function createPlugin (input) {
     return {
         id: String(uid$1++),
         deps: input.deps || [],
@@ -4103,7 +4030,7 @@ function createPlugin(input) {
     };
 }
 var PluginSystem = /** @class */ (function () {
-    function PluginSystem() {
+    function PluginSystem () {
         this.hooks = {
             reducers: [],
             eventDefParsers: [],
@@ -4145,7 +4072,7 @@ var PluginSystem = /** @class */ (function () {
     };
     return PluginSystem;
 }());
-function combineHooks(hooks0, hooks1) {
+function combineHooks (hooks0, hooks1) {
     return {
         reducers: hooks0.reducers.concat(hooks1.reducers),
         eventDefParsers: hooks0.eventDefParsers.concat(hooks1.eventDefParsers),
@@ -4180,8 +4107,7 @@ var eventSourceDef = {
     parseMeta: function (raw) {
         if (Array.isArray(raw)) { // short form
             return raw;
-        }
-        else if (Array.isArray(raw.events)) {
+        } else if (Array.isArray(raw.events)) {
             return raw.events;
         }
         return null;
@@ -4200,8 +4126,7 @@ var eventSourceDef$1 = {
     parseMeta: function (raw) {
         if (typeof raw === 'function') { // short form
             return raw;
-        }
-        else if (typeof raw.events === 'function') {
+        } else if (typeof raw.events === 'function') {
             return raw.events;
         }
         return null;
@@ -4225,13 +4150,12 @@ var FuncEventSourcePlugin = createPlugin({
     eventSourceDefs: [eventSourceDef$1]
 });
 
-function requestJson(method, url, params, successCallback, failureCallback) {
+function requestJson (method, url, params, successCallback, failureCallback) {
     method = method.toUpperCase();
     var body = null;
     if (method === 'GET') {
         url = injectQueryStringParams(url, params);
-    }
-    else {
+    } else {
         body = encodeParams(params);
     }
     var xhr = new XMLHttpRequest();
@@ -4244,12 +4168,10 @@ function requestJson(method, url, params, successCallback, failureCallback) {
             try {
                 var res = JSON.parse(xhr.responseText);
                 successCallback(res, xhr);
-            }
-            catch (err) {
+            } catch (err) {
                 failureCallback('Failure parsing JSON', xhr);
             }
-        }
-        else {
+        } else {
             failureCallback('Request failed', xhr);
         }
     };
@@ -4258,12 +4180,12 @@ function requestJson(method, url, params, successCallback, failureCallback) {
     };
     xhr.send(body);
 }
-function injectQueryStringParams(url, params) {
+function injectQueryStringParams (url, params) {
     return url +
         (url.indexOf('?') === -1 ? '?' : '&') +
         encodeParams(params);
 }
-function encodeParams(params) {
+function encodeParams (params) {
     var parts = [];
     for (var key in params) {
         parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
@@ -4275,8 +4197,7 @@ var eventSourceDef$2 = {
     parseMeta: function (raw) {
         if (typeof raw === 'string') { // short form
             raw = { url: raw };
-        }
-        else if (!raw || typeof raw !== 'object' || !raw.url) {
+        } else if (!raw || typeof raw !== 'object' || !raw.url) {
             return null;
         }
         return {
@@ -4301,7 +4222,7 @@ var eventSourceDef$2 = {
 var JsonFeedEventSourcePlugin = createPlugin({
     eventSourceDefs: [eventSourceDef$2]
 });
-function buildRequestParams(meta, range, calendar) {
+function buildRequestParams (meta, range, calendar) {
     var dateEnv = calendar.dateEnv;
     var startParam;
     var endParam;
@@ -4324,8 +4245,7 @@ function buildRequestParams(meta, range, calendar) {
     if (typeof meta.extraParams === 'function') {
         // supplied as a function that returns a key/value object
         customRequestParams = meta.extraParams();
-    }
-    else {
+    } else {
         // probably supplied as a straight key/value object
         customRequestParams = meta.extraParams || {};
     }
@@ -4377,8 +4297,7 @@ var recurring = {
         var clippedFramingRange = intersectRanges(framingRange, { start: typeData.startRecur, end: typeData.endRecur });
         if (clippedFramingRange) {
             return expandRanges(typeData.daysOfWeek, typeData.startTime, clippedFramingRange, dateEnv);
-        }
-        else {
+        } else {
             return [];
         }
     }
@@ -4386,21 +4305,20 @@ var recurring = {
 var SimpleRecurrencePlugin = createPlugin({
     recurringTypes: [recurring]
 });
-function expandRanges(daysOfWeek, startTime, framingRange, dateEnv) {
+function expandRanges (daysOfWeek, startTime, framingRange, dateEnv) {
     var dowHash = daysOfWeek ? arrayToHash(daysOfWeek) : null;
     var dayMarker = startOfDay(framingRange.start);
     var endMarker = framingRange.end;
     var instanceStarts = [];
     while (dayMarker < endMarker) {
-        var instanceStart 
+        var instanceStart =
         // if everyday, or this particular day-of-week
-        = void 0;
+        void 0;
         // if everyday, or this particular day-of-week
         if (!dowHash || dowHash[dayMarker.getUTCDay()]) {
             if (startTime) {
                 instanceStart = dateEnv.add(dayMarker, startTime);
-            }
-            else {
+            } else {
                 instanceStart = dayMarker;
             }
             instanceStarts.push(instanceStart);
@@ -4419,7 +4337,7 @@ var DefaultOptionChangeHandlers = createPlugin({
         plugins: handlePlugins
     }
 });
-function handleEventSources(inputs, calendar, deepEqual) {
+function handleEventSources (inputs, calendar, deepEqual) {
     var unfoundSources = hashValuesToArray(calendar.state.eventSources);
     var newInputs = [];
     for (var _i = 0, inputs_1 = inputs; _i < inputs_1.length; _i++) {
@@ -4449,7 +4367,7 @@ function handleEventSources(inputs, calendar, deepEqual) {
     }
 }
 // shortcoming: won't remove plugins
-function handlePlugins(inputs, calendar) {
+function handlePlugins (inputs, calendar) {
     calendar.addPluginInputs(inputs); // will gracefully handle duplicates
 }
 
@@ -4534,7 +4452,7 @@ var complexOptions = [
     'buttonIcons'
 ];
 // Merges an array of option objects into a single object
-function mergeOptions(optionObjs) {
+function mergeOptions (optionObjs) {
     return mergeProps(optionObjs, complexOptions);
 }
 // TODO: move this stuff to a "plugin"-related file...
@@ -4545,7 +4463,7 @@ var INTERNAL_PLUGINS = [
     SimpleRecurrencePlugin,
     DefaultOptionChangeHandlers
 ];
-function refinePluginDefs(pluginInputs) {
+function refinePluginDefs (pluginInputs) {
     var plugins = [];
     for (var _i = 0, pluginInputs_1 = pluginInputs; _i < pluginInputs_1.length; _i++) {
         var pluginInput = pluginInputs_1[_i];
@@ -4553,12 +4471,10 @@ function refinePluginDefs(pluginInputs) {
             var globalName = 'FullCalendar' + capitaliseFirstLetter(pluginInput);
             if (!window[globalName]) {
                 console.warn('Plugin file not loaded for ' + pluginInput);
-            }
-            else {
+            } else {
                 plugins.push(window[globalName].default); // is an ES6 module
             }
-        }
-        else {
+        } else {
             plugins.push(pluginInput);
         }
     }
@@ -4589,10 +4505,10 @@ var RAW_EN_LOCALE = {
     eventLimitText: 'more',
     noEventsMessage: 'No events to display'
 };
-function parseRawLocales(explicitRawLocales) {
+function parseRawLocales (explicitRawLocales) {
     var defaultCode = explicitRawLocales.length > 0 ? explicitRawLocales[0].code : 'en';
-    var globalArray = window['FullCalendarLocalesAll'] || []; // from locales-all.js
-    var globalObject = window['FullCalendarLocales'] || {}; // from locales/*.js. keys are meaningless
+    var globalArray = window.FullCalendarLocalesAll || []; // from locales-all.js
+    var globalObject = window.FullCalendarLocales || {}; // from locales/*.js. keys are meaningless
     var allRawLocales = globalArray.concat(// globalArray is low prio
     hashValuesToArray(globalObject), // medium prio
     explicitRawLocales // highest prio
@@ -4609,20 +4525,19 @@ function parseRawLocales(explicitRawLocales) {
         defaultCode: defaultCode
     };
 }
-function buildLocale(inputSingular, available) {
+function buildLocale (inputSingular, available) {
     if (typeof inputSingular === 'object' && !Array.isArray(inputSingular)) {
         return parseLocale(inputSingular.code, [inputSingular.code], inputSingular);
-    }
-    else {
+    } else {
         return queryLocale(inputSingular, available);
     }
 }
-function queryLocale(codeArg, available) {
+function queryLocale (codeArg, available) {
     var codes = [].concat(codeArg || []); // will convert to array
     var raw = queryRawLocale(codes, available) || RAW_EN_LOCALE;
     return parseLocale(codeArg, codes, raw);
 }
-function queryRawLocale(codes, available) {
+function queryRawLocale (codes, available) {
     for (var i = 0; i < codes.length; i++) {
         var parts = codes[i].toLocaleLowerCase().split('-');
         for (var j = parts.length; j > 0; j--) {
@@ -4634,7 +4549,7 @@ function queryRawLocale(codes, available) {
     }
     return null;
 }
-function parseLocale(codeArg, codes, raw) {
+function parseLocale (codeArg, codes, raw) {
     var merged = mergeProps([RAW_EN_LOCALE, raw], ['buttonText']);
     delete merged.code; // don't want this part of the options
     var week = merged.week;
@@ -4649,7 +4564,7 @@ function parseLocale(codeArg, codes, raw) {
 }
 
 var OptionsManager = /** @class */ (function () {
-    function OptionsManager(overrides) {
+    function OptionsManager (overrides) {
         this.overrides = __assign({}, overrides); // make a copy
         this.dynamicOverrides = {};
         this.compute();
@@ -4693,14 +4608,14 @@ var OptionsManager = /** @class */ (function () {
 }());
 
 var calendarSystemClassMap = {};
-function registerCalendarSystem(name, theClass) {
+function registerCalendarSystem (name, theClass) {
     calendarSystemClassMap[name] = theClass;
 }
-function createCalendarSystem(name) {
+function createCalendarSystem (name) {
     return new calendarSystemClassMap[name]();
 }
 var GregorianCalendarSystem = /** @class */ (function () {
-    function GregorianCalendarSystem() {
+    function GregorianCalendarSystem () {
     }
     GregorianCalendarSystem.prototype.getMarkerYear = function (d) {
         return d.getUTCFullYear();
@@ -4722,7 +4637,7 @@ var GregorianCalendarSystem = /** @class */ (function () {
 registerCalendarSystem('gregory', GregorianCalendarSystem);
 
 var ISO_RE = /^\s*(\d{4})(-(\d{2})(-(\d{2})([T ](\d{2}):(\d{2})(:(\d{2})(\.(\d+))?)?(Z|(([-+])(\d{2})(:?(\d{2}))?))?)?)?)?$/;
-function parse(str) {
+function parse (str) {
     var m = ISO_RE.exec(str);
     if (m) {
         var marker = new Date(Date.UTC(Number(m[1]), m[3] ? Number(m[3]) - 1 : 0, Number(m[5] || 1), Number(m[7] || 0), Number(m[8] || 0), Number(m[10] || 0), m[12] ? Number('0.' + m[12]) * 1000 : 0));
@@ -4743,7 +4658,7 @@ function parse(str) {
 }
 
 var DateEnv = /** @class */ (function () {
-    function DateEnv(settings) {
+    function DateEnv (settings) {
         var timeZone = this.timeZone = settings.timeZone;
         var isNamedTimeZone = timeZone !== 'local' && timeZone !== 'UTC';
         if (settings.namedTimeZoneImpl && isNamedTimeZone) {
@@ -4778,8 +4693,7 @@ var DateEnv = /** @class */ (function () {
     DateEnv.prototype.createNowMarker = function () {
         if (this.canComputeOffset) {
             return this.timestampToMarker(new Date().valueOf());
-        }
-        else {
+        } else {
             // if we can't compute the current date val for a timezone,
             // better to give the current local date vals than UTC
             return arrayToUtcDate(dateToLocalArray(new Date()));
@@ -4792,14 +4706,12 @@ var DateEnv = /** @class */ (function () {
         var marker = null;
         if (typeof input === 'number') {
             marker = this.timestampToMarker(input);
-        }
-        else if (input instanceof Date) {
+        } else if (input instanceof Date) {
             input = input.valueOf();
             if (!isNaN(input)) {
                 marker = this.timestampToMarker(input);
             }
-        }
-        else if (Array.isArray(input)) {
+        } else if (Array.isArray(input)) {
             marker = arrayToUtcDate(input);
         }
         if (marker === null || !isValidDate(marker)) {
@@ -4817,8 +4729,7 @@ var DateEnv = /** @class */ (function () {
         if (parts.timeZoneOffset !== null) {
             if (this.canComputeOffset) {
                 marker = this.timestampToMarker(marker.valueOf() - parts.timeZoneOffset * 60 * 1000);
-            }
-            else {
+            } else {
                 forcedTzo = parts.timeZoneOffset;
             }
         }
@@ -4936,23 +4847,17 @@ var DateEnv = /** @class */ (function () {
     DateEnv.prototype.startOf = function (m, unit) {
         if (unit === 'year') {
             return this.startOfYear(m);
-        }
-        else if (unit === 'month') {
+        } else if (unit === 'month') {
             return this.startOfMonth(m);
-        }
-        else if (unit === 'week') {
+        } else if (unit === 'week') {
             return this.startOfWeek(m);
-        }
-        else if (unit === 'day') {
+        } else if (unit === 'day') {
             return startOfDay(m);
-        }
-        else if (unit === 'hour') {
+        } else if (unit === 'hour') {
             return startOfHour(m);
-        }
-        else if (unit === 'minute') {
+        } else if (unit === 'minute') {
             return startOfMinute(m);
-        }
-        else if (unit === 'second') {
+        } else if (unit === 'second') {
             return startOfSecond(m);
         }
     };
@@ -4978,8 +4883,7 @@ var DateEnv = /** @class */ (function () {
     DateEnv.prototype.computeWeekNumber = function (marker) {
         if (this.weekNumberFunc) {
             return this.weekNumberFunc(this.toDate(marker));
-        }
-        else {
+        } else {
             return weekOfYear(marker, this.weekDow, this.weekDoy);
         }
     };
@@ -4988,9 +4892,9 @@ var DateEnv = /** @class */ (function () {
         if (dateOptions === void 0) { dateOptions = {}; }
         return formatter.format({
             marker: marker,
-            timeZoneOffset: dateOptions.forcedTzo != null ?
-                dateOptions.forcedTzo :
-                this.offsetForMarker(marker)
+            timeZoneOffset: dateOptions.forcedTzo != null
+                ? dateOptions.forcedTzo
+                : this.offsetForMarker(marker)
         }, this);
     };
     DateEnv.prototype.formatRange = function (start, end, formatter, dateOptions) {
@@ -5000,14 +4904,14 @@ var DateEnv = /** @class */ (function () {
         }
         return formatter.formatRange({
             marker: start,
-            timeZoneOffset: dateOptions.forcedStartTzo != null ?
-                dateOptions.forcedStartTzo :
-                this.offsetForMarker(start)
+            timeZoneOffset: dateOptions.forcedStartTzo != null
+                ? dateOptions.forcedStartTzo
+                : this.offsetForMarker(start)
         }, {
             marker: end,
-            timeZoneOffset: dateOptions.forcedEndTzo != null ?
-                dateOptions.forcedEndTzo :
-                this.offsetForMarker(end)
+            timeZoneOffset: dateOptions.forcedEndTzo != null
+                ? dateOptions.forcedEndTzo
+                : this.offsetForMarker(end)
         }, this);
     };
     DateEnv.prototype.formatIso = function (marker, extraOptions) {
@@ -5016,8 +4920,7 @@ var DateEnv = /** @class */ (function () {
         if (!extraOptions.omitTimeZoneOffset) {
             if (extraOptions.forcedTzo != null) {
                 timeZoneOffset = extraOptions.forcedTzo;
-            }
-            else {
+            } else {
                 timeZoneOffset = this.offsetForMarker(marker);
             }
         }
@@ -5027,22 +4930,18 @@ var DateEnv = /** @class */ (function () {
     DateEnv.prototype.timestampToMarker = function (ms) {
         if (this.timeZone === 'local') {
             return arrayToUtcDate(dateToLocalArray(new Date(ms)));
-        }
-        else if (this.timeZone === 'UTC' || !this.namedTimeZoneImpl) {
+        } else if (this.timeZone === 'UTC' || !this.namedTimeZoneImpl) {
             return new Date(ms);
-        }
-        else {
+        } else {
             return arrayToUtcDate(this.namedTimeZoneImpl.timestampToArray(ms));
         }
     };
     DateEnv.prototype.offsetForMarker = function (m) {
         if (this.timeZone === 'local') {
             return -arrayToLocalDate(dateToUtcArray(m)).getTimezoneOffset(); // convert "inverse" offset to "normal" offset
-        }
-        else if (this.timeZone === 'UTC') {
+        } else if (this.timeZone === 'UTC') {
             return 0;
-        }
-        else if (this.namedTimeZoneImpl) {
+        } else if (this.namedTimeZoneImpl) {
             return this.namedTimeZoneImpl.offsetForArray(dateToUtcArray(m));
         }
         return null;
@@ -5051,14 +4950,11 @@ var DateEnv = /** @class */ (function () {
     DateEnv.prototype.toDate = function (m, forcedTzo) {
         if (this.timeZone === 'local') {
             return arrayToLocalDate(dateToUtcArray(m));
-        }
-        else if (this.timeZone === 'UTC') {
+        } else if (this.timeZone === 'UTC') {
             return new Date(m.valueOf()); // make sure it's a copy
-        }
-        else if (!this.namedTimeZoneImpl) {
+        } else if (!this.namedTimeZoneImpl) {
             return new Date(m.valueOf() - (forcedTzo || 0));
-        }
-        else {
+        } else {
             return new Date(m.valueOf() -
                 this.namedTimeZoneImpl.offsetForArray(dateToUtcArray(m)) * 1000 * 60 // convert minutes -> ms
             );
@@ -5075,11 +4971,11 @@ var SIMPLE_SOURCE_PROPS = {
     failure: Function
 };
 var uid$2 = 0;
-function doesSourceNeedRange(eventSource, calendar) {
+function doesSourceNeedRange (eventSource, calendar) {
     var defs = calendar.pluginSystem.hooks.eventSourceDefs;
     return !defs[eventSource.sourceDefId].ignoreRange;
 }
-function parseEventSource(raw, calendar) {
+function parseEventSource (raw, calendar) {
     var defs = calendar.pluginSystem.hooks.eventSourceDefs;
     for (var i = defs.length - 1; i >= 0; i--) { // later-added plugins take precedence
         var def = defs[i];
@@ -5092,7 +4988,7 @@ function parseEventSource(raw, calendar) {
     }
     return null;
 }
-function parseEventSourceProps(raw, meta, sourceDefId, calendar) {
+function parseEventSourceProps (raw, meta, sourceDefId, calendar) {
     var leftovers0 = {};
     var props = refineProps(raw, SIMPLE_SOURCE_PROPS, {}, leftovers0);
     var leftovers1 = {};
@@ -5121,15 +5017,14 @@ function reduceEventSources (eventSources, action, dateProfile, calendar) {
         case 'SET_VIEW_TYPE':
             if (dateProfile) {
                 return fetchDirtySources(eventSources, dateProfile.activeRange, calendar);
-            }
-            else {
+            } else {
                 return eventSources;
             }
         case 'FETCH_EVENT_SOURCES':
         case 'CHANGE_TIMEZONE':
-            return fetchSourcesByIds(eventSources, action.sourceIds ?
-                arrayToHash(action.sourceIds) :
-                excludeStaticSources(eventSources, calendar), dateProfile ? dateProfile.activeRange : null, calendar);
+            return fetchSourcesByIds(eventSources, action.sourceIds
+                ? arrayToHash(action.sourceIds)
+                : excludeStaticSources(eventSources, calendar), dateProfile ? dateProfile.activeRange : null, calendar);
         case 'RECEIVE_EVENTS':
         case 'RECEIVE_EVENT_ERROR':
             return receiveResponse(eventSources, action.sourceId, action.fetchId, action.fetchRange);
@@ -5140,7 +5035,7 @@ function reduceEventSources (eventSources, action, dateProfile, calendar) {
     }
 }
 var uid$3 = 0;
-function addSources(eventSourceHash, sources, fetchRange, calendar) {
+function addSources (eventSourceHash, sources, fetchRange, calendar) {
     var hash = {};
     for (var _i = 0, sources_1 = sources; _i < sources_1.length; _i++) {
         var source = sources_1[_i];
@@ -5151,21 +5046,20 @@ function addSources(eventSourceHash, sources, fetchRange, calendar) {
     }
     return __assign({}, eventSourceHash, hash);
 }
-function removeSource(eventSourceHash, sourceId) {
+function removeSource (eventSourceHash, sourceId) {
     return filterHash(eventSourceHash, function (eventSource) {
         return eventSource.sourceId !== sourceId;
     });
 }
-function fetchDirtySources(sourceHash, fetchRange, calendar) {
+function fetchDirtySources (sourceHash, fetchRange, calendar) {
     return fetchSourcesByIds(sourceHash, filterHash(sourceHash, function (eventSource) {
         return isSourceDirty(eventSource, fetchRange, calendar);
     }), fetchRange, calendar);
 }
-function isSourceDirty(eventSource, fetchRange, calendar) {
+function isSourceDirty (eventSource, fetchRange, calendar) {
     if (!doesSourceNeedRange(eventSource, calendar)) {
         return !eventSource.latestFetchId;
-    }
-    else {
+    } else {
         return !calendar.opt('lazyFetching') ||
             !eventSource.fetchRange ||
             eventSource.isFetching || // always cancel outdated in-progress fetches
@@ -5173,20 +5067,19 @@ function isSourceDirty(eventSource, fetchRange, calendar) {
             fetchRange.end > eventSource.fetchRange.end;
     }
 }
-function fetchSourcesByIds(prevSources, sourceIdHash, fetchRange, calendar) {
+function fetchSourcesByIds (prevSources, sourceIdHash, fetchRange, calendar) {
     var nextSources = {};
     for (var sourceId in prevSources) {
         var source = prevSources[sourceId];
         if (sourceIdHash[sourceId]) {
             nextSources[sourceId] = fetchSource(source, fetchRange, calendar);
-        }
-        else {
+        } else {
             nextSources[sourceId] = source;
         }
     }
     return nextSources;
 }
-function fetchSource(eventSource, fetchRange, calendar) {
+function fetchSource (eventSource, fetchRange, calendar) {
     var sourceDef = calendar.pluginSystem.hooks.eventSourceDefs[eventSource.sourceDefId];
     var fetchId = String(uid$3++);
     sourceDef.fetch({
@@ -5231,7 +5124,7 @@ function fetchSource(eventSource, fetchRange, calendar) {
     });
     return __assign({}, eventSource, { isFetching: true, latestFetchId: fetchId });
 }
-function receiveResponse(sourceHash, sourceId, fetchId, fetchRange) {
+function receiveResponse (sourceHash, sourceId, fetchId, fetchRange) {
     var _a;
     var eventSource = sourceHash[sourceId];
     if (eventSource && // not already removed
@@ -5241,14 +5134,14 @@ function receiveResponse(sourceHash, sourceId, fetchId, fetchRange) {
     }
     return sourceHash;
 }
-function excludeStaticSources(eventSources, calendar) {
+function excludeStaticSources (eventSources, calendar) {
     return filterHash(eventSources, function (eventSource) {
         return doesSourceNeedRange(eventSource, calendar);
     });
 }
 
 var DateProfileGenerator = /** @class */ (function () {
-    function DateProfileGenerator(viewSpec, calendar) {
+    function DateProfileGenerator (viewSpec, calendar) {
         this.viewSpec = viewSpec;
         this.options = viewSpec.options;
         this.dateEnv = calendar.dateEnv;
@@ -5256,7 +5149,7 @@ var DateProfileGenerator = /** @class */ (function () {
         this.initHiddenDays();
     }
     /* Date Range Computation
-    ------------------------------------------------------------------------------------------------------------------*/
+    ------------------------------------------------------------------------------------------------------------------ */
     // Builds a structure with info about what the dates/ranges will be for the "prev" view.
     DateProfileGenerator.prototype.buildPrev = function (currentDateProfile, currentDate) {
         var dateEnv = this.dateEnv;
@@ -5342,7 +5235,7 @@ var DateProfileGenerator = /** @class */ (function () {
     // See build() for a description of `direction`.
     // Guaranteed to have `range` and `unit` properties. `duration` is optional.
     DateProfileGenerator.prototype.buildCurrentRangeInfo = function (date, direction) {
-        var _a = this, viewSpec = _a.viewSpec, dateEnv = _a.dateEnv;
+        var _a = this; var viewSpec = _a.viewSpec; var dateEnv = _a.dateEnv;
         var duration = null;
         var unit = null;
         var range = null;
@@ -5351,15 +5244,12 @@ var DateProfileGenerator = /** @class */ (function () {
             duration = viewSpec.duration;
             unit = viewSpec.durationUnit;
             range = this.buildRangeFromDuration(date, direction, duration, unit);
-        }
-        else if ((dayCount = this.options.dayCount)) {
+        } else if ((dayCount = this.options.dayCount)) {
             unit = 'day';
             range = this.buildRangeFromDayCount(date, direction, dayCount);
-        }
-        else if ((range = this.buildCustomVisibleRange(date))) {
+        } else if ((range = this.buildCustomVisibleRange(date))) {
             unit = dateEnv.greatestWholeUnit(range.start, range.end).unit;
-        }
-        else {
+        } else {
             duration = this.getFallbackDuration();
             unit = greatestDurationDenominator(duration).unit;
             range = this.buildRangeFromDuration(date, direction, duration, unit);
@@ -5408,12 +5298,10 @@ var DateProfileGenerator = /** @class */ (function () {
                 // use the smaller of the two units
                 if (asRoughMs(dateIncrementDuration) < asRoughMs(duration)) {
                     alignment = greatestDurationDenominator(dateIncrementDuration, !getWeeksFromInput(dateIncrementInput)).unit;
-                }
-                else {
+                } else {
                     alignment = unit;
                 }
-            }
-            else {
+            } else {
                 alignment = unit;
             }
         }
@@ -5424,7 +5312,7 @@ var DateProfileGenerator = /** @class */ (function () {
                 start = startOfDay(start);
             }
         }
-        function computeRes() {
+        function computeRes () {
             start = dateEnv.startOf(date, alignment);
             end = dateEnv.add(start, duration);
             res = { start: start, end: end };
@@ -5481,14 +5369,11 @@ var DateProfileGenerator = /** @class */ (function () {
         var customAlignment;
         if (dateIncrementInput) {
             return createDuration(dateIncrementInput);
-        }
-        else if ((customAlignment = this.options.dateAlignment)) {
+        } else if ((customAlignment = this.options.dateAlignment)) {
             return createDuration(1, customAlignment);
-        }
-        else if (fallback) {
+        } else if (fallback) {
             return fallback;
-        }
-        else {
+        } else {
             return createDuration({ days: 1 });
         }
     };
@@ -5513,7 +5398,7 @@ var DateProfileGenerator = /** @class */ (function () {
         return val;
     };
     /* Hidden Days
-    ------------------------------------------------------------------------------------------------------------------*/
+    ------------------------------------------------------------------------------------------------------------------ */
     // Initializes internal variables related to calculating hidden days-of-week
     DateProfileGenerator.prototype.initHiddenDays = function () {
         var hiddenDays = this.options.hiddenDays || []; // array of day-of-week indices that are hidden
@@ -5573,7 +5458,7 @@ var DateProfileGenerator = /** @class */ (function () {
     return DateProfileGenerator;
 }());
 // TODO: find a way to avoid comparing DateProfiles. it's tedious
-function isDateProfilesEqual(p0, p1) {
+function isDateProfilesEqual (p0, p1) {
     return rangesEqual(p0.validRange, p1.validRange) &&
         rangesEqual(p0.activeRange, p1.activeRange) &&
         rangesEqual(p0.renderRange, p1.renderRange) &&
@@ -5593,8 +5478,19 @@ function reduce (state, action, calendar) {
     var viewType = reduceViewType(state.viewType, action);
     var dateProfile = reduceDateProfile(state.dateProfile, action, state.currentDate, viewType, calendar);
     var eventSources = reduceEventSources(state.eventSources, action, dateProfile, calendar);
-    var nextState = __assign({}, state, { viewType: viewType,
-        dateProfile: dateProfile, currentDate: reduceCurrentDate(state.currentDate, action, dateProfile), eventSources: eventSources, eventStore: reduceEventStore(state.eventStore, action, eventSources, dateProfile, calendar), dateSelection: reduceDateSelection(state.dateSelection, action, calendar), eventSelection: reduceSelectedEvent(state.eventSelection, action), eventDrag: reduceEventDrag(state.eventDrag, action, eventSources, calendar), eventResize: reduceEventResize(state.eventResize, action, eventSources, calendar), eventSourceLoadingLevel: computeLoadingLevel(eventSources), loadingLevel: computeLoadingLevel(eventSources) });
+    var nextState = __assign({}, state, {
+ viewType: viewType,
+        dateProfile: dateProfile,
+currentDate: reduceCurrentDate(state.currentDate, action, dateProfile),
+eventSources: eventSources,
+eventStore: reduceEventStore(state.eventStore, action, eventSources, dateProfile, calendar),
+dateSelection: reduceDateSelection(state.dateSelection, action, calendar),
+eventSelection: reduceSelectedEvent(state.eventSelection, action),
+eventDrag: reduceEventDrag(state.eventDrag, action, eventSources, calendar),
+eventResize: reduceEventResize(state.eventResize, action, eventSources, calendar),
+eventSourceLoadingLevel: computeLoadingLevel(eventSources),
+loadingLevel: computeLoadingLevel(eventSources)
+});
     for (var _i = 0, _a = calendar.pluginSystem.hooks.reducers; _i < _a.length; _i++) {
         var reducerFunc = _a[_i];
         nextState = reducerFunc(nextState, action, calendar);
@@ -5602,7 +5498,7 @@ function reduce (state, action, calendar) {
     // console.log(action.type, nextState)
     return nextState;
 }
-function reduceViewType(currentViewType, action) {
+function reduceViewType (currentViewType, action) {
     switch (action.type) {
         case 'SET_VIEW_TYPE':
             return action.viewType;
@@ -5610,7 +5506,7 @@ function reduceViewType(currentViewType, action) {
             return currentViewType;
     }
 }
-function reduceDateProfile(currentDateProfile, action, currentDate, viewType, calendar) {
+function reduceDateProfile (currentDateProfile, action, currentDate, viewType, calendar) {
     var newDateProfile;
     switch (action.type) {
         case 'PREV':
@@ -5629,9 +5525,9 @@ function reduceDateProfile(currentDateProfile, action, currentDate, viewType, ca
         case 'SET_VIEW_TYPE':
             var generator = calendar.dateProfileGenerators[viewType];
             if (!generator) {
-                throw new Error(viewType ?
-                    'The FullCalendar view "' + viewType + '" does not exist. Make sure your plugins are loaded correctly.' :
-                    'No available FullCalendar view plugins.');
+                throw new Error(viewType
+                    ? 'The FullCalendar view "' + viewType + '" does not exist. Make sure your plugins are loaded correctly.'
+                    : 'No available FullCalendar view plugins.');
             }
             newDateProfile = generator.build(action.dateMarker || currentDate, undefined, true // forceToValid
             );
@@ -5641,19 +5537,17 @@ function reduceDateProfile(currentDateProfile, action, currentDate, viewType, ca
         newDateProfile.isValid &&
         !(currentDateProfile && isDateProfilesEqual(currentDateProfile, newDateProfile))) {
         return newDateProfile;
-    }
-    else {
+    } else {
         return currentDateProfile;
     }
 }
-function reduceCurrentDate(currentDate, action, dateProfile) {
+function reduceCurrentDate (currentDate, action, dateProfile) {
     switch (action.type) {
         case 'PREV':
         case 'NEXT':
             if (!rangeContainsMarker(dateProfile.currentRange, currentDate)) {
                 return dateProfile.currentRange.start;
-            }
-            else {
+            } else {
                 return currentDate;
             }
         case 'SET_DATE':
@@ -5661,15 +5555,14 @@ function reduceCurrentDate(currentDate, action, dateProfile) {
             var newDate = action.dateMarker || currentDate;
             if (dateProfile.activeRange && !rangeContainsMarker(dateProfile.activeRange, newDate)) {
                 return dateProfile.currentRange.start;
-            }
-            else {
+            } else {
                 return newDate;
             }
         default:
             return currentDate;
     }
 }
-function reduceDateSelection(currentSelection, action, calendar) {
+function reduceDateSelection (currentSelection, action, calendar) {
     switch (action.type) {
         case 'SELECT_DATES':
             return action.selection;
@@ -5679,7 +5572,7 @@ function reduceDateSelection(currentSelection, action, calendar) {
             return currentSelection;
     }
 }
-function reduceSelectedEvent(currentInstanceId, action) {
+function reduceSelectedEvent (currentInstanceId, action) {
     switch (action.type) {
         case 'SELECT_EVENT':
             return action.eventInstanceId;
@@ -5689,7 +5582,7 @@ function reduceSelectedEvent(currentInstanceId, action) {
             return currentInstanceId;
     }
 }
-function reduceEventDrag(currentDrag, action, sources, calendar) {
+function reduceEventDrag (currentDrag, action, sources, calendar) {
     switch (action.type) {
         case 'SET_EVENT_DRAG':
             var newDrag = action.state;
@@ -5705,7 +5598,7 @@ function reduceEventDrag(currentDrag, action, sources, calendar) {
             return currentDrag;
     }
 }
-function reduceEventResize(currentResize, action, sources, calendar) {
+function reduceEventResize (currentResize, action, sources, calendar) {
     switch (action.type) {
         case 'SET_EVENT_RESIZE':
             var newResize = action.state;
@@ -5721,7 +5614,7 @@ function reduceEventResize(currentResize, action, sources, calendar) {
             return currentResize;
     }
 }
-function computeLoadingLevel(eventSources) {
+function computeLoadingLevel (eventSources) {
     var cnt = 0;
     for (var sourceId in eventSources) {
         if (eventSources[sourceId].isFetching) {
@@ -5736,7 +5629,7 @@ var STANDARD_PROPS = {
     end: null,
     allDay: Boolean
 };
-function parseDateSpan(raw, dateEnv, defaultDuration) {
+function parseDateSpan (raw, dateEnv, defaultDuration) {
     var span = parseOpenDateSpan(raw, dateEnv);
     var range = span.range;
     if (!range.start) {
@@ -5745,8 +5638,7 @@ function parseDateSpan(raw, dateEnv, defaultDuration) {
     if (!range.end) {
         if (defaultDuration == null) {
             return null;
-        }
-        else {
+        } else {
             range.end = dateEnv.add(range.start, defaultDuration);
         }
     }
@@ -5756,7 +5648,7 @@ function parseDateSpan(raw, dateEnv, defaultDuration) {
 TODO: somehow combine with parseRange?
 Will return null if the start/end props were present but parsed invalidly.
 */
-function parseOpenDateSpan(raw, dateEnv) {
+function parseOpenDateSpan (raw, dateEnv) {
     var leftovers = {};
     var standardProps = refineProps(raw, STANDARD_PROPS, {}, leftovers);
     var startMeta = standardProps.start ? dateEnv.createMarkerMeta(standardProps.start) : null;
@@ -5774,13 +5666,13 @@ function parseOpenDateSpan(raw, dateEnv) {
     leftovers.allDay = allDay;
     return leftovers;
 }
-function isDateSpansEqual(span0, span1) {
+function isDateSpansEqual (span0, span1) {
     return rangesEqual(span0.range, span1.range) &&
         span0.allDay === span1.allDay &&
         isSpanPropsEqual(span0, span1);
 }
 // the NON-DATE-RELATED props
-function isSpanPropsEqual(span0, span1) {
+function isSpanPropsEqual (span0, span1) {
     for (var propName in span1) {
         if (propName !== 'range' && propName !== 'allDay') {
             if (span0[propName] !== span1[propName]) {
@@ -5797,7 +5689,7 @@ function isSpanPropsEqual(span0, span1) {
     }
     return true;
 }
-function buildDateSpanApi(span, dateEnv) {
+function buildDateSpanApi (span, dateEnv) {
     return {
         start: dateEnv.toDate(span.range.start),
         end: dateEnv.toDate(span.range.end),
@@ -5806,14 +5698,14 @@ function buildDateSpanApi(span, dateEnv) {
         allDay: span.allDay
     };
 }
-function buildDatePointApi(span, dateEnv) {
+function buildDatePointApi (span, dateEnv) {
     return {
         date: dateEnv.toDate(span.range.start),
         dateStr: dateEnv.formatIso(span.range.start, { omitTime: span.allDay }),
         allDay: span.allDay
     };
 }
-function fabricateEventRange(dateSpan, eventUiBases, calendar) {
+function fabricateEventRange (dateSpan, eventUiBases, calendar) {
     var def = parseEventDef({ editable: false }, '', // sourceId
     dateSpan.allDay, true, // hasEnd
     calendar);
@@ -5827,7 +5719,7 @@ function fabricateEventRange(dateSpan, eventUiBases, calendar) {
     };
 }
 
-function compileViewDefs(defaultConfigs, overrideConfigs) {
+function compileViewDefs (defaultConfigs, overrideConfigs) {
     var hash = {};
     var viewType;
     for (viewType in defaultConfigs) {
@@ -5838,7 +5730,7 @@ function compileViewDefs(defaultConfigs, overrideConfigs) {
     }
     return hash;
 }
-function ensureViewDef(viewType, hash, defaultConfigs, overrideConfigs) {
+function ensureViewDef (viewType, hash, defaultConfigs, overrideConfigs) {
     if (hash[viewType]) {
         return hash[viewType];
     }
@@ -5848,12 +5740,12 @@ function ensureViewDef(viewType, hash, defaultConfigs, overrideConfigs) {
     }
     return viewDef;
 }
-function buildViewDef(viewType, hash, defaultConfigs, overrideConfigs) {
+function buildViewDef (viewType, hash, defaultConfigs, overrideConfigs) {
     var defaultConfig = defaultConfigs[viewType];
     var overrideConfig = overrideConfigs[viewType];
     var queryProp = function (name) {
-        return (defaultConfig && defaultConfig[name] !== null) ? defaultConfig[name] :
-            ((overrideConfig && overrideConfig[name] !== null) ? overrideConfig[name] : null);
+        return (defaultConfig && defaultConfig[name] !== null) ? defaultConfig[name]
+            : ((overrideConfig && overrideConfig[name] !== null) ? overrideConfig[name] : null);
     };
     var theClass = queryProp('class');
     var superType = queryProp('superType');
@@ -5882,7 +5774,7 @@ function buildViewDef(viewType, hash, defaultConfigs, overrideConfigs) {
         overrides: __assign({}, (superDef ? superDef.overrides : {}), (overrideConfig ? overrideConfig.options : {}))
     };
 }
-function findViewNameBySubclass(viewSubclass, configs) {
+function findViewNameBySubclass (viewSubclass, configs) {
     var superProto = Object.getPrototypeOf(viewSubclass.prototype);
     for (var viewType in configs) {
         var parsed = configs[viewType];
@@ -5894,14 +5786,14 @@ function findViewNameBySubclass(viewSubclass, configs) {
     return '';
 }
 
-function parseViewConfigs(inputs) {
+function parseViewConfigs (inputs) {
     return mapHash(inputs, parseViewConfig);
 }
 var VIEW_DEF_PROPS = {
     type: String,
     class: null
 };
-function parseViewConfig(input) {
+function parseViewConfig (input) {
     if (typeof input === 'function') {
         input = { class: input };
     }
@@ -5914,7 +5806,7 @@ function parseViewConfig(input) {
     };
 }
 
-function buildViewSpecs(defaultInputs, optionsManager) {
+function buildViewSpecs (defaultInputs, optionsManager) {
     var defaultConfigs = parseViewConfigs(defaultInputs);
     var overrideConfigs = parseViewConfigs(optionsManager.overrides.views);
     var viewDefs = compileViewDefs(defaultConfigs, overrideConfigs);
@@ -5922,7 +5814,7 @@ function buildViewSpecs(defaultInputs, optionsManager) {
         return buildViewSpec(viewDef, overrideConfigs, optionsManager);
     });
 }
-function buildViewSpec(viewDef, overrideConfigs, optionsManager) {
+function buildViewSpec (viewDef, overrideConfigs, optionsManager) {
     var durationInput = viewDef.overrides.duration ||
         viewDef.defaults.duration ||
         optionsManager.dynamicOverrides.duration ||
@@ -5975,7 +5867,7 @@ function buildViewSpec(viewDef, overrideConfigs, optionsManager) {
 
 var Toolbar = /** @class */ (function (_super) {
     __extends(Toolbar, _super);
-    function Toolbar(extraClassName) {
+    function Toolbar (extraClassName) {
         var _this = _super.call(this) || this;
         _this._renderLayout = memoizeRendering(_this.renderLayout, _this.unrenderLayout);
         _this._updateTitle = memoizeRendering(_this.updateTitle, null, [_this._renderLayout]);
@@ -6011,7 +5903,7 @@ var Toolbar = /** @class */ (function (_super) {
     };
     Toolbar.prototype.renderSection = function (position, buttonStr) {
         var _this = this;
-        var _a = this.context, theme = _a.theme, calendar = _a.calendar;
+        var _a = this.context; var theme = _a.theme; var calendar = _a.calendar;
         var optionsManager = calendar.optionsManager;
         var viewSpecs = calendar.viewSpecs;
         var sectionEl = createElement('div', { className: 'fc-' + position });
@@ -6036,8 +5928,7 @@ var Toolbar = /** @class */ (function (_super) {
                     if (buttonName === 'title') {
                         groupChildren.push(htmlToElement('<h2>&nbsp;</h2>')); // we always want it to take up height
                         isOnlyButtons = false;
-                    }
-                    else {
+                    } else {
                         if ((customButtonProps = calendarCustomButtons[buttonName])) {
                             buttonClick = function (ev) {
                                 if (customButtonProps.click) {
@@ -6047,8 +5938,7 @@ var Toolbar = /** @class */ (function (_super) {
                             (buttonIcon = theme.getCustomButtonIconClass(customButtonProps)) ||
                                 (buttonIcon = theme.getIconClass(buttonName)) ||
                                 (buttonText = customButtonProps.text);
-                        }
-                        else if ((viewSpec = viewSpecs[buttonName])) {
+                        } else if ((viewSpec = viewSpecs[buttonName])) {
                             _this.viewsWithButtons.push(buttonName);
                             buttonClick = function () {
                                 calendar.changeView(buttonName);
@@ -6056,8 +5946,7 @@ var Toolbar = /** @class */ (function (_super) {
                             (buttonText = viewSpec.buttonTextOverride) ||
                                 (buttonIcon = theme.getIconClass(buttonName)) ||
                                 (buttonText = viewSpec.buttonTextDefault);
-                        }
-                        else if (calendar[buttonName]) { // a calendar method
+                        } else if (calendar[buttonName]) { // a calendar method
                             buttonClick = function () {
                                 calendar[buttonName]();
                             };
@@ -6074,8 +5963,7 @@ var Toolbar = /** @class */ (function (_super) {
                             if (buttonText) {
                                 buttonInnerHtml = htmlEscape(buttonText);
                                 buttonAriaAttr = '';
-                            }
-                            else if (buttonIcon) {
+                            } else if (buttonIcon) {
                                 buttonInnerHtml = "<span class='" + buttonIcon + "'></span>";
                                 buttonAriaAttr = ' aria-label="' + buttonName + '"';
                             }
@@ -6096,8 +5984,7 @@ var Toolbar = /** @class */ (function (_super) {
                     }
                     appendToElement(groupEl, groupChildren);
                     sectionEl.appendChild(groupEl);
-                }
-                else {
+                } else {
                     appendToElement(sectionEl, groupChildren); // 1 or 0 children
                 }
             });
@@ -6124,8 +6011,7 @@ var Toolbar = /** @class */ (function (_super) {
         findElements(this.el, 'button').forEach(function (buttonEl) {
             if (buttonName && buttonEl.classList.contains('fc-' + buttonName + '-button')) {
                 buttonEl.classList.add(className);
-            }
-            else {
+            } else {
                 buttonEl.classList.remove(className);
             }
         });
@@ -6140,7 +6026,7 @@ var Toolbar = /** @class */ (function (_super) {
 
 var CalendarComponent = /** @class */ (function (_super) {
     __extends(CalendarComponent, _super);
-    function CalendarComponent(el) {
+    function CalendarComponent (el) {
         var _this = _super.call(this) || this;
         _this.elClassNames = [];
         _this.renderSkeleton = memoizeRendering(_this._renderSkeleton, _this._unrenderSkeleton);
@@ -6202,7 +6088,7 @@ var CalendarComponent = /** @class */ (function (_super) {
     };
     CalendarComponent.prototype.updateElClassNames = function (context) {
         this.removeElClassNames();
-        var theme = context.theme, options = context.options;
+        var theme = context.theme; var options = context.options;
         this.elClassNames = [
             'fc',
             'fc-' + options.dir,
@@ -6215,8 +6101,8 @@ var CalendarComponent = /** @class */ (function (_super) {
         }
     };
     CalendarComponent.prototype._renderToolbars = function (viewSpec, dateProfile, currentDate, title) {
-        var _a = this, context = _a.context, header = _a.header, footer = _a.footer;
-        var options = context.options, calendar = context.calendar;
+        var _a = this; var context = _a.context; var header = _a.header; var footer = _a.footer;
+        var options = context.options; var calendar = context.calendar;
         var headerLayout = options.header;
         var footerLayout = options.footer;
         var dateProfileGenerator = this.props.dateProfileGenerator;
@@ -6237,8 +6123,7 @@ var CalendarComponent = /** @class */ (function (_super) {
                 prependToElement(this.el, header.el);
             }
             header.receiveProps(__assign({ layout: headerLayout }, toolbarProps), context);
-        }
-        else if (header) {
+        } else if (header) {
             header.destroy();
             header = this.header = null;
         }
@@ -6248,8 +6133,7 @@ var CalendarComponent = /** @class */ (function (_super) {
                 appendToElement(this.el, footer.el);
             }
             footer.receiveProps(__assign({ layout: footerLayout }, toolbarProps), context);
-        }
-        else if (footer) {
+        } else if (footer) {
             footer.destroy();
             footer = this.footer = null;
         }
@@ -6266,13 +6150,13 @@ var CalendarComponent = /** @class */ (function (_super) {
     };
     CalendarComponent.prototype.renderView = function (props, title) {
         var view = this.view;
-        var _a = this.context, calendar = _a.calendar, options = _a.options;
-        var viewSpec = props.viewSpec, dateProfileGenerator = props.dateProfileGenerator;
+        var _a = this.context; var calendar = _a.calendar; var options = _a.options;
+        var viewSpec = props.viewSpec; var dateProfileGenerator = props.dateProfileGenerator;
         if (!view || view.viewSpec !== viewSpec) {
             if (view) {
                 view.destroy();
             }
-            view = this.view = new viewSpec['class'](viewSpec, this.contentEl);
+            view = this.view = new viewSpec.class(viewSpec, this.contentEl);
             if (this.savedScroll) {
                 view.addScroll(this.savedScroll, true);
                 this.savedScroll = null;
@@ -6319,23 +6203,18 @@ var CalendarComponent = /** @class */ (function (_super) {
         this.isHeightAuto = heightInput === 'auto' || contentHeightInput === 'auto';
         if (typeof contentHeightInput === 'number') { // exists and not 'auto'
             this.viewHeight = contentHeightInput;
-        }
-        else if (typeof contentHeightInput === 'function') { // exists and is a function
+        } else if (typeof contentHeightInput === 'function') { // exists and is a function
             this.viewHeight = contentHeightInput();
-        }
-        else if (typeof heightInput === 'number') { // exists and not 'auto'
+        } else if (typeof heightInput === 'number') { // exists and not 'auto'
             this.viewHeight = heightInput - this.queryToolbarsHeight();
-        }
-        else if (typeof heightInput === 'function') { // exists and is a function
+        } else if (typeof heightInput === 'function') { // exists and is a function
             this.viewHeight = heightInput() - this.queryToolbarsHeight();
-        }
-        else if (heightInput === 'parent') { // set to height of parent element
+        } else if (heightInput === 'parent') { // set to height of parent element
             var parentEl = this.el.parentNode;
             this.viewHeight = parentEl.getBoundingClientRect().height - this.queryToolbarsHeight();
-        }
-        else {
+        } else {
             this.viewHeight = Math.round(this.contentEl.getBoundingClientRect().width /
-                Math.max(calendar.opt('aspectRatio'), .5));
+                Math.max(calendar.opt('aspectRatio'), 0.5));
         }
     };
     CalendarComponent.prototype.queryToolbarsHeight = function () {
@@ -6367,67 +6246,63 @@ var CalendarComponent = /** @class */ (function (_super) {
 // Title and Date Formatting
 // -----------------------------------------------------------------------------------------------------------------
 // Computes what the title at the top of the calendar should be for this view
-function computeTitle(dateProfile, viewOptions) {
+function computeTitle (dateProfile, viewOptions) {
     var range;
     // for views that span a large unit of time, show the proper interval, ignoring stray days before and after
     if (/^(year|month)$/.test(dateProfile.currentRangeUnit)) {
         range = dateProfile.currentRange;
-    }
-    else { // for day units or smaller, use the actual day range
+    } else { // for day units or smaller, use the actual day range
         range = dateProfile.activeRange;
     }
     return this.context.dateEnv.formatRange(range.start, range.end, createFormatter(viewOptions.titleFormat || computeTitleFormat(dateProfile), viewOptions.titleRangeSeparator), { isEndExclusive: dateProfile.isRangeAllDay });
 }
 // Generates the format string that should be used to generate the title for the current date range.
 // Attempts to compute the most appropriate format if not explicitly specified with `titleFormat`.
-function computeTitleFormat(dateProfile) {
+function computeTitleFormat (dateProfile) {
     var currentRangeUnit = dateProfile.currentRangeUnit;
     if (currentRangeUnit === 'year') {
         return { year: 'numeric' };
-    }
-    else if (currentRangeUnit === 'month') {
+    } else if (currentRangeUnit === 'month') {
         return { year: 'numeric', month: 'long' }; // like "September 2014"
-    }
-    else {
+    } else {
         var days = diffWholeDays(dateProfile.currentRange.start, dateProfile.currentRange.end);
         if (days !== null && days > 1) {
             // multi-day range. shorter, like "Sep 9 - 10 2014"
             return { year: 'numeric', month: 'short', day: 'numeric' };
-        }
-        else {
+        } else {
             // one day. longer, like "September 9 2014"
             return { year: 'numeric', month: 'long', day: 'numeric' };
         }
     }
 }
 // build a context scoped to the view
-function buildComponentContext(context, viewSpec, view) {
+function buildComponentContext (context, viewSpec, view) {
     return context.extend(viewSpec.options, view);
 }
 // Plugin
 // -----------------------------------------------------------------------------------------------------------------
-function buildViewPropTransformers(theClasses) {
+function buildViewPropTransformers (theClasses) {
     return theClasses.map(function (theClass) {
         return new theClass();
     });
 }
 
 var Interaction = /** @class */ (function () {
-    function Interaction(settings) {
+    function Interaction (settings) {
         this.component = settings.component;
     }
     Interaction.prototype.destroy = function () {
     };
     return Interaction;
 }());
-function parseInteractionSettings(component, input) {
+function parseInteractionSettings (component, input) {
     return {
         component: component,
         el: input.el,
         useEventCenter: input.useEventCenter != null ? input.useEventCenter : true
     };
 }
-function interactionSettingsToStore(settings) {
+function interactionSettingsToStore (settings) {
     var _a;
     return _a = {},
         _a[settings.component.uid] = settings,
@@ -6441,11 +6316,11 @@ Detects when the user clicks on an event within a DateComponent
 */
 var EventClicking = /** @class */ (function (_super) {
     __extends(EventClicking, _super);
-    function EventClicking(settings) {
+    function EventClicking (settings) {
         var _this = _super.call(this, settings) || this;
         _this.handleSegClick = function (ev, segEl) {
             var component = _this.component;
-            var _a = component.context, calendar = _a.calendar, view = _a.view;
+            var _a = component.context; var calendar = _a.calendar; var view = _a.view;
             var seg = getElSeg(segEl);
             if (seg && // might be the <div> surrounding the more link
                 component.isValidSegDownEl(ev.target)) {
@@ -6479,7 +6354,7 @@ enters/leaves event-elements of a component.
 */
 var EventHovering = /** @class */ (function (_super) {
     __extends(EventHovering, _super);
-    function EventHovering(settings) {
+    function EventHovering (settings) {
         var _this = _super.call(this, settings) || this;
         // for simulating an eventMouseLeave when the event el is destroyed while mouse is over it
         _this.handleEventElRemove = function (el) {
@@ -6513,7 +6388,7 @@ var EventHovering = /** @class */ (function (_super) {
     };
     EventHovering.prototype.triggerEvent = function (publicEvName, ev, segEl) {
         var component = this.component;
-        var _a = component.context, calendar = _a.calendar, view = _a.view;
+        var _a = component.context; var calendar = _a.calendar; var view = _a.view;
         var seg = getElSeg(segEl);
         if (!ev || component.isValidSegDownEl(ev.target)) {
             calendar.publiclyTrigger(publicEvName, [
@@ -6531,7 +6406,7 @@ var EventHovering = /** @class */ (function (_super) {
 
 var StandardTheme = /** @class */ (function (_super) {
     __extends(StandardTheme, _super);
-    function StandardTheme() {
+    function StandardTheme () {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return StandardTheme;
@@ -6564,7 +6439,7 @@ StandardTheme.prototype.iconOverrideCustomButtonOption = 'icon';
 StandardTheme.prototype.iconOverridePrefix = 'fc-icon-';
 
 var Calendar = /** @class */ (function () {
-    function Calendar(el, overrides) {
+    function Calendar (el, overrides) {
         var _this = this;
         this.buildComponentContext = memoize(buildComponentContext$1);
         this.parseRawLocales = memoize(parseRawLocales);
@@ -6607,7 +6482,7 @@ var Calendar = /** @class */ (function () {
             this.pluginSystem.add(pluginDef);
         }
     };
-    Object.defineProperty(Calendar.prototype, "view", {
+    Object.defineProperty(Calendar.prototype, 'view', {
         // public API
         get: function () {
             return this.component ? this.component.view : null;
@@ -6623,8 +6498,7 @@ var Calendar = /** @class */ (function () {
             this.renderableEventStore = createEmptyEventStore();
             this.bindHandlers();
             this.executeRender();
-        }
-        else {
+        } else {
             this.requestRerender();
         }
     };
@@ -6655,8 +6529,7 @@ var Calendar = /** @class */ (function () {
             var customAction = _this.viewOpt('navLink' + capitaliseFirstLetter(viewType) + 'Click');
             if (typeof customAction === 'function') {
                 customAction(dateEnv.toDate(dateMarker), ev);
-            }
-            else {
+            } else {
                 if (typeof customAction === 'string') {
                     viewType = customAction;
                 }
@@ -6729,8 +6602,7 @@ var Calendar = /** @class */ (function () {
             this.isReducing = false;
             if (!oldState.loadingLevel && newState.loadingLevel) {
                 this.publiclyTrigger('loading', [true]);
-            }
-            else if (oldState.loadingLevel && !newState.loadingLevel) {
+            } else if (oldState.loadingLevel && !newState.loadingLevel) {
                 this.publiclyTrigger('loading', [false]);
             }
             var view = this.component && this.component.view;
@@ -6807,18 +6679,18 @@ var Calendar = /** @class */ (function () {
     don't call this directly. use executeRender instead
     */
     Calendar.prototype.renderComponent = function () {
-        var _a = this, state = _a.state, component = _a.component;
+        var _a = this; var state = _a.state; var component = _a.component;
         var viewType = state.viewType;
         var viewSpec = this.viewSpecs[viewType];
         if (!viewSpec) {
-            throw new Error("View type \"" + viewType + "\" is not valid");
+            throw new Error('View type "' + viewType + '" is not valid');
         }
         // if event sources are still loading and progressive rendering hasn't been enabled,
         // keep rendering the last fully loaded set of events
         var renderableEventStore = this.renderableEventStore =
-            (state.eventSourceLoadingLevel && !this.opt('progressiveEventRendering')) ?
-                this.renderableEventStore :
-                state.eventStore;
+            (state.eventSourceLoadingLevel && !this.opt('progressiveEventRendering'))
+                ? this.renderableEventStore
+                : state.eventStore;
         var eventUiSingleBase = this.buildEventUiSingleBase(viewSpec.options);
         var eventUiBySource = this.buildEventUiBySource(state.eventSources);
         var eventUiBases = this.eventUiBases = this.buildEventUiBases(renderableEventStore.defs, eventUiSingleBase, eventUiBySource);
@@ -6879,16 +6751,14 @@ var Calendar = /** @class */ (function () {
         for (var name_1 in updates) {
             if (changeHandlers[name_1]) {
                 specialUpdates[name_1] = updates[name_1];
-            }
-            else {
+            } else {
                 normalUpdates[name_1] = updates[name_1];
             }
         }
         for (var name_2 in normalUpdates) {
             if (/^(height|contentHeight|aspectRatio)$/.test(name_2)) {
                 isSizeDirty = true;
-            }
-            else if (/^(defaultDate|defaultView)$/.test(name_2)) ;
+            } else if (/^(defaultDate|defaultView)$/.test(name_2)) ;
             else {
                 anyDifficultOptions = true;
                 if (name_2 === 'timeZone') {
@@ -6916,8 +6786,7 @@ var Calendar = /** @class */ (function () {
                     type: 'SET_VIEW_TYPE',
                     viewType: _this.state.viewType
                 });
-            }
-            else if (isSizeDirty) {
+            } else if (isSizeDirty) {
                 _this.updateSize();
             }
             // special updates
@@ -7001,8 +6870,7 @@ var Calendar = /** @class */ (function () {
             if (dateOrRange.start && dateOrRange.end) { // a range
                 this.optionsManager.mutate({ visibleRange: dateOrRange }, []); // will not rerender
                 this.handleOptions(this.optionsManager.computed); // ...but yuck
-            }
-            else { // a date
+            } else { // a date
                 dateMarker = this.dateEnv.createMarker(dateOrRange); // just like gotoDate
             }
         }
@@ -7028,8 +6896,7 @@ var Calendar = /** @class */ (function () {
                 viewType: spec.type,
                 dateMarker: dateMarker
             });
-        }
-        else {
+        } else {
             this.dispatch({
                 type: 'SET_DATE',
                 dateMarker: dateMarker
@@ -7069,8 +6936,7 @@ var Calendar = /** @class */ (function () {
         // compute the initial ambig-timezone date
         if (defaultDateInput != null) {
             return this.dateEnv.createMarker(defaultDateInput);
-        }
-        else {
+        } else {
             return this.getNow(); // getNow already returns unzoned
         }
     };
@@ -7189,15 +7055,13 @@ var Calendar = /** @class */ (function () {
         if (endDate == null) {
             if (dateOrObj.start != null) {
                 selectionInput = dateOrObj;
-            }
-            else {
+            } else {
                 selectionInput = {
                     start: dateOrObj,
                     end: null
                 };
             }
-        }
-        else {
+        } else {
             selectionInput = {
                 start: dateOrObj,
                 end: endDate
@@ -7231,8 +7095,11 @@ var Calendar = /** @class */ (function () {
     };
     // TODO: receive pev?
     Calendar.prototype.triggerDateClick = function (dateSpan, dayEl, view, ev) {
-        var arg = __assign({}, this.buildDatePointApi(dateSpan), { dayEl: dayEl, jsEvent: ev, // Is this always a mouse event? See #4655
-            view: view });
+        var arg = __assign({}, this.buildDatePointApi(dateSpan), {
+ dayEl: dayEl,
+jsEvent: ev, // Is this always a mouse event? See #4655
+            view: view
+});
         this.publiclyTrigger('dateClick', [arg]);
     };
     Calendar.prototype.buildDatePointApi = function (dateSpan) {
@@ -7275,8 +7142,7 @@ var Calendar = /** @class */ (function () {
         if (allDay) {
             end = startOfDay(end);
             end = this.dateEnv.add(end, this.defaultAllDayEventDuration);
-        }
-        else {
+        } else {
             end = this.dateEnv.add(end, this.defaultTimedEventDuration);
         }
         return end;
@@ -7299,14 +7165,12 @@ var Calendar = /** @class */ (function () {
         var sourceId;
         if (sourceInput instanceof EventSourceApi) {
             sourceId = sourceInput.internalEventSource.sourceId;
-        }
-        else if (sourceInput != null) {
+        } else if (sourceInput != null) {
             var sourceApi = this.getEventSourceById(sourceInput); // TODO: use an internal function
             if (!sourceApi) {
                 console.warn('Could not find an event source with ID "' + sourceInput + '"'); // TODO: test
                 return null;
-            }
-            else {
+            } else {
                 sourceId = sourceApi.internalEventSource.sourceId;
             }
         }
@@ -7322,15 +7186,14 @@ var Calendar = /** @class */ (function () {
     };
     // TODO: optimize
     Calendar.prototype.getEventById = function (id) {
-        var _a = this.state.eventStore, defs = _a.defs, instances = _a.instances;
+        var _a = this.state.eventStore; var defs = _a.defs; var instances = _a.instances;
         id = String(id);
         for (var defId in defs) {
             var def = defs[defId];
             if (def.publicId === id) {
                 if (def.recurringDef) {
                     return new EventApi(this, def, null);
-                }
-                else {
+                } else {
                     for (var instanceId in instances) {
                         var instance = instances[instanceId];
                         if (instance.defId === def.defId) {
@@ -7343,7 +7206,7 @@ var Calendar = /** @class */ (function () {
         return null;
     };
     Calendar.prototype.getEvents = function () {
-        var _a = this.state.eventStore, defs = _a.defs, instances = _a.instances;
+        var _a = this.state.eventStore; var defs = _a.defs; var instances = _a.instances;
         var eventApis = [];
         for (var id in instances) {
             var instance = instances[id];
@@ -7415,10 +7278,10 @@ var Calendar = /** @class */ (function () {
 EmitterMixin.mixInto(Calendar);
 // for memoizers
 // -----------------------------------------------------------------------------------------------------------------
-function buildComponentContext$1(theme, dateEnv, options) {
+function buildComponentContext$1 (theme, dateEnv, options) {
     return new ComponentContext(this, theme, dateEnv, options, null);
 }
-function buildDateEnv(locale, timeZone, namedTimeZoneImpl, firstDay, weekNumberCalculation, weekLabel, cmdFormatter) {
+function buildDateEnv (locale, timeZone, namedTimeZoneImpl, firstDay, weekNumberCalculation, weekLabel, cmdFormatter) {
     return new DateEnv({
         calendarSystem: 'gregory',
         timeZone: timeZone,
@@ -7430,23 +7293,23 @@ function buildDateEnv(locale, timeZone, namedTimeZoneImpl, firstDay, weekNumberC
         cmdFormatter: cmdFormatter
     });
 }
-function buildTheme(calendarOptions) {
+function buildTheme (calendarOptions) {
     var themeClass = this.pluginSystem.hooks.themeClasses[calendarOptions.themeSystem] || StandardTheme;
     return new themeClass(calendarOptions);
 }
-function buildDelayedRerender(wait) {
+function buildDelayedRerender (wait) {
     var func = this.tryRerender.bind(this);
     if (wait != null) {
         func = debounce(func, wait);
     }
     return func;
 }
-function buildEventUiBySource(eventSources) {
+function buildEventUiBySource (eventSources) {
     return mapHash(eventSources, function (eventSource) {
         return eventSource.ui;
     });
 }
-function buildEventUiBases(eventDefs, eventUiSingleBase, eventUiBySource) {
+function buildEventUiBases (eventDefs, eventUiSingleBase, eventUiBySource) {
     var eventUiBases = { '': eventUiSingleBase };
     for (var defId in eventDefs) {
         var def = eventDefs[defId];
@@ -7459,7 +7322,7 @@ function buildEventUiBases(eventDefs, eventUiSingleBase, eventUiBySource) {
 
 var View = /** @class */ (function (_super) {
     __extends(View, _super);
-    function View(viewSpec, parentEl) {
+    function View (viewSpec, parentEl) {
         var _this = _super.call(this, createElement('div', { className: 'fc-view fc-' + viewSpec.type + '-view' })) || this;
         _this.renderDatesMem = memoizeRendering(_this.renderDatesWrap, _this.unrenderDatesWrap);
         _this.renderBusinessHoursMem = memoizeRendering(_this.renderBusinessHours, _this.unrenderBusinessHours, [_this.renderDatesMem]);
@@ -7476,7 +7339,7 @@ var View = /** @class */ (function (_super) {
     }
     View.prototype.initialize = function () {
     };
-    Object.defineProperty(View.prototype, "activeStart", {
+    Object.defineProperty(View.prototype, 'activeStart', {
         // Date Setting/Unsetting
         // -----------------------------------------------------------------------------------------------------------------
         get: function () {
@@ -7485,21 +7348,21 @@ var View = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(View.prototype, "activeEnd", {
+    Object.defineProperty(View.prototype, 'activeEnd', {
         get: function () {
             return this.context.dateEnv.toDate(this.props.dateProfile.activeRange.end);
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(View.prototype, "currentStart", {
+    Object.defineProperty(View.prototype, 'currentStart', {
         get: function () {
             return this.context.dateEnv.toDate(this.props.dateProfile.currentRange.start);
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(View.prototype, "currentEnd", {
+    Object.defineProperty(View.prototype, 'currentEnd', {
         get: function () {
             return this.context.dateEnv.toDate(this.props.dateProfile.currentRange.end);
         },
@@ -7627,14 +7490,14 @@ var View = /** @class */ (function (_super) {
     View.prototype.renderEventResize = function (state) { };
     View.prototype.unrenderEventResize = function (state) { };
     /* Now Indicator
-    ------------------------------------------------------------------------------------------------------------------*/
+    ------------------------------------------------------------------------------------------------------------------ */
     // Immediately render the current time indicator and begins re-rendering it at an interval,
     // which is defined by this.getNowIndicatorUnit().
     // TODO: somehow do this for the current whole day's background too
     // USAGE: must be called manually from subclasses' render methods! don't need to call stopNowIndicator tho
     View.prototype.startNowIndicator = function (dateProfile, dateProfileGenerator) {
         var _this = this;
-        var _a = this.context, calendar = _a.calendar, dateEnv = _a.dateEnv, options = _a.options;
+        var _a = this.context; var calendar = _a.calendar; var dateEnv = _a.dateEnv; var options = _a.options;
         var unit;
         var update;
         var delay; // ms wait value
@@ -7652,8 +7515,7 @@ var View = /** @class */ (function (_super) {
                     update();
                     if (unit === 'second') {
                         delay = 1000; // every second
-                    }
-                    else {
+                    } else {
                         delay = 1000 * 60; // otherwise, every minute
                     }
                     _this.nowIndicatorIntervalID = setInterval(update, delay); // update every interval
@@ -7701,7 +7563,7 @@ var View = /** @class */ (function (_super) {
         // SUBCLASSES MUST PASS TO CHILDREN!
     };
     /* Scroller
-    ------------------------------------------------------------------------------------------------------------------*/
+    ------------------------------------------------------------------------------------------------------------------ */
     View.prototype.addScroll = function (scroll, isForced) {
         if (isForced) {
             scroll.isForced = isForced;
@@ -7725,7 +7587,7 @@ var View = /** @class */ (function (_super) {
         return scroll;
     };
     View.prototype.applyScroll = function (scroll, isResize) {
-        var duration = scroll.duration, isForced = scroll.isForced;
+        var duration = scroll.duration; var isForced = scroll.isForced;
         if (duration != null && !isForced) {
             delete scroll.duration;
             if (this.props.dateProfile) { // dates rendered yet?
@@ -7756,7 +7618,7 @@ View.prototype.usesMinMaxTime = false;
 View.prototype.dateProfileGeneratorClass = DateProfileGenerator;
 
 var FgEventRenderer = /** @class */ (function () {
-    function FgEventRenderer() {
+    function FgEventRenderer () {
         this.segs = [];
         this.isSizeDirty = false;
     }
@@ -7845,7 +7707,7 @@ var FgEventRenderer = /** @class */ (function () {
     // If not specified, formatter will default to the eventTimeFormat setting,
     // and displayEnd will default to the displayEventEnd setting.
     FgEventRenderer.prototype.getTimeText = function (eventRange, formatter, displayEnd) {
-        var def = eventRange.def, instance = eventRange.instance;
+        var def = eventRange.def; var instance = eventRange.instance;
         return this._getTimeText(instance.range.start, def.hasEnd ? instance.range.end : null, def.allDay, formatter, displayEnd, instance.forcedStartTzo, instance.forcedEndTzo);
     };
     FgEventRenderer.prototype._getTimeText = function (start, end, allDay, formatter, displayEnd, forcedStartTzo, forcedEndTzo) {
@@ -7862,8 +7724,7 @@ var FgEventRenderer = /** @class */ (function () {
                     forcedStartTzo: forcedStartTzo,
                     forcedEndTzo: forcedEndTzo
                 });
-            }
-            else {
+            } else {
                 return dateEnv.format(start, formatter, {
                     forcedTzo: forcedStartTzo
                 });
@@ -7964,13 +7825,18 @@ var FgEventRenderer = /** @class */ (function () {
     return FgEventRenderer;
 }());
 // returns a object with all primitive props that can be compared
-function buildSegCompareObj(seg) {
+function buildSegCompareObj (seg) {
     var eventDef = seg.eventRange.def;
     var range = seg.eventRange.instance.range;
     var start = range.start ? range.start.valueOf() : 0; // TODO: better support for open-range events
     var end = range.end ? range.end.valueOf() : 0; // "
-    return __assign({}, eventDef.extendedProps, eventDef, { id: eventDef.publicId, start: start,
-        end: end, duration: end - start, allDay: Number(eventDef.allDay), _seg: seg // for later retrieval
+    return __assign({}, eventDef.extendedProps, eventDef, {
+ id: eventDef.publicId,
+start: start,
+        end: end,
+duration: end - start,
+allDay: Number(eventDef.allDay),
+_seg: seg // for later retrieval
      });
 }
 
@@ -7978,7 +7844,7 @@ function buildSegCompareObj(seg) {
 TODO: when refactoring this class, make a new FillRenderer instance for each `type`
 */
 var FillRenderer = /** @class */ (function () {
-    function FillRenderer() {
+    function FillRenderer () {
         this.fillSegTag = 'div';
         this.dirtySizeFlags = {};
         this.containerElsByType = {};
@@ -8055,8 +7921,7 @@ var FillRenderer = /** @class */ (function () {
         }
         if (type === 'businessHours') {
             classNames.push('fc-bgevent');
-        }
-        else {
+        } else {
             classNames.push('fc-' + type.toLowerCase());
         }
         return '<' + this.fillSegTag +
@@ -8094,7 +7959,7 @@ var FillRenderer = /** @class */ (function () {
 }());
 
 var NamedTimeZoneImpl = /** @class */ (function () {
-    function NamedTimeZoneImpl(timeZoneName) {
+    function NamedTimeZoneImpl (timeZoneName) {
         this.timeZoneName = timeZoneName;
     }
     return NamedTimeZoneImpl;
@@ -8114,7 +7979,7 @@ subclasses must emit:
 - dragend
 */
 var ElementDragging = /** @class */ (function () {
-    function ElementDragging(el) {
+    function ElementDragging (el) {
         this.emitter = new EmitterMixin();
     }
     ElementDragging.prototype.destroy = function () {
@@ -8131,7 +7996,7 @@ var ElementDragging = /** @class */ (function () {
     return ElementDragging;
 }());
 
-function formatDate(dateInput, settings) {
+function formatDate (dateInput, settings) {
     if (settings === void 0) { settings = {}; }
     var dateEnv = buildDateEnv$1(settings);
     var formatter = createFormatter(settings);
@@ -8143,7 +8008,7 @@ function formatDate(dateInput, settings) {
         forcedTzo: dateMeta.forcedTzo
     });
 }
-function formatRange(startInput, endInput, settings // mixture of env and formatter settings
+function formatRange (startInput, endInput, settings // mixture of env and formatter settings
 ) {
     var dateEnv = buildDateEnv$1(typeof settings === 'object' && settings ? settings : {}); // pass in if non-null object
     var formatter = createFormatter(settings, globalDefaults.defaultRangeSeparator);
@@ -8159,7 +8024,7 @@ function formatRange(startInput, endInput, settings // mixture of env and format
     });
 }
 // TODO: more DRY and optimized
-function buildDateEnv$1(settings) {
+function buildDateEnv$1 (settings) {
     var locale = buildLocale(settings.locale || 'en', parseRawLocales([]).map); // TODO: don't hardcode 'en' everywhere
     // ensure required settings
     settings = __assign({ timeZone: globalDefaults.timeZone, calendarSystem: 'gregory' }, settings, { locale: locale });
@@ -8175,7 +8040,7 @@ var DRAG_META_PROPS = {
 var DRAG_META_DEFAULTS = {
     create: true
 };
-function parseDragMeta(raw) {
+function parseDragMeta (raw) {
     var leftoverProps = {};
     var refined = refineProps(raw, DRAG_META_PROPS, DRAG_META_DEFAULTS, leftoverProps);
     refined.leftoverProps = leftoverProps;
@@ -8183,21 +8048,19 @@ function parseDragMeta(raw) {
 }
 
 // Computes a default column header formatting string if `colFormat` is not explicitly defined
-function computeFallbackHeaderFormat(datesRepDistinctDays, dayCnt) {
+function computeFallbackHeaderFormat (datesRepDistinctDays, dayCnt) {
     // if more than one week row, or if there are a lot of columns with not much space,
     // put just the day numbers will be in each cell
     if (!datesRepDistinctDays || dayCnt > 10) {
         return { weekday: 'short' }; // "Sat"
-    }
-    else if (dayCnt > 1) {
+    } else if (dayCnt > 1) {
         return { weekday: 'short', month: 'numeric', day: 'numeric', omitCommas: true }; // "Sat 11/12"
-    }
-    else {
+    } else {
         return { weekday: 'long' }; // "Saturday"
     }
 }
-function renderDateCell(dateMarker, dateProfile, datesRepDistinctDays, colCnt, colHeadFormat, context, colspan, otherAttrs) {
-    var dateEnv = context.dateEnv, theme = context.theme, options = context.options;
+function renderDateCell (dateMarker, dateProfile, datesRepDistinctDays, colCnt, colHeadFormat, context, colspan, otherAttrs) {
+    var dateEnv = context.dateEnv; var theme = context.theme; var options = context.options;
     var isDateValid = rangeContainsMarker(dateProfile.activeRange, dateMarker); // TODO: called too frequently. cache somehow.
     var classNames = [
         'fc-day-header',
@@ -8206,11 +8069,9 @@ function renderDateCell(dateMarker, dateProfile, datesRepDistinctDays, colCnt, c
     var innerHtml;
     if (typeof options.columnHeaderHtml === 'function') {
         innerHtml = options.columnHeaderHtml(dateEnv.toDate(dateMarker));
-    }
-    else if (typeof options.columnHeaderText === 'function') {
+    } else if (typeof options.columnHeaderText === 'function') {
         innerHtml = htmlEscape(options.columnHeaderText(dateEnv.toDate(dateMarker)));
-    }
-    else {
+    } else {
         innerHtml = htmlEscape(dateEnv.format(dateMarker, colHeadFormat));
     }
     // if only one row of days, the classNames on the header can represent the specific days beneath
@@ -8219,40 +8080,39 @@ function renderDateCell(dateMarker, dateProfile, datesRepDistinctDays, colCnt, c
         // includes the day-of-week class
         // noThemeHighlight=true (don't highlight the header)
         getDayClasses(dateMarker, dateProfile, context, true));
-    }
-    else {
+    } else {
         classNames.push('fc-' + DAY_IDS[dateMarker.getUTCDay()]); // only add the day-of-week class
     }
     return '' +
         '<th class="' + classNames.join(' ') + '"' +
-        ((isDateValid && datesRepDistinctDays) ?
-            ' data-date="' + dateEnv.formatIso(dateMarker, { omitTime: true }) + '"' :
-            '') +
-        (colspan > 1 ?
-            ' colspan="' + colspan + '"' :
-            '') +
-        (otherAttrs ?
-            ' ' + otherAttrs :
-            '') +
+        ((isDateValid && datesRepDistinctDays)
+            ? ' data-date="' + dateEnv.formatIso(dateMarker, { omitTime: true }) + '"'
+            : '') +
+        (colspan > 1
+            ? ' colspan="' + colspan + '"'
+            : '') +
+        (otherAttrs
+            ? ' ' + otherAttrs
+            : '') +
         '>' +
-        (isDateValid ?
+        (isDateValid
             // don't make a link if the heading could represent multiple days, or if there's only one day (forceOff)
-            buildGotoAnchorHtml(options, dateEnv, { date: dateMarker, forceOff: !datesRepDistinctDays || colCnt === 1 }, innerHtml) :
+            ? buildGotoAnchorHtml(options, dateEnv, { date: dateMarker, forceOff: !datesRepDistinctDays || colCnt === 1 }, innerHtml)
             // if not valid, display text, but no link
-            innerHtml) +
+            : innerHtml) +
         '</th>';
 }
 
 var DayHeader = /** @class */ (function (_super) {
     __extends(DayHeader, _super);
-    function DayHeader(parentEl) {
+    function DayHeader (parentEl) {
         var _this = _super.call(this) || this;
         _this.renderSkeleton = memoizeRendering(_this._renderSkeleton, _this._unrenderSkeleton);
         _this.parentEl = parentEl;
         return _this;
     }
     DayHeader.prototype.render = function (props, context) {
-        var dates = props.dates, datesRepDistinctDays = props.datesRepDistinctDays;
+        var dates = props.dates; var datesRepDistinctDays = props.datesRepDistinctDays;
         var parts = [];
         this.renderSkeleton(context);
         if (props.renderIntroHtml) {
@@ -8291,7 +8151,7 @@ var DayHeader = /** @class */ (function (_super) {
 }(Component));
 
 var DaySeries = /** @class */ (function () {
-    function DaySeries(range, dateProfileGenerator) {
+    function DaySeries (range, dateProfileGenerator) {
         var date = range.start;
         var end = range.end;
         var indices = [];
@@ -8300,8 +8160,7 @@ var DaySeries = /** @class */ (function () {
         while (date < end) { // loop each day from start to end
             if (dateProfileGenerator.isHiddenDay(date)) {
                 indices.push(dayIndex + 0.5); // mark that it's between indices
-            }
-            else {
+            } else {
                 dayIndex++;
                 indices.push(dayIndex);
                 dates.push(date);
@@ -8327,8 +8186,7 @@ var DaySeries = /** @class */ (function () {
                 isStart: firstIndex === clippedFirstIndex,
                 isEnd: lastIndex === clippedLastIndex
             };
-        }
-        else {
+        } else {
             return null;
         }
     };
@@ -8342,11 +8200,9 @@ var DaySeries = /** @class */ (function () {
         var dayOffset = Math.floor(diffDays(this.dates[0], date));
         if (dayOffset < 0) {
             return indices[0] - 1;
-        }
-        else if (dayOffset >= indices.length) {
+        } else if (dayOffset >= indices.length) {
             return indices[indices.length - 1] + 1;
-        }
-        else {
+        } else {
             return indices[dayOffset];
         }
     };
@@ -8354,7 +8210,7 @@ var DaySeries = /** @class */ (function () {
 }());
 
 var DayTable = /** @class */ (function () {
-    function DayTable(daySeries, breakOnWeeks) {
+    function DayTable (daySeries, breakOnWeeks) {
         var dates = daySeries.dates;
         var daysPerRow;
         var firstDay;
@@ -8368,8 +8224,7 @@ var DayTable = /** @class */ (function () {
                 }
             }
             rowCnt = Math.ceil(dates.length / daysPerRow);
-        }
-        else {
+        } else {
             rowCnt = 1;
             daysPerRow = dates.length;
         }
@@ -8407,7 +8262,7 @@ var DayTable = /** @class */ (function () {
         var seriesSeg = this.daySeries.sliceRange(range);
         var segs = [];
         if (seriesSeg) {
-            var firstIndex = seriesSeg.firstIndex, lastIndex = seriesSeg.lastIndex;
+            var firstIndex = seriesSeg.firstIndex; var lastIndex = seriesSeg.lastIndex;
             var index = firstIndex;
             while (index <= lastIndex) {
                 var row = Math.floor(index / colCnt);
@@ -8428,7 +8283,7 @@ var DayTable = /** @class */ (function () {
 }());
 
 var Slicer = /** @class */ (function () {
-    function Slicer() {
+    function Slicer () {
         this.sliceBusinessHours = memoize(this._sliceBusinessHours);
         this.sliceDateSelection = memoize(this._sliceDateSpan);
         this.sliceEventStore = memoize(this._sliceEventStore);
@@ -8487,8 +8342,7 @@ var Slicer = /** @class */ (function () {
                 bg: this.sliceEventRanges(rangeRes.bg, component, extraArgs),
                 fg: this.sliceEventRanges(rangeRes.fg, component, extraArgs)
             };
-        }
-        else {
+        } else {
             return { bg: [], fg: [] };
         }
     };
@@ -8559,7 +8413,7 @@ for incorporating minTime/maxTime if appropriate
 TODO: should be part of DateProfile!
 TimelineDateProfile already does this btw
 */
-function computeActiveRange(dateProfile, isComponentAllDay) {
+function computeActiveRange (dateProfile, isComponentAllDay) {
     var range = dateProfile.activeRange;
     if (isComponentAllDay) {
         return range;

@@ -5,10 +5,11 @@ Docs & License: https://fullcalendar.io/
 */
 
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@fullcalendar/core')) :
-    typeof define === 'function' && define.amd ? define(['exports', '@fullcalendar/core'], factory) :
-    (global = global || self, factory(global.FullCalendarDayGrid = {}, global.FullCalendar));
-}(this, function (exports, core) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@fullcalendar/core'))
+    : typeof define === 'function' && define.amd ? define(['exports', '@fullcalendar/core'], factory)
+    : (global = global || self, factory(global.FullCalendarDayGrid = {}, global.FullCalendar));
+}(this, function (exports, core) {
+ 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -26,21 +27,21 @@ Docs & License: https://fullcalendar.io/
     ***************************************************************************** */
     /* global Reflect, Promise */
 
-    var extendStatics = function(d, b) {
+    var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
             function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
 
-    function __extends(d, b) {
+    function __extends (d, b) {
         extendStatics(d, b);
-        function __() { this.constructor = d; }
+        function __ () { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     }
 
-    var __assign = function() {
-        __assign = Object.assign || function __assign(t) {
+    var __assign = function () {
+        __assign = Object.assign || function __assign (t) {
             for (var s, i = 1, n = arguments.length; i < n; i++) {
                 s = arguments[i];
                 for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
@@ -52,7 +53,7 @@ Docs & License: https://fullcalendar.io/
 
     var DayGridDateProfileGenerator = /** @class */ (function (_super) {
         __extends(DayGridDateProfileGenerator, _super);
-        function DayGridDateProfileGenerator() {
+        function DayGridDateProfileGenerator () {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         // Computes the date range that will be rendered.
@@ -97,7 +98,7 @@ Docs & License: https://fullcalendar.io/
       - hide (callback)
     */
     var Popover = /** @class */ (function () {
-        function Popover(options) {
+        function Popover (options) {
             var _this = this;
             this.isHidden = true;
             this.margin = 10; // the space required between the popover and the edges of the scroll container
@@ -175,11 +176,9 @@ Docs & License: https://fullcalendar.io/
             top = options.top || 0;
             if (options.left !== undefined) {
                 left = options.left;
-            }
-            else if (options.right !== undefined) {
+            } else if (options.right !== undefined) {
                 left = options.right - elDims.width; // derive the left value from the right value
-            }
-            else {
+            } else {
                 left = 0;
             }
             // constrain to the view port. if constrained by two edges, give precedence to top/left
@@ -205,11 +204,11 @@ Docs & License: https://fullcalendar.io/
     }());
 
     /* Event-rendering methods for the DayGrid class
-    ----------------------------------------------------------------------------------------------------------------------*/
+    ---------------------------------------------------------------------------------------------------------------------- */
     // "Simple" is bad a name. has nothing to do with SimpleDayGrid
     var SimpleDayGridEventRenderer = /** @class */ (function (_super) {
         __extends(SimpleDayGridEventRenderer, _super);
-        function SimpleDayGridEventRenderer() {
+        function SimpleDayGridEventRenderer () {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         // Builds the HTML to be used for the default element for an individual segment
@@ -240,25 +239,25 @@ Docs & License: https://fullcalendar.io/
                     (core.htmlEscape(eventDef.title || '') || '&nbsp;') + // we always want one line of height
                     '</span>';
             return '<a class="' + classes.join(' ') + '"' +
-                (eventDef.url ?
-                    ' href="' + core.htmlEscape(eventDef.url) + '"' :
-                    '') +
-                (skinCss ?
-                    ' style="' + skinCss + '"' :
-                    '') +
+                (eventDef.url
+                    ? ' href="' + core.htmlEscape(eventDef.url) + '"'
+                    : '') +
+                (skinCss
+                    ? ' style="' + skinCss + '"'
+                    : '') +
                 '>' +
                 '<div class="fc-content">' +
-                (context.options.dir === 'rtl' ?
-                    titleHtml + ' ' + timeHtml : // put a natural space in between
-                    timeHtml + ' ' + titleHtml //
+                (context.options.dir === 'rtl'
+                    ? titleHtml + ' ' + timeHtml // put a natural space in between
+                    : timeHtml + ' ' + titleHtml //
                 ) +
                 '</div>' +
-                (isResizableFromStart ?
-                    '<div class="fc-resizer fc-start-resizer"></div>' :
-                    '') +
-                (isResizableFromEnd ?
-                    '<div class="fc-resizer fc-end-resizer"></div>' :
-                    '') +
+                (isResizableFromStart
+                    ? '<div class="fc-resizer fc-start-resizer"></div>'
+                    : '') +
+                (isResizableFromEnd
+                    ? '<div class="fc-resizer fc-end-resizer"></div>'
+                    : '') +
                 '</a>';
         };
         // Computes a default event time formatting string if `eventTimeFormat` is not explicitly defined
@@ -277,10 +276,10 @@ Docs & License: https://fullcalendar.io/
     }(core.FgEventRenderer));
 
     /* Event-rendering methods for the DayGrid class
-    ----------------------------------------------------------------------------------------------------------------------*/
+    ---------------------------------------------------------------------------------------------------------------------- */
     var DayGridEventRenderer = /** @class */ (function (_super) {
         __extends(DayGridEventRenderer, _super);
-        function DayGridEventRenderer(dayGrid) {
+        function DayGridEventRenderer (dayGrid) {
             var _this = _super.call(this) || this;
             _this.dayGrid = dayGrid;
             return _this;
@@ -341,14 +340,13 @@ Docs & License: https://fullcalendar.io/
             var seg;
             var td;
             // populates empty cells from the current column (`col`) to `endCol`
-            function emptyCellsUntil(endCol) {
+            function emptyCellsUntil (endCol) {
                 while (col < endCol) {
                     // try to grab a cell from the level above and extend its rowspan. otherwise, create a fresh cell
                     td = (loneCellMatrix[i - 1] || [])[col];
                     if (td) {
                         td.rowSpan = (td.rowSpan || 1) + 1;
-                    }
-                    else {
+                    } else {
                         td = document.createElement('td');
                         tr.appendChild(td);
                     }
@@ -376,8 +374,7 @@ Docs & License: https://fullcalendar.io/
                         td = core.createElement('td', { className: 'fc-event-container' }, seg.el);
                         if (leftCol !== rightCol) {
                             td.colSpan = rightCol - leftCol + 1;
-                        }
-                        else { // a single-column segment
+                        } else { // a single-column segment
                             loneCellMatrix[i][col] = td;
                         }
                         while (col <= rightCol) {
@@ -393,8 +390,7 @@ Docs & License: https://fullcalendar.io/
                 if (introHtml) {
                     if (isRtl) {
                         core.appendToElement(tr, introHtml);
-                    }
-                    else {
+                    } else {
                         core.prependToElement(tr, introHtml);
                     }
                 }
@@ -461,7 +457,7 @@ Docs & License: https://fullcalendar.io/
         return DayGridEventRenderer;
     }(SimpleDayGridEventRenderer));
     // Computes whether two segments' columns collide. They are assumed to be in the same row.
-    function isDaySegCollision(seg, otherSegs) {
+    function isDaySegCollision (seg, otherSegs) {
         var i;
         var otherSeg;
         for (i = 0; i < otherSegs.length; i++) {
@@ -474,13 +470,13 @@ Docs & License: https://fullcalendar.io/
         return false;
     }
     // A cmp function for determining the leftmost event
-    function compareDaySegCols(a, b) {
+    function compareDaySegCols (a, b) {
         return a.leftCol - b.leftCol;
     }
 
     var DayGridMirrorRenderer = /** @class */ (function (_super) {
         __extends(DayGridMirrorRenderer, _super);
-        function DayGridMirrorRenderer() {
+        function DayGridMirrorRenderer () {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         DayGridMirrorRenderer.prototype.attachSegs = function (segs, mirrorInfo) {
@@ -494,8 +490,7 @@ Docs & License: https://fullcalendar.io/
                 // If there is an original segment, match the top position. Otherwise, put it at the row's top level
                 if (sourceSeg && sourceSeg.row === row) {
                     skeletonTopEl = sourceSeg.el;
-                }
-                else {
+                } else {
                     skeletonTopEl = rowNode.querySelector('.fc-content-skeleton tbody');
                     if (!skeletonTopEl) { // when no events
                         skeletonTopEl = rowNode.querySelector('.fc-content-skeleton table');
@@ -514,7 +509,7 @@ Docs & License: https://fullcalendar.io/
     var EMPTY_CELL_HTML = '<td style="pointer-events:none"></td>';
     var DayGridFillRenderer = /** @class */ (function (_super) {
         __extends(DayGridFillRenderer, _super);
-        function DayGridFillRenderer(dayGrid) {
+        function DayGridFillRenderer (dayGrid) {
             var _this = _super.call(this) || this;
             _this.fillSegTag = 'td'; // override the default tag name
             _this.dayGrid = dayGrid;
@@ -556,8 +551,7 @@ Docs & License: https://fullcalendar.io/
             var trEl;
             if (type === 'businessHours') {
                 className = 'bgevent';
-            }
-            else {
+            } else {
                 className = type.toLowerCase();
             }
             skeletonEl = core.htmlToElement('<div class="fc-' + className + '-skeleton">' +
@@ -565,14 +559,14 @@ Docs & License: https://fullcalendar.io/
                 '</div>');
             trEl = skeletonEl.getElementsByTagName('tr')[0];
             if (startCol > 0) {
-                core.appendToElement(trEl, 
+                core.appendToElement(trEl,
                 // will create (startCol + 1) td's
                 new Array(startCol + 1).join(EMPTY_CELL_HTML));
             }
             seg.el.colSpan = endCol - startCol;
             trEl.appendChild(seg.el);
             if (endCol < colCnt) {
-                core.appendToElement(trEl, 
+                core.appendToElement(trEl,
                 // will create (colCnt - endCol) td's
                 new Array(colCnt - endCol + 1).join(EMPTY_CELL_HTML));
             }
@@ -580,8 +574,7 @@ Docs & License: https://fullcalendar.io/
             if (introHtml) {
                 if (isRtl) {
                     core.appendToElement(trEl, introHtml);
-                }
-                else {
+                } else {
                     core.prependToElement(trEl, introHtml);
                 }
             }
@@ -592,7 +585,7 @@ Docs & License: https://fullcalendar.io/
 
     var DayTile = /** @class */ (function (_super) {
         __extends(DayTile, _super);
-        function DayTile(el) {
+        function DayTile (el) {
             var _this = _super.call(this, el) || this;
             var eventRenderer = _this.eventRenderer = new DayTileEventRenderer(_this);
             var renderFrame = _this.renderFrame = core.memoizeRendering(_this._renderFrame);
@@ -621,7 +614,7 @@ Docs & License: https://fullcalendar.io/
             this.context.calendar.unregisterInteractiveComponent(this);
         };
         DayTile.prototype._renderFrame = function (date) {
-            var _a = this.context, theme = _a.theme, dateEnv = _a.dateEnv, options = _a.options;
+            var _a = this.context; var theme = _a.theme; var dateEnv = _a.dateEnv; var options = _a.options;
             var title = dateEnv.format(date, core.createFormatter(options.dayPopoverFormat) // TODO: cache
             );
             this.el.innerHTML =
@@ -660,7 +653,7 @@ Docs & License: https://fullcalendar.io/
     }(core.DateComponent));
     var DayTileEventRenderer = /** @class */ (function (_super) {
         __extends(DayTileEventRenderer, _super);
-        function DayTileEventRenderer(dayTile) {
+        function DayTileEventRenderer (dayTile) {
             var _this = _super.call(this) || this;
             _this.dayTile = dayTile;
             return _this;
@@ -681,7 +674,7 @@ Docs & License: https://fullcalendar.io/
     }(SimpleDayGridEventRenderer));
 
     var DayBgRow = /** @class */ (function () {
-        function DayBgRow(context) {
+        function DayBgRow (context) {
             this.context = context;
         }
         DayBgRow.prototype.renderHtml = function (props) {
@@ -703,18 +696,18 @@ Docs & License: https://fullcalendar.io/
         };
         return DayBgRow;
     }());
-    function renderCellHtml(date, dateProfile, context, otherAttrs) {
-        var dateEnv = context.dateEnv, theme = context.theme;
+    function renderCellHtml (date, dateProfile, context, otherAttrs) {
+        var dateEnv = context.dateEnv; var theme = context.theme;
         var isDateValid = core.rangeContainsMarker(dateProfile.activeRange, date); // TODO: called too frequently. cache somehow.
         var classes = core.getDayClasses(date, dateProfile, context);
         classes.unshift('fc-day', theme.getClass('widgetContent'));
         return '<td class="' + classes.join(' ') + '"' +
-            (isDateValid ?
-                ' data-date="' + dateEnv.formatIso(date, { omitTime: true }) + '"' :
-                '') +
-            (otherAttrs ?
-                ' ' + otherAttrs :
-                '') +
+            (isDateValid
+                ? ' data-date="' + dateEnv.formatIso(date, { omitTime: true }) + '"'
+                : '') +
+            (otherAttrs
+                ? ' ' + otherAttrs
+                : '') +
             '></td>';
     }
 
@@ -722,7 +715,7 @@ Docs & License: https://fullcalendar.io/
     var WEEK_NUM_FORMAT = core.createFormatter({ week: 'numeric' });
     var DayGrid = /** @class */ (function (_super) {
         __extends(DayGrid, _super);
-        function DayGrid(el, renderProps) {
+        function DayGrid (el, renderProps) {
             var _this = _super.call(this, el) || this;
             _this.bottomCoordPadding = 0; // hack for extending the hit area for the last row of the coordinate grid
             _this.isCellSizesDirty = false;
@@ -776,10 +769,10 @@ Docs & License: https://fullcalendar.io/
             }, this.context);
         };
         /* Date Rendering
-        ------------------------------------------------------------------------------------------------------------------*/
+        ------------------------------------------------------------------------------------------------------------------ */
         DayGrid.prototype._renderCells = function (cells, isRigid) {
-            var _a = this.context, calendar = _a.calendar, view = _a.view, isRtl = _a.isRtl, dateEnv = _a.dateEnv;
-            var _b = this, rowCnt = _b.rowCnt, colCnt = _b.colCnt;
+            var _a = this.context; var calendar = _a.calendar; var view = _a.view; var isRtl = _a.isRtl; var dateEnv = _a.dateEnv;
+            var _b = this; var rowCnt = _b.rowCnt; var colCnt = _b.colCnt;
             var html = '';
             var row;
             var col;
@@ -836,11 +829,11 @@ Docs & License: https://fullcalendar.io/
                 '</div>' +
                 '<div class="fc-content-skeleton">' +
                 '<table>' +
-                (this.getIsNumbersVisible() ?
-                    '<thead>' +
+                (this.getIsNumbersVisible()
+                    ? '<thead>' +
                         this.renderNumberTrHtml(row) +
-                        '</thead>' :
-                    '') +
+                        '</thead>'
+                    : '') +
                 '</table>' +
                 '</div>' +
                 '</div>';
@@ -854,7 +847,7 @@ Docs & License: https://fullcalendar.io/
             return this.rowCnt > 1;
         };
         /* Grid Number Rendering
-        ------------------------------------------------------------------------------------------------------------------*/
+        ------------------------------------------------------------------------------------------------------------------ */
         DayGrid.prototype.renderNumberTrHtml = function (row) {
             var isRtl = this.context.isRtl;
             var intro = this.renderProps.renderNumberIntroHtml(row, this);
@@ -881,7 +874,7 @@ Docs & License: https://fullcalendar.io/
         // Generates the HTML for the <td>s of the "number" row in the DayGrid's content skeleton.
         // The number row will only exist if either day numbers or week numbers are turned on.
         DayGrid.prototype.renderNumberCellHtml = function (date) {
-            var _a = this.context, dateEnv = _a.dateEnv, options = _a.options;
+            var _a = this.context; var dateEnv = _a.dateEnv; var options = _a.options;
             var html = '';
             var isDateValid = core.rangeContainsMarker(this.props.dateProfile.activeRange, date); // TODO: called too frequently. cache somehow.
             var isDayNumberVisible = this.getIsDayNumbersVisible() && isDateValid;
@@ -897,26 +890,26 @@ Docs & License: https://fullcalendar.io/
                 weekCalcFirstDow = dateEnv.weekDow;
             }
             html += '<td class="' + classes.join(' ') + '"' +
-                (isDateValid ?
-                    ' data-date="' + dateEnv.formatIso(date, { omitTime: true }) + '"' :
-                    '') +
+                (isDateValid
+                    ? ' data-date="' + dateEnv.formatIso(date, { omitTime: true }) + '"'
+                    : '') +
                 '>';
             if (this.renderProps.cellWeekNumbersVisible && (date.getUTCDay() === weekCalcFirstDow)) {
-                html += core.buildGotoAnchorHtml(options, dateEnv, { date: date, type: 'week' }, { 'class': 'fc-week-number' }, dateEnv.format(date, WEEK_NUM_FORMAT) // inner HTML
+                html += core.buildGotoAnchorHtml(options, dateEnv, { date: date, type: 'week' }, { class: 'fc-week-number' }, dateEnv.format(date, WEEK_NUM_FORMAT) // inner HTML
                 );
             }
             if (isDayNumberVisible) {
-                html += core.buildGotoAnchorHtml(options, dateEnv, date, { 'class': 'fc-day-number' }, dateEnv.format(date, DAY_NUM_FORMAT) // inner HTML
+                html += core.buildGotoAnchorHtml(options, dateEnv, date, { class: 'fc-day-number' }, dateEnv.format(date, DAY_NUM_FORMAT) // inner HTML
                 );
             }
             html += '</td>';
             return html;
         };
         /* Sizing
-        ------------------------------------------------------------------------------------------------------------------*/
+        ------------------------------------------------------------------------------------------------------------------ */
         DayGrid.prototype.updateSize = function (isResize) {
             var calendar = this.context.calendar;
-            var _a = this, fillRenderer = _a.fillRenderer, eventRenderer = _a.eventRenderer, mirrorRenderer = _a.mirrorRenderer;
+            var _a = this; var fillRenderer = _a.fillRenderer; var eventRenderer = _a.eventRenderer; var mirrorRenderer = _a.mirrorRenderer;
             if (isResize ||
                 this.isCellSizesDirty ||
                 calendar.isEventsUpdated // hack
@@ -943,9 +936,9 @@ Docs & License: https://fullcalendar.io/
             this.rowPositions.bottoms[this.rowCnt - 1] += this.bottomCoordPadding; // hack
         };
         /* Hit System
-        ------------------------------------------------------------------------------------------------------------------*/
+        ------------------------------------------------------------------------------------------------------------------ */
         DayGrid.prototype.positionToHit = function (leftPosition, topPosition) {
-            var _a = this, colPositions = _a.colPositions, rowPositions = _a.rowPositions;
+            var _a = this; var colPositions = _a.colPositions; var rowPositions = _a.rowPositions;
             var col = colPositions.leftToIndex(leftPosition);
             var row = rowPositions.topToIndex(topPosition);
             if (row != null && col != null) {
@@ -967,13 +960,13 @@ Docs & License: https://fullcalendar.io/
             }
         };
         /* Cell System
-        ------------------------------------------------------------------------------------------------------------------*/
+        ------------------------------------------------------------------------------------------------------------------ */
         // FYI: the first column is the leftmost column, regardless of date
         DayGrid.prototype.getCellEl = function (row, col) {
             return this.cellEls[row * this.colCnt + col];
         };
         /* Event Drag Visualization
-        ------------------------------------------------------------------------------------------------------------------*/
+        ------------------------------------------------------------------------------------------------------------------ */
         DayGrid.prototype._renderEventDrag = function (state) {
             if (state) {
                 this.eventRenderer.hideByHash(state.affectedInstances);
@@ -987,7 +980,7 @@ Docs & License: https://fullcalendar.io/
             }
         };
         /* Event Resize Visualization
-        ------------------------------------------------------------------------------------------------------------------*/
+        ------------------------------------------------------------------------------------------------------------------ */
         DayGrid.prototype._renderEventResize = function (state) {
             if (state) {
                 this.eventRenderer.hideByHash(state.affectedInstances);
@@ -1003,7 +996,7 @@ Docs & License: https://fullcalendar.io/
             }
         };
         /* More+ Link Popover
-        ------------------------------------------------------------------------------------------------------------------*/
+        ------------------------------------------------------------------------------------------------------------------ */
         DayGrid.prototype.removeSegPopover = function () {
             if (this.segPopover) {
                 this.segPopover.hide(); // in handler, will call segPopover's removeElement
@@ -1019,11 +1012,9 @@ Docs & License: https://fullcalendar.io/
                 this.unlimitRow(row);
                 if (!levelLimit) {
                     rowLevelLimit = false;
-                }
-                else if (typeof levelLimit === 'number') {
+                } else if (typeof levelLimit === 'number') {
                     rowLevelLimit = levelLimit;
-                }
-                else {
+                } else {
                     rowLevelLimit = this.computeRowLevelLimit(row);
                 }
                 if (rowLevelLimit !== false) {
@@ -1155,7 +1146,7 @@ Docs & License: https://fullcalendar.io/
         // Responsible for attaching click handler as well.
         DayGrid.prototype.renderMoreLink = function (row, col, hiddenSegs) {
             var _this = this;
-            var _a = this.context, calendar = _a.calendar, view = _a.view, dateEnv = _a.dateEnv, options = _a.options, isRtl = _a.isRtl;
+            var _a = this.context; var calendar = _a.calendar; var view = _a.view; var dateEnv = _a.dateEnv; var options = _a.options; var isRtl = _a.isRtl;
             var a = core.createElement('a', { className: 'fc-more' });
             a.innerText = this.getMoreLinkText(hiddenSegs.length);
             a.addEventListener('click', function (ev) {
@@ -1185,8 +1176,7 @@ Docs & License: https://fullcalendar.io/
                 }
                 if (clickOption === 'popover') {
                     _this.showSegPopover(row, col, moreEl, reslicedAllSegs);
-                }
-                else if (typeof clickOption === 'string') { // a view name
+                } else if (typeof clickOption === 'string') { // a view name
                     calendar.zoomTo(date, clickOption);
                 }
             });
@@ -1195,15 +1185,14 @@ Docs & License: https://fullcalendar.io/
         // Reveals the popover that displays all events within a cell
         DayGrid.prototype.showSegPopover = function (row, col, moreLink, segs) {
             var _this = this;
-            var _a = this.context, calendar = _a.calendar, view = _a.view, theme = _a.theme, isRtl = _a.isRtl;
+            var _a = this.context; var calendar = _a.calendar; var view = _a.view; var theme = _a.theme; var isRtl = _a.isRtl;
             var _col = isRtl ? this.colCnt - col - 1 : col; // HACK: props.cells has different dir system?
             var moreWrap = moreLink.parentNode; // the <div> wrapper around the <a>
             var topEl; // the element we want to match the top coordinate of
             var options;
             if (this.rowCnt === 1) {
                 topEl = view.el; // will cause the popover to cover any sort of header
-            }
-            else {
+            } else {
                 topEl = this.rowEls[row]; // will align with top of row
             }
             options = {
@@ -1226,8 +1215,7 @@ Docs & License: https://fullcalendar.io/
             // We use the moreWrap instead of the <td> to avoid border confusion.
             if (isRtl) {
                 options.right = core.computeRect(moreWrap).right + 1; // +1 to be over cell border
-            }
-            else {
+            } else {
                 options.left = core.computeRect(moreWrap).left - 1; // -1 to be over cell border
             }
             this.segPopover = new Popover(options);
@@ -1246,12 +1234,16 @@ Docs & License: https://fullcalendar.io/
                 var origRange = eventRange.range;
                 var slicedRange = core.intersectRanges(origRange, dayRange);
                 if (slicedRange) {
-                    newSegs.push(__assign({}, seg, { eventRange: {
+                    newSegs.push(__assign({}, seg, {
+ eventRange: {
                             def: eventRange.def,
                             ui: __assign({}, eventRange.ui, { durationEditable: false }),
                             instance: eventRange.instance,
                             range: slicedRange
-                        }, isStart: seg.isStart && slicedRange.start.valueOf() === origRange.start.valueOf(), isEnd: seg.isEnd && slicedRange.end.valueOf() === origRange.end.valueOf() }));
+                        },
+isStart: seg.isStart && slicedRange.start.valueOf() === origRange.start.valueOf(),
+isEnd: seg.isEnd && slicedRange.end.valueOf() === origRange.end.valueOf()
+}));
                 }
             }
             return newSegs;
@@ -1261,8 +1253,7 @@ Docs & License: https://fullcalendar.io/
             var opt = this.context.options.eventLimitText;
             if (typeof opt === 'function') {
                 return opt(num);
-            }
-            else {
+            } else {
                 return '+' + num + ' ' + opt;
             }
         };
@@ -1287,20 +1278,20 @@ Docs & License: https://fullcalendar.io/
 
     var WEEK_NUM_FORMAT$1 = core.createFormatter({ week: 'numeric' });
     /* An abstract class for the daygrid views, as well as month view. Renders one or more rows of day cells.
-    ----------------------------------------------------------------------------------------------------------------------*/
+    ---------------------------------------------------------------------------------------------------------------------- */
     // It is a manager for a DayGrid subcomponent, which does most of the heavy lifting.
     // It is responsible for managing width/height.
     var AbstractDayGridView = /** @class */ (function (_super) {
         __extends(AbstractDayGridView, _super);
-        function AbstractDayGridView() {
+        function AbstractDayGridView () {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.processOptions = core.memoize(_this._processOptions);
             _this.renderSkeleton = core.memoizeRendering(_this._renderSkeleton, _this._unrenderSkeleton);
             /* Header Rendering
-            ------------------------------------------------------------------------------------------------------------------*/
+            ------------------------------------------------------------------------------------------------------------------ */
             // Generates the HTML that will go before the day-of week header cells
             _this.renderHeadIntroHtml = function () {
-                var _a = _this.context, theme = _a.theme, options = _a.options;
+                var _a = _this.context; var theme = _a.theme; var options = _a.options;
                 if (_this.colWeekNumbersVisible) {
                     return '' +
                         '<th class="fc-week-number ' + theme.getClass('widgetHeader') + '" ' + _this.weekNumberStyleAttr() + '>' +
@@ -1312,10 +1303,10 @@ Docs & License: https://fullcalendar.io/
                 return '';
             };
             /* Day Grid Rendering
-            ------------------------------------------------------------------------------------------------------------------*/
+            ------------------------------------------------------------------------------------------------------------------ */
             // Generates the HTML that will go before content-skeleton cells that display the day/week numbers
             _this.renderDayGridNumberIntroHtml = function (row, dayGrid) {
-                var _a = _this.context, options = _a.options, dateEnv = _a.dateEnv;
+                var _a = _this.context; var options = _a.options; var dateEnv = _a.dateEnv;
                 var weekStart = dayGrid.props.cells[row][0].date;
                 if (_this.colWeekNumbersVisible) {
                     return '' +
@@ -1350,13 +1341,11 @@ Docs & License: https://fullcalendar.io/
                 if (options.weekNumbersWithinDays) {
                     this.cellWeekNumbersVisible = true;
                     this.colWeekNumbersVisible = false;
-                }
-                else {
+                } else {
                     this.cellWeekNumbersVisible = false;
                     this.colWeekNumbersVisible = true;
                 }
-            }
-            else {
+            } else {
                 this.colWeekNumbersVisible = false;
                 this.cellWeekNumbersVisible = false;
             }
@@ -1397,16 +1386,16 @@ Docs & License: https://fullcalendar.io/
         // Builds the HTML skeleton for the view.
         // The day-grid component will render inside of a container defined by this HTML.
         AbstractDayGridView.prototype.renderSkeletonHtml = function () {
-            var _a = this.context, theme = _a.theme, options = _a.options;
+            var _a = this.context; var theme = _a.theme; var options = _a.options;
             return '' +
                 '<table class="' + theme.getClass('tableGrid') + '">' +
-                (options.columnHeader ?
-                    '<thead class="fc-head">' +
+                (options.columnHeader
+                    ? '<thead class="fc-head">' +
                         '<tr>' +
                         '<td class="fc-head-container ' + theme.getClass('widgetHeader') + '">&nbsp;</td>' +
                         '</tr>' +
-                        '</thead>' :
-                    '') +
+                        '</thead>'
+                    : '') +
                 '<tbody class="fc-body">' +
                 '<tr>' +
                 '<td class="' + theme.getClass('widgetContent') + '"></td>' +
@@ -1427,7 +1416,7 @@ Docs & License: https://fullcalendar.io/
             return eventLimit && typeof eventLimit !== 'number';
         };
         /* Dimensions
-        ------------------------------------------------------------------------------------------------------------------*/
+        ------------------------------------------------------------------------------------------------------------------ */
         AbstractDayGridView.prototype.updateSize = function (isResize, viewHeight, isAuto) {
             _super.prototype.updateSize.call(this, isResize, viewHeight, isAuto); // will call updateBaseSize. important that executes first
             this.dayGrid.updateSize(isResize);
@@ -1498,18 +1487,16 @@ Docs & License: https://fullcalendar.io/
                     height *= this.dayGrid.rowCnt / 6;
                 }
                 core.distributeHeight(this.dayGrid.rowEls, height, !isAuto); // if auto, don't compensate for height-hogging rows
-            }
-            else {
+            } else {
                 if (isAuto) {
                     core.undistributeHeight(this.dayGrid.rowEls); // let the rows be their natural height with no expanding
-                }
-                else {
+                } else {
                     core.distributeHeight(this.dayGrid.rowEls, height, true); // true = compensate for height-hogging rows
                 }
             }
         };
         /* Scroll
-        ------------------------------------------------------------------------------------------------------------------*/
+        ------------------------------------------------------------------------------------------------------------------ */
         AbstractDayGridView.prototype.computeDateScroll = function (duration) {
             return { top: 0 };
         };
@@ -1527,7 +1514,7 @@ Docs & License: https://fullcalendar.io/
 
     var SimpleDayGrid = /** @class */ (function (_super) {
         __extends(SimpleDayGrid, _super);
-        function SimpleDayGrid(dayGrid) {
+        function SimpleDayGrid (dayGrid) {
             var _this = _super.call(this, dayGrid.el) || this;
             _this.slicer = new DayGridSlicer();
             _this.dayGrid = dayGrid;
@@ -1542,7 +1529,7 @@ Docs & License: https://fullcalendar.io/
         };
         SimpleDayGrid.prototype.render = function (props, context) {
             var dayGrid = this.dayGrid;
-            var dateProfile = props.dateProfile, dayTable = props.dayTable;
+            var dateProfile = props.dateProfile; var dayTable = props.dayTable;
             dayGrid.receiveProps(__assign({}, this.slicer.sliceProps(props, dateProfile, props.nextDayThreshold, context.calendar, dayGrid, dayTable), { dateProfile: dateProfile, cells: dayTable.cells, isRigid: props.isRigid }), context);
         };
         SimpleDayGrid.prototype.buildPositionCaches = function () {
@@ -1569,7 +1556,7 @@ Docs & License: https://fullcalendar.io/
     }(core.DateComponent));
     var DayGridSlicer = /** @class */ (function (_super) {
         __extends(DayGridSlicer, _super);
-        function DayGridSlicer() {
+        function DayGridSlicer () {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         DayGridSlicer.prototype.sliceRange = function (dateRange, dayTable) {
@@ -1580,7 +1567,7 @@ Docs & License: https://fullcalendar.io/
 
     var DayGridView = /** @class */ (function (_super) {
         __extends(DayGridView, _super);
-        function DayGridView() {
+        function DayGridView () {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.buildDayTable = core.memoize(buildDayTable);
             return _this;
@@ -1628,7 +1615,7 @@ Docs & License: https://fullcalendar.io/
         };
         return DayGridView;
     }(AbstractDayGridView));
-    function buildDayTable(dateProfile, dateProfileGenerator) {
+    function buildDayTable (dateProfile, dateProfileGenerator) {
         var daySeries = new core.DaySeries(dateProfile.renderRange, dateProfileGenerator);
         return new core.DayTable(daySeries, /year|month|week/.test(dateProfile.currentRangeUnit));
     }
@@ -1664,5 +1651,4 @@ Docs & License: https://fullcalendar.io/
     exports.default = main;
 
     Object.defineProperty(exports, '__esModule', { value: true });
-
 }));

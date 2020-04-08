@@ -6,31 +6,31 @@ describe('Test the ammend appearances request', () => {
     return request(app)
     .post('/adminToggle')
     .send({
-        'Admin': false
+        Admin: false
       })
     .expect(200)
-    .then(function(){
+    .then(function () {
       return request(app)
-      .post('/ammendApps')
+      .post('/amendApps')
       .expect(403);
-    })
+    });
 });
 test('POST new appearances data with admin', () => {
   return request(app)
   .post('/adminToggle')
   .send({
-      'Admin': true
+      Admin: true
     })
   .expect(200)
-  .then(function(){
+  .then(function () {
     return request(app)
-    .post('/ammendApps')
+    .post('/amendApps')
     .send({
-        'Title': "Test",
-        'Apps': 10
+        Title: 'Test',
+        Apps: 10
       })
     .expect(200);
-  })
+  });
 });
 });
 
@@ -39,34 +39,34 @@ describe('Test the ammend goals request', () => {
     return request(app)
     .post('/adminToggle')
     .send({
-        'Admin': false
+        Admin: false
       })
     .expect(200)
-    .then(function(){
+    .then(function () {
       return request(app)
-      .post('/ammendGoals')
+      .post('/amendGoals')
       .send({
-          'Title': "Test",
-          'Goals': 10
+          Title: 'Test',
+          Goals: 10
         })
       .expect(403);
-    })
+    });
 });
 test('POST new goals data with admin', () => {
   return request(app)
   .post('/adminToggle')
   .send({
-      'Admin': true
+      Admin: true
     })
   .expect(200)
-  .then(function(){
+  .then(function () {
     return request(app)
-    .post('/ammendGoals')
+    .post('/amendGoals')
     .send({
-        'Title': "Test",
-        'Goals': 10
+        Title: 'Test',
+        Goals: 10
       })
     .expect(200);
-  })
+  });
 });
 });

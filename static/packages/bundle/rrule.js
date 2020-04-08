@@ -5,13 +5,14 @@ Docs & License: https://fullcalendar.io/
 */
 
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('rrule'), require('fullcalendar')) :
-    typeof define === 'function' && define.amd ? define(['exports', 'rrule', 'fullcalendar'], factory) :
-    (global = global || self, factory(global.FullCalendar = global.FullCalendar || {}, global.rrule, global.FullCalendar));
-}(this, (function (exports, rrule, fullcalendar) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('rrule'), require('fullcalendar'))
+    : typeof define === 'function' && define.amd ? define(['exports', 'rrule', 'fullcalendar'], factory)
+    : (global = global || self, factory(global.FullCalendar = global.FullCalendar || {}, global.rrule, global.FullCalendar));
+}(this, function (exports, rrule, fullcalendar) {
+ 'use strict';
 
-    var __assign = function() {
-        __assign = Object.assign || function __assign(t) {
+    var __assign = function () {
+        __assign = Object.assign || function __assign (t) {
             for (var s, i = 1, n = arguments.length; i < n; i++) {
                 s = arguments[i];
                 for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
@@ -50,21 +51,19 @@ Docs & License: https://fullcalendar.io/
     var main = fullcalendar.createPlugin({
         recurringTypes: [recurring]
     });
-    function parseRRule(input, dateEnv) {
+    function parseRRule (input, dateEnv) {
         var allDayGuess = null;
         var rrule$1;
         if (typeof input === 'string') {
             rrule$1 = rrule.rrulestr(input);
-        }
-        else if (typeof input === 'object' && input) {
+        } else if (typeof input === 'object' && input) {
             var refined = __assign({}, input);
             if (typeof refined.dtstart === 'string') {
                 var dtstartMeta = dateEnv.createMarkerMeta(refined.dtstart);
                 if (dtstartMeta) {
                     refined.dtstart = dtstartMeta.marker;
                     allDayGuess = dtstartMeta.isTimeUnspecified;
-                }
-                else {
+                } else {
                     delete refined.dtstart;
                 }
             }
@@ -76,8 +75,7 @@ Docs & License: https://fullcalendar.io/
             }
             if (refined.wkst != null) {
                 refined.wkst = convertConstant(refined.wkst);
-            }
-            else {
+            } else {
                 refined.wkst = (dateEnv.weekDow - 1 + 7) % 7;
             }
             if (refined.byweekday != null) {
@@ -90,13 +88,13 @@ Docs & License: https://fullcalendar.io/
         }
         return null;
     }
-    function convertConstants(input) {
+    function convertConstants (input) {
         if (Array.isArray(input)) {
             return input.map(convertConstant);
         }
         return convertConstant(input);
     }
-    function convertConstant(input) {
+    function convertConstant (input) {
         if (typeof input === 'string') {
             return rrule.RRule[input.toUpperCase()];
         }
@@ -107,11 +105,9 @@ Docs & License: https://fullcalendar.io/
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-
     if (exports.globalPlugins) {
-      exports.globalPlugins.push(exports.default)
-      delete exports.default
+      exports.globalPlugins.push(exports.default);
+      delete exports.default;
     }
-
-})));
-//# sourceMappingURL=rrule.js.map
+}));
+// # sourceMappingURL=rrule.js.map

@@ -1,7 +1,7 @@
-(function(){
+(function () {
   var options = INSTALL_OPTIONS;
 
-  Array.prototype.forEach.call(document.querySelectorAll('table'), function(table){
+  Array.prototype.forEach.call(document.querySelectorAll('table'), function (table) {
     var firstTBodyRow, tHead;
 
     try {

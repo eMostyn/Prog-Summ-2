@@ -4,14 +4,10 @@
 }
 .navbar-custom .navbar-brand,
 .navbar-custom .navbar-text,
-.nav-link {
+.nav-link , .navbar-toggler.collapsed{
     font-family: "Arial Black", Gadget, sans-serif;
     font-size: 25px;
     color: white;
-}
-#activeLink
- {
-    color: black;
 }
 
 body{
@@ -28,10 +24,31 @@ body{
     margin-right:2%;
     float:left;
 }
-.playerDiv img{
-  width: 200px;
-    height: 200px;
+
+
+.imgDiv{
+  display: grid;
+  height: 100%;
 }
-  .caption {
-      display: block;
+.imgDiv img{
+  max-width: 95%;
+  max-height: 250px;
+  margin: auto;
+  margin-top: 5px;
 }
+.capDiv{
+  display: inline-block;
+  text-align: center;
+}
+.innerDiv{
+  width: 100%;
+  text-align: center;
+}
+.caption{
+  margin: auto;
+  display: table;
+}
+
+/* #collapse{
+  background-color: blue;
+} */

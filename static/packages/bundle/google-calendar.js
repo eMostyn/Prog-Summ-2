@@ -5,13 +5,14 @@ Docs & License: https://fullcalendar.io/
 */
 
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('fullcalendar')) :
-    typeof define === 'function' && define.amd ? define(['exports', 'fullcalendar'], factory) :
-    (global = global || self, factory(global.FullCalendar = global.FullCalendar || {}, global.FullCalendar));
-}(this, (function (exports, fullcalendar) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('fullcalendar'))
+    : typeof define === 'function' && define.amd ? define(['exports', 'fullcalendar'], factory)
+    : (global = global || self, factory(global.FullCalendar = global.FullCalendar || {}, global.FullCalendar));
+}(this, function (exports, fullcalendar) {
+ 'use strict';
 
-    var __assign = function() {
-        __assign = Object.assign || function __assign(t) {
+    var __assign = function () {
+        __assign = Object.assign || function __assign (t) {
             for (var s, i = 1, n = arguments.length; i < n; i++) {
                 s = arguments[i];
                 for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
@@ -54,8 +55,7 @@ Docs & License: https://fullcalendar.io/
                 onFailure({
                     message: 'Specify a googleCalendarApiKey. See http://fullcalendar.io/docs/google_calendar/'
                 });
-            }
-            else {
+            } else {
                 var url = buildUrl(meta);
                 var requestParams_1 = buildRequestParams(arg.range, apiKey, meta.data, calendar.dateEnv);
                 fullcalendar.requestJson('GET', url, requestParams_1, function (body, xhr) {
@@ -65,8 +65,7 @@ Docs & License: https://fullcalendar.io/
                             errors: body.error.errors,
                             xhr: xhr
                         });
-                    }
-                    else {
+                    } else {
                         onSuccess({
                             rawEvents: gcalItemsToRawEventDefs(body.items, requestParams_1.timeZone),
                             xhr: xhr
@@ -78,32 +77,30 @@ Docs & License: https://fullcalendar.io/
             }
         }
     };
-    function parseGoogleCalendarId(url) {
+    function parseGoogleCalendarId (url) {
         var match;
         if (/^[^\/]+@([^\/\.]+\.)*(google|googlemail|gmail)\.com$/.test(url)) {
             return url;
-        }
-        else if ((match = /^https:\/\/www.googleapis.com\/calendar\/v3\/calendars\/([^\/]*)/.exec(url)) ||
+        } else if ((match = /^https:\/\/www.googleapis.com\/calendar\/v3\/calendars\/([^\/]*)/.exec(url)) ||
             (match = /^https?:\/\/www.google.com\/calendar\/feeds\/([^\/]*)/.exec(url))) {
             return decodeURIComponent(match[1]);
         }
     }
-    function buildUrl(meta) {
+    function buildUrl (meta) {
         var apiBase = meta.googleCalendarApiBase;
         if (!apiBase) {
             apiBase = API_BASE;
         }
         return apiBase + '/' + encodeURIComponent(meta.googleCalendarId) + '/events';
     }
-    function buildRequestParams(range, apiKey, extraParams, dateEnv) {
+    function buildRequestParams (range, apiKey, extraParams, dateEnv) {
         var params;
         var startStr;
         var endStr;
         if (dateEnv.canComputeOffset) {
             startStr = dateEnv.formatIso(range.start);
             endStr = dateEnv.formatIso(range.end);
-        }
-        else {
+        } else {
             startStr = fullcalendar.addDays(range.start, -1).toISOString();
             endStr = fullcalendar.addDays(range.end, 1).toISOString();
         }
@@ -113,12 +110,12 @@ Docs & License: https://fullcalendar.io/
         }
         return params;
     }
-    function gcalItemsToRawEventDefs(items, gcalTimezone) {
+    function gcalItemsToRawEventDefs (items, gcalTimezone) {
         return items.map(function (item) {
             return gcalItemToRawEventDef(item, gcalTimezone);
         });
     }
-    function gcalItemToRawEventDef(item, gcalTimezone) {
+    function gcalItemToRawEventDef (item, gcalTimezone) {
         var url = item.htmlLink || null;
         if (url && gcalTimezone) {
             url = injectQsComponent(url, 'ctz=' + gcalTimezone);
@@ -133,7 +130,7 @@ Docs & License: https://fullcalendar.io/
             description: item.description
         };
     }
-    function injectQsComponent(url, component) {
+    function injectQsComponent (url, component) {
         return url.replace(/(\?.*?)?(#|$)/, function (whole, qs, hash) {
             return (qs ? qs + '&' : '?') + component + hash;
         });
@@ -146,11 +143,9 @@ Docs & License: https://fullcalendar.io/
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-
     if (exports.globalPlugins) {
-      exports.globalPlugins.push(exports.default)
-      delete exports.default
+      exports.globalPlugins.push(exports.default);
+      delete exports.default;
     }
-
-})));
-//# sourceMappingURL=google-calendar.js.map
+}));
+// # sourceMappingURL=google-calendar.js.map

@@ -23,21 +23,21 @@ and limitations under the License.
 ***************************************************************************** */
 /* global Reflect, Promise */
 
-var extendStatics = function(d, b) {
+var extendStatics = function (d, b) {
     extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
         function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
     return extendStatics(d, b);
 };
 
-function __extends(d, b) {
+function __extends (d, b) {
     extendStatics(d, b);
-    function __() { this.constructor = d; }
+    function __ () { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 }
 
-var __assign = function() {
-    __assign = Object.assign || function __assign(t) {
+var __assign = function () {
+    __assign = Object.assign || function __assign (t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
             s = arguments[i];
             for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
@@ -47,7 +47,7 @@ var __assign = function() {
     return __assign.apply(this, arguments);
 };
 
-function toDateTime(date, calendar) {
+function toDateTime (date, calendar) {
     if (!(calendar instanceof Calendar)) {
         throw new Error('must supply a Calendar instance');
     }
@@ -56,7 +56,7 @@ function toDateTime(date, calendar) {
         locale: calendar.dateEnv.locale.codes[0]
     });
 }
-function toDuration(duration, calendar) {
+function toDuration (duration, calendar) {
     if (!(calendar instanceof Calendar)) {
         throw new Error('must supply a Calendar instance');
     }
@@ -64,7 +64,7 @@ function toDuration(duration, calendar) {
 }
 var LuxonNamedTimeZone = /** @class */ (function (_super) {
     __extends(LuxonNamedTimeZone, _super);
-    function LuxonNamedTimeZone() {
+    function LuxonNamedTimeZone () {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     LuxonNamedTimeZone.prototype.offsetForArray = function (a) {
@@ -77,7 +77,7 @@ var LuxonNamedTimeZone = /** @class */ (function (_super) {
     };
     return LuxonNamedTimeZone;
 }(NamedTimeZoneImpl));
-function formatWithCmdStr(cmdStr, arg) {
+function formatWithCmdStr (cmdStr, arg) {
     var cmd = parseCmdStr(cmdStr);
     if (arg.end) {
         var start = arrayToLuxon(arg.start.array, arg.timeZone, arg.localeCodes[0]);
@@ -90,7 +90,7 @@ var main = createPlugin({
     cmdFormatter: formatWithCmdStr,
     namedTimeZonedImpl: LuxonNamedTimeZone
 });
-function luxonToArray(datetime) {
+function luxonToArray (datetime) {
     return [
         datetime.year,
         datetime.month - 1,
@@ -101,7 +101,7 @@ function luxonToArray(datetime) {
         datetime.millisecond
     ];
 }
-function arrayToLuxon(arr, timeZone, locale) {
+function arrayToLuxon (arr, timeZone, locale) {
     return DateTime.fromObject({
         zone: timeZone,
         locale: locale,
@@ -114,7 +114,7 @@ function arrayToLuxon(arr, timeZone, locale) {
         millisecond: arr[6]
     });
 }
-function parseCmdStr(cmdStr) {
+function parseCmdStr (cmdStr) {
     var parts = cmdStr.match(/^(.*?)\{(.*)\}(.*)$/); // TODO: lookbehinds for escape characters
     if (parts) {
         var middle = parseCmdStr(parts[2]);
@@ -124,8 +124,7 @@ function parseCmdStr(cmdStr) {
             tail: parts[3],
             whole: parts[1] + middle.whole + parts[3]
         };
-    }
-    else {
+    } else {
         return {
             head: null,
             middle: null,
@@ -134,7 +133,7 @@ function parseCmdStr(cmdStr) {
         };
     }
 }
-function formatRange(cmd, formatStart, formatEnd, separator) {
+function formatRange (cmd, formatStart, formatEnd, separator) {
     if (cmd.middle) {
         var startHead = formatStart(cmd.head);
         var startMiddle = formatRange(cmd.middle, formatStart, formatEnd, separator);
@@ -152,8 +151,7 @@ function formatRange(cmd, formatStart, formatEnd, separator) {
     var endWhole = formatEnd(cmd.whole);
     if (startWhole === endWhole) {
         return startWhole;
-    }
-    else {
+    } else {
         return startWhole + separator + endWhole;
     }
 }
