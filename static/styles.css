@@ -86,3 +86,12 @@ input[type=text], input[type=file]{
   text-align: center;
   margin: auto;
 }
+.col-2.text-right{
+  min-width: 120px;
+}
+#ageBox, #imgInput{
+  width: 100%;
+}
+#imgInput{
+  font-size: 55%;
+}

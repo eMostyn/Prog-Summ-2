@@ -362,6 +362,7 @@ app.get('/searchEvents', function (req, res) {
     // Get the title we are searching for and convert it to lower case.
     // This is so the search will not be case sensitive
     searchVal = req.query.Title.toLowerCase();
+    console.log(searchVal)
     // Read the file, putting the output in jsonString
     fs.readFile('./schedule.json', 'utf8', (err, jsonString) => {
       if (err) {
@@ -374,14 +375,15 @@ app.get('/searchEvents', function (req, res) {
       // For each individual object
       for (obj in data) {
         // If the title of this object (in lower case) includes the search value
-        if (data[obj].Title.toLowerCase().includes(searchVal)) {
+        if (data[obj].Title.toLowerCase().startsWith(searchVal)) {
           // Push that object to the relevant array
           relevant.push(data[obj]);
       }
-      console.log(relevant);
-      // Return the relevant array to the client to be displayed
-      res.send(relevant);
+
     }
+    console.log(relevant);
+    // Return the relevant array to the client to be displayed
+    res.send(relevant);
     });
 });
 

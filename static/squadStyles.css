@@ -31,14 +31,16 @@ body{
   height: 100%;
 }
 .imgDiv img{
-  max-width: 95%;
+  max-width: 90%;
   max-height: 250px;
   margin: auto;
   margin-top: 5px;
+
 }
 .capDiv{
   display: inline-block;
   text-align: center;
+  width:100%;
 }
 .innerDiv{
   width: 100%;
@@ -47,6 +49,11 @@ body{
 .caption{
   margin: auto;
   display: table;
+  font-size: 100%;
+}
+.capDiv span{
+  display: block;
+  font-size: 1.5vw;
 }
 
 /* #collapse{

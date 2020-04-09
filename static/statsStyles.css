@@ -19,7 +19,7 @@ body{
 #tableDiv, #appsDiv,#goalsDiv{
 list-style-position: inside;
  margin: auto;
- width: 50%;
+ width: 95%;
  text-align: center;
  border: 3px solid #db2828;
  margin-bottom: 10px;

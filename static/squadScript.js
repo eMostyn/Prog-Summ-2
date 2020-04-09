@@ -164,7 +164,6 @@ function readFile () {
       createPlayerProf((obj[object]));
 
     }
-    equalizeDivs();
 
   })
    .catch(() => {
@@ -243,25 +242,3 @@ function deletePlayer () {
     }
   });
 }
-
-function equalizeDivs(){
-  // var maxHeight = 0;
-  // var divs = document.getElementsByClassName('playerDiv');
-  // console.log(divs.length)
-  // var i;
-  // for(var i = 0; i< divs.length; i++){
-  //   console.log(divs[i].offsetHeight)
-  //   if (divs[i].offsetHeight  > maxHeight){
-  //     console.log("Here")
-  //     maxHeight = divs[i].offsetHeight ;
-  //   }
-  // }
-  // console.log(maxHeight)
-  // for(var i = 0; i< divs.length; i++){
-  //   console.log("end")
-  //   const height = maxHeight + "mm"
-  //   console.log(height)
-  //   divs[i].style.height = height;
-  // }
-  }
-// window.addEventListener('resize', equalizeDivs());
