@@ -2,3 +2,4 @@ node_modules/*
 static/packages/**
 static/sortable-0.8.0/*
 static/sortable.min.js
+out/*

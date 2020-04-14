@@ -89,10 +89,10 @@ function createPlayerProf (data) {
   var playerDiv = document.createElement('div');
   playerDiv.className = 'playerDiv';
 
-  var innerDiv = document.createElement('div')
-  innerDiv.className = "innerDiv"
-  //Create an image div
-  var imgDiv = document.createElement('div')
+  var innerDiv = document.createElement('div');
+  innerDiv.className = 'innerDiv';
+  // Create an image div
+  var imgDiv = document.createElement('div');
   imgDiv.className = 'imgDiv';
   // Create the image
   var image = document.createElement('img');
@@ -102,8 +102,8 @@ function createPlayerProf (data) {
   imgDiv.appendChild(image);
  innerDiv.appendChild(imgDiv);
 
-  var capDiv = document.createElement('div')
-  capDiv.className = 'capDiv'
+  var capDiv = document.createElement('div');
+  capDiv.className = 'capDiv';
 
   // Create the name caption using span
   var nameCap = document.createElement('span');
@@ -132,13 +132,11 @@ function createPlayerProf (data) {
     // Add the caption to the div
   capDiv.appendChild(positionCap);
 
-
   innerDiv.appendChild(capDiv);
 
   playerDiv.appendChild(innerDiv);
   // Add this player to the overall container
   containerDiv.appendChild(playerDiv);
-
 }
 
 function readFile () {
@@ -162,15 +160,12 @@ function readFile () {
     for (object in obj) {
       // Create a player profile for that object (player)
       createPlayerProf((obj[object]));
-
     }
-
   })
    .catch(() => {
      // Catch an error if one occurs
        console.error('Error');
    });
-
 }
 
 function generateOptions () {

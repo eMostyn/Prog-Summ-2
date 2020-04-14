@@ -4,7 +4,7 @@
   "description": "Programming summative term 2",
   "main": "index.js",
   "scripts": {
-    "pretest": "eslint .",
+    "pretest": "eslint . --fix",
     "test": "jest",
     "start": "node server.js"
   },

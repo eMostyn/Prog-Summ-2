@@ -46,7 +46,7 @@ describe('Test the ammend goals request', () => {
       return request(app)
       .post('/amendGoals')
       .send({
-          Title: 'Test',
+          Name: 'Test',
           Goals: 10
         })
       .expect(403);
@@ -63,7 +63,7 @@ test('POST new goals data with admin', () => {
     return request(app)
     .post('/amendGoals')
     .send({
-        Title: 'Test',
+        Name: 'Test',
         Goals: 10
       })
     .expect(200);

@@ -72,7 +72,7 @@ describe('Test the delete player request', () => {
       return request(app)
       .post('/delPlayer')
       .send({
-          Name: 'T est'
+          Name: 'Test'
         })
       .expect(200);
     });

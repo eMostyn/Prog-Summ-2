@@ -345,7 +345,7 @@ function searchEvents () {
       }
     })
     .then(body => {
-      console.log(body)
+      console.log(body);
       // Set data to the JSON object of body
       data = JSON.parse(body);
       // For each individual item that is returned from the search, create an event for it.
