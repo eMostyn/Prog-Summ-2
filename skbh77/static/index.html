@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Grey College Men's Hockey</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap core CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="styles.css">
+<meta name="theme-color" content="#563d7c">
+
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+    <div id = "nav">
+    <nav class="navbar navbar-expand-sm navbar-custom navbar-dark">
+          <div class="navbar-brand">
+            <img src = "footer-coat-of-arms.png" id = "logo" alt = "logo">
+          </div>
+          <button id = "collapse" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+            <span id = "collapseIcon" class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarsExample03">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link" href="calendar.html">Schedule</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link"  href="squad.html" aria-disabled="true">Squad</a>
+              </li>
+              <li class = "nav-item">
+                <a class = "nav-link" href = "statsPage.html" aria-disabled = "true"> Statistics </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link"  href="adminPage.html" aria-disabled="true">Admin</a>
+                </li>
+              <li class="nav-item dropdown" >
+                <a class="nav-link dropdown-toggle"   href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Edit</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown03">
+                  <a class="dropdown-item" href="eventEdit.html">Add/Remove Events</a>
+                  <a class="dropdown-item" href="playerEdit.html">Add/Remove Players</a>
+                    <a class="dropdown-item" href="statsEdit.html">Edit Stats</a>
+                </div>
+              </li>
+            </ul>
+
+          </div>
+
+        </nav>
+    </div>
+    </head>
+
+    <body>
+<main role="main">
+
+  <!-- Main jumbotron for a primary marketing message or call to action -->
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="display-3">Grey College Mens Hockey Club</h1>
+      <p>Hockey team playing in Durham college sport premiership league.  </p>
+
+    </div>
+  </div>
+
+
+  <div class="container">
+    <!-- Example row of columns -->
+    <div class="row">
+      <div class="col-md-8">
+        <h2>Description</h2>
+        <p>This website shows the club schedule, the squad and player statistics!</p>
+      </div>
+      <div class="col-md-4">
+        <h2>Training</h2>
+        <p> </p>
+        <p><button type="button" id = "trainingButt" class="btn btn-primary" data-toggle="modal" data-target="#trainingModel">
+          Learn More
+        </button>
+        </p>
+
+        <div class="modal fade" id="trainingModel" tabindex="-1" role="dialog" aria-labelledby="trainingTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="trainingTitle">Training Times</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div id = "trainingModelBody" class="modal-body">
+                Friday 08:00 - 09:00pm
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <hr>
+
+  </div> <!-- /container -->
+
+</main>
+
+
+</body>
+
+</html>

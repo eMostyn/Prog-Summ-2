@@ -1,0 +1,97 @@
+.navbar.navbar-expand-sm.navbar-custom {
+  background-color: #db2828;
+
+}
+.navbar-custom .navbar-brand,
+.navbar-custom .navbar-text,
+.nav-link {
+    font-family: "Arial Black", Gadget, sans-serif;
+    font-size: 25px;
+    color: white;
+}
+#activeLink
+ {
+    color: black;
+}
+
+#adminInfo{
+   list-style-position: inside;
+  margin: auto;
+  width: 50%;
+  text-align: center;
+  border: 3px solid #db2828;
+  margin-bottom: 25px;
+}
+
+
+#adminButtonDiv{
+  margin: auto;
+  width: 50%;
+  text-align: center;
+}
+#adBut{
+background-color: #db2828;
+ color: white;
+ padding: 15px 32px;
+ text-align: center;
+ text-decoration: none;
+ display: inline-block;
+ font-size: 16px;
+}
+
+body{
+  font-family: "Arial Black", Gadget, sans-serif;
+}
+#addPDiv,#removePDiv,#addEDiv, #removeEDiv{
+  list-style-position: inside;
+ margin: auto;
+ width: 50%;
+ text-align: center;
+ border: 3px solid #db2828;
+ margin-bottom: 10px;
+}
+#submitDiv, #removeButtDiv{
+  list-style-position: inside;
+ margin: auto;
+ width: 50%;
+ text-align: center;
+ margin-bottom: 25px;
+}
+#addPButt,#removePButt,#submitEButt,#removeEButt{
+background-color: #db2828;
+ color: white;
+ padding: 15px 32px;
+ text-align: center;
+ text-decoration: none;
+ display: inline-block;
+ font-size: 16px;
+ margin-bottom: 5px;
+}
+input[type=text], input[type=file]{
+  width: 50%;
+  padding: 5px;
+  border: 1px solid #db2828;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: vertical;
+  margin-bottom: 5px
+}
+#deleteOptions{
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+#searchBar{
+  display: block;
+  width: 20%;
+  text-align: center;
+  margin: auto;
+}
+.col-2.text-right{
+  min-width: 120px;
+}
+#ageBox, #imgInput{
+  width: 100%;
+}
+#imgInput{
+  font-size: 55%;
+}
